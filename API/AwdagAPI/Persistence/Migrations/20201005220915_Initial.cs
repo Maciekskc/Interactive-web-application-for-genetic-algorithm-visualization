@@ -8,6 +8,19 @@ namespace Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Aquariums",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Width = table.Column<int>(nullable: false),
+                    Height = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Aquariums", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -62,6 +75,25 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MaintenanceMessages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Fishes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    AquariumId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Fishes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Fishes_Aquariums_AquariumId",
+                        column: x => x.AquariumId,
+                        principalTable: "Aquariums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -193,6 +225,30 @@ namespace Persistence.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PhysicalStatistics",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    X = table.Column<float>(nullable: false),
+                    Y = table.Column<float>(nullable: false),
+                    V = table.Column<float>(nullable: false),
+                    Vx = table.Column<float>(nullable: false),
+                    Vy = table.Column<float>(nullable: false),
+                    Color = table.Column<string>(nullable: true),
+                    FishId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PhysicalStatistics", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PhysicalStatistics_Fishes_FishId",
+                        column: x => x.FishId,
+                        principalTable: "Fishes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -233,6 +289,17 @@ namespace Persistence.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Fishes_AquariumId",
+                table: "Fishes",
+                column: "AquariumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PhysicalStatistics_FishId",
+                table: "PhysicalStatistics",
+                column: "FishId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
@@ -259,13 +326,22 @@ namespace Persistence.Migrations
                 name: "MaintenanceMessages");
 
             migrationBuilder.DropTable(
+                name: "PhysicalStatistics");
+
+            migrationBuilder.DropTable(
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Fishes");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Aquariums");
         }
     }
 }

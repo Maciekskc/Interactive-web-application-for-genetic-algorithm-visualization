@@ -1,6 +1,5 @@
 ﻿using Domain.Models;
 using Domain.Models.Entities;
-using Domain.Models.Entities.Association;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,8 +16,6 @@ namespace Persistence
         public DbSet<MaintenanceMessage> MaintenanceMessages { get; set; }
 
         /// ASSOCIATIONS
-        public DbSet<FishAquarium> FishAquatiums { get; set; }
-        public DbSet<FishPhysicalStatistic> FishPhysicalStatistics { get; set; }
 
         // TABLES 
         public DbSet<Fish> Fishes { get; set; }
@@ -36,11 +33,20 @@ namespace Persistence
             ConfigureCompositeKeys(builder);
             ConfigureCascadeProperties(builder);
             ConfigureEnums(builder);
+
+            builder.Entity<Fish>()
+                .HasOne(a => a.PhysicalStatistic)
+                .WithOne(b => b.Fish)
+                .HasForeignKey<PhysicalStatistic>(b => b.FishId);
+
+            builder.Entity<Aquarium>()
+                .HasMany(c => c.Fishes)
+                .WithOne(e => e.Aquarium)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         private static void ConfigureEnums(ModelBuilder builder)
         {
-
         }
 
         private static void ConfigureCompositeKeys(ModelBuilder builder)
@@ -49,12 +55,7 @@ namespace Persistence
 
         private static void ConfigureCascadeProperties(ModelBuilder builder)
         {
-            builder.Entity<FishAquarium>()
-                .HasMany<Fish>()
-                .WithOne(sq => sq.FishAquarium)
-                .HasForeignKey(x => x.SolvedTestId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.ClientCascade);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

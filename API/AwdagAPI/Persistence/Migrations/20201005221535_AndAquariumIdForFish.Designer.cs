@@ -10,8 +10,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200922124609_Initial")]
-    partial class Initial
+    [Migration("20201005221535_AndAquariumIdForFish")]
+    partial class AndAquariumIdForFish
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -99,6 +99,23 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Domain.Models.Entities.Aquarium", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Aquariums");
+                });
+
             modelBuilder.Entity("Domain.Models.Entities.MaintenanceMessage", b =>
                 {
                     b.Property<int>("Id")
@@ -120,6 +137,60 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MaintenanceMessages");
+                });
+
+            modelBuilder.Entity("Domain.Models.Fish", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AquariumId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AquariumId");
+
+                    b.ToTable("Fishes");
+                });
+
+            modelBuilder.Entity("Domain.Models.PhysicalStatistic", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("FishId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("V")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Vx")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Vy")
+                        .HasColumnType("real");
+
+                    b.Property<float>("X")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Y")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FishId")
+                        .IsUnique();
+
+                    b.ToTable("PhysicalStatistics");
                 });
 
             modelBuilder.Entity("Domain.Models.RefreshToken", b =>
@@ -282,6 +353,24 @@ namespace Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Domain.Models.Fish", b =>
+                {
+                    b.HasOne("Domain.Models.Entities.Aquarium", "Aquarium")
+                        .WithMany("Fishes")
+                        .HasForeignKey("AquariumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.PhysicalStatistic", b =>
+                {
+                    b.HasOne("Domain.Models.Fish", "Fish")
+                        .WithOne("PhysicalStatistic")
+                        .HasForeignKey("Domain.Models.PhysicalStatistic", "FishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.RefreshToken", b =>

@@ -175,6 +175,7 @@ namespace API
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<ILogsService, LogsService>();
             services.AddTransient<IMaintenanceService, MaintenanceService>();
+            services.AddTransient<IFishService, FishService>();
         }
 
         private static void AddMvc(IServiceCollection services)
