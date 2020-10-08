@@ -46,7 +46,7 @@ namespace API.Controllers
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var timerManager =
-                    new TimerManager(() => _hub.Clients.All.SendAsync("transferfishes", response.Payload));
+                    new TimerManager(() => _hub.Clients.All.SendAsync($"transferfishes-{aquariumId}", response.Payload));
                 return Ok(response.Payload);
             }
             else
