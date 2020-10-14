@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using OfficeOpenXml.Style;
 using Org.BouncyCastle.Asn1.Crmf;
 using Org.BouncyCastle.Asn1.Sec;
 
@@ -9,6 +10,8 @@ namespace Application.HubConfig.TimerManager
 {
     public class TimerManager
     {
+        private int counter = 0;
+
         private Timer _timer;
         private AutoResetEvent _autoResetEvent;
         private Action _action;
@@ -27,6 +30,10 @@ namespace Application.HubConfig.TimerManager
             {
                 _timer.Dispose();
             }
+
+            counter++;
+            if (counter == 5)
+                _timer.DisposeAsync();
         }
     }
 }
