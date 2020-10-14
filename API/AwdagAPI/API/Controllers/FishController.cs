@@ -22,10 +22,12 @@ namespace API.Controllers
     public class FishController : BaseController
     {
         private readonly IFishService _fishService;
+        private readonly IAlgorithmInterface _algorithmInterface;
         private readonly IHubContext<AquariumHub> _hub;
 
-        public FishController(IFishService fishService, IHubContext<AquariumHub> hub)
+        public FishController(IFishService fishService, IAlgorithmInterface algorithmInterface, IHubContext<AquariumHub> hub)
         {
+            _algorithmInterface = algorithmInterface;
             _fishService = fishService;
             _hub = hub;
         }
@@ -45,12 +47,17 @@ namespace API.Controllers
             var response = await _fishService.GetFishesFromAquarium(aquariumId);
             if (response.StatusCode == HttpStatusCode.OK)
             {
+                //TUTAJ JEST WERROR BO JEDNOCZEŚNIE DANE SIĘ NADPISUJĄ I WYSYŁAJĄ, TRZEBA TO ZROBIC W TEN SPOSÓB ŻE AWEITUJEMY NADPISYWANIE I ODYŁAMY DANE
+
+                //_algorithmInterface.Start();
+
                 var timerManager =
-                    new TimerManager(() => _hub.Clients.All.SendAsync($"transferfishes-{aquariumId}", response.Payload));
+                    new TimerManager(() => _hub.Clients.Group($"aq-{aquariumId}").SendAsync($"transferfishes-{aquariumId}", response.Payload));
+
                 return Ok(response.Payload);
             }
             else
-                return Ok();
+                return Ok("Not found");
         }
     }
 }
