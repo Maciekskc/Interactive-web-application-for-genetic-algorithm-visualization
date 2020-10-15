@@ -10,8 +10,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200922124609_Initial")]
-    partial class Initial
+    [Migration("20201015125504_AddCascadeConstrainsProperty")]
+    partial class AddCascadeConstrainsProperty
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -99,27 +99,229 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.Models.Entities.MaintenanceMessage", b =>
+            modelBuilder.Entity("Domain.Models.Entities.Aquarium", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(512)")
-                        .HasMaxLength(512);
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("FoodMaximalAmount")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("MaintenanceMessages");
+                    b.ToTable("Aquariums");
+                });
+
+            modelBuilder.Entity("Domain.Models.Entities.Association.ParentChild", b =>
+                {
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ChildId1")
+                        .HasColumnType("int");
+
+                    b.HasKey("ParentId", "ChildId");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("ChildId1");
+
+                    b.ToTable("ParentChild");
+                });
+
+            modelBuilder.Entity("Domain.Models.Entities.Food", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AquariumId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("X")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AquariumId");
+
+                    b.ToTable("Foods");
+                });
+
+            modelBuilder.Entity("Domain.Models.Entities.LifeParameters", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FishId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Hunger")
+                        .HasColumnType("real");
+
+                    b.Property<TimeSpan>("HungerInterval")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("LastHungerUpdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastVitalityUpdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("Vitality")
+                        .HasColumnType("real");
+
+                    b.Property<TimeSpan>("VitalityInterval")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FishId")
+                        .IsUnique();
+
+                    b.ToTable("LifeParameters");
+                });
+
+            modelBuilder.Entity("Domain.Models.Entities.SetOfMutations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("FishId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("HungryCharge")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Predator")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FishId")
+                        .IsUnique();
+
+                    b.ToTable("SetOfMutations");
+                });
+
+            modelBuilder.Entity("Domain.Models.Fish", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AquariumId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAlive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AquariumId");
+
+                    b.ToTable("Fishes");
+                });
+
+            modelBuilder.Entity("Domain.Models.LifeTimeStatistic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeathDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Descendants")
+                        .HasColumnType("int");
+
+                    b.Property<double>("DistanceSwimmed")
+                        .HasColumnType("float");
+
+                    b.Property<int>("FishId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FoodCollected")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FishId")
+                        .IsUnique();
+
+                    b.ToTable("LifeTimeStatistic");
+                });
+
+            modelBuilder.Entity("Domain.Models.PhysicalStatistic", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("FishId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("V")
+                        .HasColumnType("real");
+
+                    b.Property<int>("VisionAngle")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VisionRange")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Vx")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Vy")
+                        .HasColumnType("real");
+
+                    b.Property<float>("X")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Y")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FishId")
+                        .IsUnique();
+
+                    b.ToTable("PhysicalStatistics");
                 });
 
             modelBuilder.Entity("Domain.Models.RefreshToken", b =>
@@ -282,6 +484,73 @@ namespace Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Domain.Models.Entities.Association.ParentChild", b =>
+                {
+                    b.HasOne("Domain.Models.Fish", "Parent")
+                        .WithMany("Childs")
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Models.Fish", "Child")
+                        .WithMany()
+                        .HasForeignKey("ChildId1");
+                });
+
+            modelBuilder.Entity("Domain.Models.Entities.Food", b =>
+                {
+                    b.HasOne("Domain.Models.Entities.Aquarium", "Aquarium")
+                        .WithMany("Food")
+                        .HasForeignKey("AquariumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Entities.LifeParameters", b =>
+                {
+                    b.HasOne("Domain.Models.Fish", "Fish")
+                        .WithOne("LifeParameters")
+                        .HasForeignKey("Domain.Models.Entities.LifeParameters", "FishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Entities.SetOfMutations", b =>
+                {
+                    b.HasOne("Domain.Models.Fish", "Fish")
+                        .WithOne("SetOfMutations")
+                        .HasForeignKey("Domain.Models.Entities.SetOfMutations", "FishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.Fish", b =>
+                {
+                    b.HasOne("Domain.Models.Entities.Aquarium", "Aquarium")
+                        .WithMany("Fishes")
+                        .HasForeignKey("AquariumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.LifeTimeStatistic", b =>
+                {
+                    b.HasOne("Domain.Models.Fish", "Fish")
+                        .WithOne("LifeTimeStatistic")
+                        .HasForeignKey("Domain.Models.LifeTimeStatistic", "FishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Models.PhysicalStatistic", b =>
+                {
+                    b.HasOne("Domain.Models.Fish", "Fish")
+                        .WithOne("PhysicalStatistic")
+                        .HasForeignKey("Domain.Models.PhysicalStatistic", "FishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.RefreshToken", b =>
