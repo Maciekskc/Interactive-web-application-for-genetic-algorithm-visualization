@@ -52,7 +52,7 @@ namespace API
             AddMapper(services);
 
             AddPrincipalJwt(services);
-
+            
             AddApplicationServices(services);
 
             // register cors
@@ -182,7 +182,7 @@ namespace API
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<ILogsService, LogsService>();
-            services.AddTransient<IMaintenanceService, MaintenanceService>();
+
             services.AddTransient<IFishService, FishService>();
         }
 

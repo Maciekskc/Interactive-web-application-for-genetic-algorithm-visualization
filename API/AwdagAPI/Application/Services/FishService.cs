@@ -17,7 +17,7 @@ namespace Application.Services
         {
         }
 
-        public async Task<ServiceResponse<List<GetFishFromAquariumResponse>>> GetFishesFromAquarium(Guid aquariumId)
+        public async Task<ServiceResponse<List<GetFishFromAquariumResponse>>> GetFishesFromAquarium(int aquariumId)
         {
             if(aquariumId == null)
                 return new ServiceResponse<List<GetFishFromAquariumResponse>>(HttpStatusCode.BadRequest,new []{ "Zły argument"});

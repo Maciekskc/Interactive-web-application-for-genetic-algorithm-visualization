@@ -22,19 +22,17 @@ namespace API.Controllers
     public class FishController : BaseController
     {
         private readonly IFishService _fishService;
-        private readonly IAlgorithmInterface _algorithmInterface;
         private readonly IHubContext<AquariumHub> _hub;
 
-        public FishController(IFishService fishService, IAlgorithmInterface algorithmInterface, IHubContext<AquariumHub> hub)
+        public FishController(IFishService fishService, IHubContext<AquariumHub> hub)
         {
-            _algorithmInterface = algorithmInterface;
             _fishService = fishService;
             _hub = hub;
         }
 
         [Produces(typeof(GetFishFromAquariumResponse))]
         [HttpGet("aquarium/{aquariumId}")]
-        public async Task<IActionResult> GetFishesFromAquarium([FromRoute] Guid aquariumId)
+        public async Task<IActionResult> GetFishesFromAquarium([FromRoute] int aquariumId)
         {
             var response = await _fishService.GetFishesFromAquarium(aquariumId);
             return SendResponse(response);
@@ -42,7 +40,7 @@ namespace API.Controllers
 
         [Produces(typeof(GetFishFromAquariumResponse))]
         [HttpGet("aquarium/{aquariumId}/hub")]
-        public async Task<IActionResult> GetFishesFromAquariumHUB([FromRoute] Guid aquariumId)
+        public async Task<IActionResult> GetFishesFromAquariumHUB([FromRoute] int aquariumId)
         {
             var response = await _fishService.GetFishesFromAquarium(aquariumId);
             if (response.StatusCode == HttpStatusCode.OK)

@@ -9,11 +9,8 @@ using System;
 using System.Globalization;
 using System.IO;
 using Application.Dtos.Auth.Responses;
-using Application.Dtos.Maintenance.Requests;
-using Application.Dtos.Maintenance.Responses;
 using Application.Dtos.NewFolder.Response;
 using Domain.Models;
-using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace Application.Infrastructure
 {
@@ -25,28 +22,7 @@ namespace Application.Infrastructure
             MapsForAccount();
             MapsForAdmin();
             MapsForLogs();
-            MapsForMaintenance();
             MapsForFishes();
-        }
-
-        /// <summary>
-        /// Mapy dla kontrolera Maintenance
-        /// </summary>
-        private void MapsForMaintenance()
-        {
-            CreateMap<CreateMessageRequest, MaintenanceMessage>();
-            CreateMap<MaintenanceMessage, CreateMessageResponse>();
-
-            CreateMap<MaintenanceMessage, GetMessageResponse>();
-
-            CreateMap<MaintenanceMessage, MessageForGetAllMessagesResponse>();
-
-            CreateMap<MaintenanceMessage, MessageForGetUpcomingMessagesResponse>();
-
-            CreateMap<MaintenanceMessage, MessageForGetCurrentMessagesResponse>();
-
-            CreateMap<UpdateMessageRequest, MaintenanceMessage>();
-            CreateMap<MaintenanceMessage, UpdateMessageResponse>();
         }
 
         /// <summary>

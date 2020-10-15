@@ -15,6 +15,6 @@ namespace Application.Interfaces
         /// </summary>
         /// <param name="aquariumId"></param>
         /// <returns></returns>
-        Task<ServiceResponse<List<GetFishFromAquariumResponse>>> GetFishesFromAquarium(Guid aquariumId);
+        Task<ServiceResponse<List<GetFishFromAquariumResponse>>> GetFishesFromAquarium(int aquariumId);
     }
 }

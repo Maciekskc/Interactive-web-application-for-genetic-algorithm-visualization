@@ -11,6 +11,7 @@ using Persistence.Seeds;
 
 using System;
 using System.Threading.Tasks;
+using Application.Services;
 
 namespace API
 {
@@ -33,7 +34,8 @@ namespace API
                         logging.AddLog4Net();
                         logging.SetMinimumLevel(LogLevel.Debug);
                     });
-                });
+
+                }).ConfigureServices(services => { services.AddHostedService<AlgorithmService>(); });
 
         private static async Task SeedDatabase(IHost host)
         {

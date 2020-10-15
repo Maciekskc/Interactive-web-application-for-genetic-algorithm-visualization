@@ -23,6 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\NewFolder\Request\" />
+    <Folder Include="Dtos\Fish\Request\" />
   </ItemGroup>
 </Project>

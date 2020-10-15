@@ -20,7 +20,7 @@ namespace Application.DataStorage
             _fishService = fishService;
         }
 
-        public async Task<List<GetFishFromAquariumResponse>> GetFishes(Guid aquariumId)
+        public async Task<List<GetFishFromAquariumResponse>> GetFishes(int aquariumId)
         {
             var list = await _fishService.GetFishesFromAquarium(aquariumId);
 

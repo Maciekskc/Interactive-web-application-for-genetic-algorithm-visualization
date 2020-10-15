@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,9 +11,12 @@ namespace Persistence.Migrations
                 name: "Aquariums",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Width = table.Column<int>(nullable: false),
-                    Height = table.Column<int>(nullable: false)
+                    Height = table.Column<int>(nullable: false),
+                    Capacity = table.Column<int>(nullable: false),
+                    FoodMaximalAmount = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -63,33 +66,41 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MaintenanceMessages",
+                name: "Fishes",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StartDate = table.Column<DateTime>(nullable: false),
-                    EndDate = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(maxLength: 512, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MaintenanceMessages", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Fishes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
-                    AquariumId = table.Column<Guid>(nullable: true)
+                    IsAlive = table.Column<bool>(nullable: false),
+                    AquariumId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Fishes", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Fishes_Aquariums_AquariumId",
+                        column: x => x.AquariumId,
+                        principalTable: "Aquariums",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Foods",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    X = table.Column<int>(nullable: false),
+                    Y = table.Column<int>(nullable: false),
+                    AquariumId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Foods", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Foods_Aquariums_AquariumId",
                         column: x => x.AquariumId,
                         principalTable: "Aquariums",
                         principalColumn: "Id",
@@ -226,23 +237,121 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LifeParameters",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Hunger = table.Column<float>(nullable: false),
+                    HungerInterval = table.Column<DateTime>(nullable: false),
+                    LastHungerUpdate = table.Column<DateTime>(nullable: false),
+                    Vitality = table.Column<float>(nullable: false),
+                    VitalityInterval = table.Column<DateTime>(nullable: false),
+                    LastVitalityUpdate = table.Column<DateTime>(nullable: false),
+                    FishId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LifeParameters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LifeParameters_Fishes_FishId",
+                        column: x => x.FishId,
+                        principalTable: "Fishes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LifeTimeStatistic",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BirthDate = table.Column<DateTime>(nullable: false),
+                    DeathDate = table.Column<DateTime>(nullable: false),
+                    FoodCollected = table.Column<int>(nullable: false),
+                    DistanceSwimmed = table.Column<double>(nullable: false),
+                    Descendants = table.Column<int>(nullable: false),
+                    FishId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LifeTimeStatistic", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LifeTimeStatistic_Fishes_FishId",
+                        column: x => x.FishId,
+                        principalTable: "Fishes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ParentChild",
+                columns: table => new
+                {
+                    ParentId = table.Column<int>(nullable: false),
+                    ChildId = table.Column<int>(nullable: false),
+                    ChildId1 = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ParentChild", x => new { x.ParentId, x.ChildId });
+                    table.ForeignKey(
+                        name: "FK_ParentChild_Fishes_ChildId",
+                        column: x => x.ChildId,
+                        principalTable: "Fishes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ParentChild_Fishes_ChildId1",
+                        column: x => x.ChildId1,
+                        principalTable: "Fishes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PhysicalStatistics",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     X = table.Column<float>(nullable: false),
                     Y = table.Column<float>(nullable: false),
                     V = table.Column<float>(nullable: false),
                     Vx = table.Column<float>(nullable: false),
                     Vy = table.Column<float>(nullable: false),
                     Color = table.Column<string>(nullable: true),
-                    FishId = table.Column<Guid>(nullable: false)
+                    VisionAngle = table.Column<int>(nullable: false),
+                    VisionRange = table.Column<int>(nullable: false),
+                    FishId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PhysicalStatistics", x => x.Id);
                     table.ForeignKey(
                         name: "FK_PhysicalStatistics_Fishes_FishId",
+                        column: x => x.FishId,
+                        principalTable: "Fishes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SetOfMutations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Predator = table.Column<bool>(nullable: false),
+                    HungryCharge = table.Column<bool>(nullable: false),
+                    FishId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SetOfMutations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SetOfMutations_Fishes_FishId",
                         column: x => x.FishId,
                         principalTable: "Fishes",
                         principalColumn: "Id",
@@ -294,6 +403,33 @@ namespace Persistence.Migrations
                 column: "AquariumId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Foods_AquariumId",
+                table: "Foods",
+                column: "AquariumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LifeParameters_FishId",
+                table: "LifeParameters",
+                column: "FishId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LifeTimeStatistic_FishId",
+                table: "LifeTimeStatistic",
+                column: "FishId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParentChild_ChildId",
+                table: "ParentChild",
+                column: "ChildId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ParentChild_ChildId1",
+                table: "ParentChild",
+                column: "ChildId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PhysicalStatistics_FishId",
                 table: "PhysicalStatistics",
                 column: "FishId",
@@ -303,6 +439,12 @@ namespace Persistence.Migrations
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SetOfMutations_FishId",
+                table: "SetOfMutations",
+                column: "FishId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -323,7 +465,16 @@ namespace Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "MaintenanceMessages");
+                name: "Foods");
+
+            migrationBuilder.DropTable(
+                name: "LifeParameters");
+
+            migrationBuilder.DropTable(
+                name: "LifeTimeStatistic");
+
+            migrationBuilder.DropTable(
+                name: "ParentChild");
 
             migrationBuilder.DropTable(
                 name: "PhysicalStatistics");
@@ -332,13 +483,16 @@ namespace Persistence.Migrations
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
+                name: "SetOfMutations");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Fishes");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Fishes");
 
             migrationBuilder.DropTable(
                 name: "Aquariums");
