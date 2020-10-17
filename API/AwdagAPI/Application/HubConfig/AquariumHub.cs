@@ -2,24 +2,23 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Dtos.NewFolder.Response;
+using Application.Services;
+using Domain.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Application.HubConfig
 {
-    public class AquariumHub : Hub
+    public class AquariumHub : Hub<IAquariumHubInterface>
     {
         public async Task JoinGroup(string groupName)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-
-            await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has joined the group {groupName}.");
         }
 
         public async Task ExitGroup(string groupName)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
-
-            await Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId} has left the group {groupName}.");
         }
 
         public override Task OnConnectedAsync()
@@ -32,11 +31,14 @@ namespace Application.HubConfig
             return base.OnDisconnectedAsync(exception);
         }
 
-        public Task SendSpecifiedMessagesToGroup(string group,string aquariumId,object[] data)
+        public async Task SendAquariumDataToDirectedGroups(List<GetFishFromAquariumResponse> data)
         {
-            return Clients.Group(group).SendCoreAsync($"transferfishes-{aquariumId}", data);
+            await Clients.All.SendAquariumData(data);
         }
 
-        
+        public async Task SendMessage(string message)
+        {
+            await Clients.All.SendMessage(message);
+        }
     }
 }
