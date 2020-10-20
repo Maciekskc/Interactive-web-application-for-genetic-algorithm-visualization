@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Dtos.Hub;
 using Application.Dtos.NewFolder.Response;
 using Application.Services;
 using Domain.Models;
@@ -31,9 +32,9 @@ namespace Application.HubConfig
             return base.OnDisconnectedAsync(exception);
         }
 
-        public async Task SendAquariumDataToDirectedGroups(List<GetFishFromAquariumResponse> data)
+        public async Task SendAquariumDataToDirectedGroups(HubTransferData data)
         {
-            await Clients.All.SendAquariumData(data);
+            await Clients.All.TransferData(data);
         }
 
         public async Task SendMessage(string message)
