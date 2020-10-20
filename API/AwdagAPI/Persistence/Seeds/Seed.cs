@@ -33,7 +33,9 @@ namespace Persistence.Seeds
             await SeedLifeParameters(context);
             await SeedLifeTimeStatistic(context);
             await SeedSetOfMutations(context);
+            await SeedFoods(context);
         }
+
 
         private static async Task SeedRoles(RoleManager<IdentityRole> roleManager)
         {
@@ -133,19 +135,26 @@ namespace Persistence.Seeds
                 {
                     new Aquarium()
                     {
-                        //Id = ++seed.aquariumId,
+                        Width = 1080,
+                        Height = 720,
+                        Capacity = 15,
+                        FoodMaximalAmount = 7
                     },
                     new Aquarium()
                     {
                         //Id = ++seed.aquariumId,
                         Width = 1100,
-                        Height = 720
+                        Height = 720,
+                        Capacity = 15,
+                        FoodMaximalAmount = 7
                     },
                     new Aquarium()
                     {
                         //Id = ++seed.aquariumId,
                         Width = 1080,
-                        Height = 720
+                        Height = 720,
+                        Capacity = 15,
+                        FoodMaximalAmount = 7
                     },
                 };
                 seed.aquariumId = 3;
@@ -188,7 +197,9 @@ namespace Persistence.Seeds
                             Y = random.Next(300, 700),
                             Vx = random.Next(-3, 3),
                             Vy = random.Next(-3, 3),
-                            V = random.Next(1, 3),
+                            V = random.Next(2, 4),
+                            VisionAngle = random.Next(30,60),
+                            VisionRange = random.Next(20,40),
                             Color = String.Format("#{0:X6}", random.Next(0x1000000)),
                             FishId = ++seed.physicalStatisticId
                         }
@@ -260,6 +271,28 @@ namespace Persistence.Seeds
                     );
 
                 context.SetOfMutations.AddRange(lifeTimeStatistics);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        private static async Task SeedFoods(DataContext context)
+        {
+            Random random = new Random();
+            if (!context.Foods.Any())
+            {
+                var foods = new List<Food>();
+                foreach (var aquarium in context.Aquariums.ToList())
+                    for (int i = 0; i < aquarium.FoodMaximalAmount; i++)
+                        foods.Add(
+                            new Food()
+                            {
+                                AquariumId = aquarium.Id,
+                                X = random.Next(0,aquarium.Width),
+                                Y = random.Next(0,aquarium.Height)
+                            }
+                        );
+
+                context.Foods.AddRange(foods);
                 await context.SaveChangesAsync();
             }
         }

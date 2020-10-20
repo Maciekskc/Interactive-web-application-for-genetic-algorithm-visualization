@@ -8,6 +8,9 @@ namespace Domain.Models
         public int Id { get; set; }
         public float X { get; set; }
         public float Y { get; set; }
+        /// <summary>
+        /// speed of fish, the movement of fidh will be described by vectors vx and vy this variable will be used to specify second vector to optimize speed of fish
+        /// </summary>
         public float V { get; set; }
         public float Vx { get; set; }
         public float Vy { get; set; }

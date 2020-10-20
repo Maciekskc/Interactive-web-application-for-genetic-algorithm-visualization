@@ -23,6 +23,6 @@ namespace Domain.Models.Entities
         public int FoodMaximalAmount { get; set; }
 
         public virtual ICollection<Fish> Fishes { get; set; }
-        public virtual ICollection<Food> Food { get; set; }
+        public virtual ICollection<Food> Foods { get; set; }
     }
 }

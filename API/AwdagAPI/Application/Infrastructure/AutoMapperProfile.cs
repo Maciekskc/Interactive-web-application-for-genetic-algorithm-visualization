@@ -9,8 +9,10 @@ using System;
 using System.Globalization;
 using System.IO;
 using Application.Dtos.Auth.Responses;
+using Application.Dtos.Hub;
 using Application.Dtos.NewFolder.Response;
 using Domain.Models;
+using PhysicalStatsForGetFishFromAquariumResponse = Application.Dtos.NewFolder.Response.PhysicalStatsForGetFishFromAquariumResponse;
 
 namespace Application.Infrastructure
 {
@@ -23,6 +25,8 @@ namespace Application.Infrastructure
             MapsForAdmin();
             MapsForLogs();
             MapsForFishes();
+
+            MapsForHub();
         }
 
         /// <summary>
@@ -74,6 +78,16 @@ namespace Application.Infrastructure
         {
             CreateMap<Fish, GetFishFromAquariumResponse>();
             CreateMap<PhysicalStatistic, PhysicalStatsForGetFishFromAquariumResponse>();
+        }
+
+        private void MapsForHub()
+        {
+            CreateMap<Aquarium, HubTransferData>()
+                .ForMember(opt=>opt.AquariumWidth,src => src.MapFrom(aq=>aq.Width))
+                .ForMember(opt => opt.AquariumHeight, src => src.MapFrom(aq => aq.Height));
+            CreateMap<Fish, FishForHubTransferData>();
+            CreateMap<PhysicalStatistic, PhysicalStatsForFishForHubTransferData>();
+            CreateMap<Food, FoodForHubTransferData>();
         }
     }
 }
