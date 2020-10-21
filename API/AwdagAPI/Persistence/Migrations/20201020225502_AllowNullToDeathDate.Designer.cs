@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201020225502_AllowNullToDeathDate")]
+    partial class AllowNullToDeathDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,14 +242,9 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AquariumId");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Fishes");
                 });
@@ -536,10 +533,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("AquariumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Domain.Models.Entities.ApplicationUser", "Owner")
-                        .WithMany("Fishes")
-                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("Domain.Models.LifeTimeStatistic", b =>

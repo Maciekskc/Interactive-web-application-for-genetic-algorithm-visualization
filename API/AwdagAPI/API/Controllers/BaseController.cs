@@ -30,6 +30,9 @@ namespace API.Controllers
                 case HttpStatusCode.NoContent:
                     return NoContent();
 
+                case HttpStatusCode.Created:
+                    return StatusCode(201);
+
                 default:
                     return BadRequest(new ErrorResponse(response.Errors));
             }

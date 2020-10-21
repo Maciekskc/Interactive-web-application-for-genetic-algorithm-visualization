@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Dtos.Hub;
-using Application.Dtos.NewFolder.Response;
 using Application.HubConfig;
-using Application.HubConfig.TimerManager;
-using Application.Infrastructure;
-using Application.Interfaces;
 using AutoMapper;
 using Domain.Models;
 using Domain.Models.Entities;
-using Microsoft.AspNetCore.Components.RenderTree;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -54,7 +45,7 @@ namespace Application.Services
                 try
                 {
                     var stats = _context.PhysicalStatistics.ToList();
-                    foreach (var fish in _context.Fishes.Where(f=>f.AquariumId==1).ToList())
+                    foreach (var fish in _context.Fishes.Where(f=>f.IsAlive).ToList())
                     {
                         await MakeAMove(fish);
                     }

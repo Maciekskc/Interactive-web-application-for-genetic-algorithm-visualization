@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using Domain.Models.Interfaces;
 
 namespace Domain.Models.Entities
 {
-    public class Aquarium
+    public class Aquarium : IHasIntId
     {
         public int Id { get; set; }
 
