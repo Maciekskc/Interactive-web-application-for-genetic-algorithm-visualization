@@ -2,7 +2,6 @@
 using System.Net;
 using Application.Infrastructure.Errors;
 using Domain.Models;
-using Domain.Models.Entities;
 using Persistence.Enums;
 
 namespace Application.Utilities.QuerySorters
