@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize(Roles = Role.Administrator)]
     public class AquariumController : BaseController
     {
         private readonly IAquariumService _aquariumService;
@@ -18,6 +17,7 @@ namespace API.Controllers
             _aquariumService = aquariumService;
         }
 
+        [Authorize(Roles = Role.Administrator)]
         [Produces(typeof(GetAquariumResponse))]
         [HttpPost("create")]
         public async Task<IActionResult> CreateAquarium([FromBody] CreateAquariumRequest request)
@@ -27,22 +27,24 @@ namespace API.Controllers
         }
         
         [Produces(typeof(GetAquariumResponse))]
-        [HttpPost("{aquariumId}")]
+        [HttpGet("{aquariumId}")]
         public async Task<IActionResult> GetAquarium([FromRoute] int aquariumId)
         {
             var response = await _aquariumService.GetAquariumAsync(aquariumId);
             return SendResponse(response);
         }
-        
+
+        [Authorize(Roles = Role.Administrator)]
         [Produces(typeof(GetAquariumResponse))]
-        [HttpPut("{aquariumId/edit}")]
+        [HttpPut("{aquariumId}/edit")]
         public async Task<IActionResult> EditAquarium([FromRoute] int aquariumId,[FromBody] EditAquariumRequest request)
         {
             var response = await _aquariumService.EditAquariumAsync(aquariumId, request);
             return SendResponse(response);
         }
 
-        [HttpPut("{aquariumId/delete}")]
+        [Authorize(Roles = Role.Administrator)]
+        [HttpDelete("{aquariumId}/remove")]
         public async Task<IActionResult> RemoveAquarium([FromRoute] int aquariumId)
         {
             var response = await _aquariumService.RemoveAquariumAsync(aquariumId);
@@ -50,7 +52,7 @@ namespace API.Controllers
         }
 
         [Produces(typeof(GetAllAquariumsResponse))]
-        [HttpPut("get-all-aquariums")]
+        [HttpGet("get-all-aquariums")]
         public async Task<IActionResult> GetListOfAquarium([FromQuery] GetAllAquariumsRequest request)
         {
             var response = await _aquariumService.GetAllAquariumsAsync(request);

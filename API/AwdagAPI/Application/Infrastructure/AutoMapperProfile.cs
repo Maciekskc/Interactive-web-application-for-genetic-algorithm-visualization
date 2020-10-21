@@ -8,6 +8,7 @@ using Domain.Models.Entities;
 using System;
 using System.Globalization;
 using System.IO;
+using Application.Dtos.Aquarium.Requests;
 using Application.Dtos.Aquarium.Responses;
 using Application.Dtos.Auth.Responses;
 using Application.Dtos.Fish.Response;
@@ -74,6 +75,9 @@ namespace Application.Infrastructure
                 .ForMember(log => log.Name, opt => opt.MapFrom(fileInfo => Path.GetFileNameWithoutExtension(fileInfo.Name)));
         }
 
+        /// <summary>
+        /// Mapy dla kontrolera Fishes
+        /// </summary>
         private void MapsForFishes()
         {
             CreateMap<Fish, FishForGetFishesFromAquariumResponse>();
@@ -91,6 +95,9 @@ namespace Application.Infrastructure
             CreateMap<Fish, FishForGetUserFishesResponse>();
         }
 
+        /// <summary>
+        /// Mapy dla kontrolera Aquarium
+        /// </summary>
         private void MapsForAquariums()
         {
             CreateMap<Aquarium, GetAquariumResponse>()
@@ -104,6 +111,8 @@ namespace Application.Infrastructure
                     par => par.MapFrom(src => src.Foods.Count))
                 .ForMember(opt => opt.CurrentPopulationCount,
                     par => par.MapFrom(src => src.Fishes.Count));
+
+            CreateMap<CreateAquariumRequest, Aquarium>();
         }
 
         private void MapsForHub()

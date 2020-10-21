@@ -17,6 +17,7 @@ namespace Application.Dtos.Aquarium.Responses
 
     public class AquariumForGetAllAquariumsResponse
     {
+        public int Id { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
         public int Capacity { get; set; }
