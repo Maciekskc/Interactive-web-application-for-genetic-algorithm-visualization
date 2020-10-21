@@ -31,11 +31,11 @@ namespace Application.Interfaces
         Task<ServiceResponse<GetUserFishesResponse>> GetUserFishes(GetUserFishesRequest request);
 
         /// <summary>
-        /// Edit fishes, id of given fish need to be pasted in request
+        /// Edit fishes with data pasted to query
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<ServiceResponse> EditFish(EditFishRequest request);
+        Task<ServiceResponse<GetFishResponse>> EditFish(int fishId, EditFishRequest request);
 
         /// <summary>
         /// Create new fish, statistic will be calculated by aquarium system to make object posibly competetive

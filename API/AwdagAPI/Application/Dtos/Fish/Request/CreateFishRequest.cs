@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-namespace Application.Dtos.Fish.Request
+﻿namespace Application.Dtos.Fish.Request
 {
     public class CreateFishRequest
     {

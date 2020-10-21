@@ -44,14 +44,14 @@ namespace API.Controllers
             return SendResponse(response);
         }
 
-        /*[Produces(typeof(GetFishResponse))]
-        [HttpPut()]
-        public async Task<IActionResult> EditFish([FromBody] EditFishRequest request)
+        [Produces(typeof(GetFishResponse))]
+        [HttpPut("{fishId}/edit")]
+        public async Task<IActionResult> EditFish([FromRoute] int fishId, [FromBody] EditFishRequest request)
         {
-            var response = await _fishService.EditFish(request);
+            var response = await _fishService.EditFish(fishId, request);
             return SendResponse(response);
         }
-*/
+
         [Produces(typeof(GetFishResponse))]
         [HttpPost("create")]
         public async Task<IActionResult> CreateFish([FromBody] CreateFishRequest request)

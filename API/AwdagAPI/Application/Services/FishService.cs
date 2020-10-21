@@ -83,9 +83,27 @@ namespace Application.Services
             return new ServiceResponse<GetUserFishesResponse>(HttpStatusCode.OK, response);
         }
 
-        public Task<ServiceResponse> EditFish(EditFishRequest request)
+        public async Task<ServiceResponse<GetFishResponse>> EditFish(int fishId, EditFishRequest request)
         {
-            throw new NotImplementedException();
+            var fish = await GetEntityByIdAsync<Fish>(fishId);
+            if (fish.OwnerId != CurrentlyLoggedUser.Id)
+                throw new RestException(HttpStatusCode.Unauthorized, "Cannot Edit fish that don't belongs to you.");
+
+            //TODO TUTAJ POWINNY BYĆ PRZEPISANE STATYSTYKI
+            fish.Name = request.Name;
+            await SaveChangesAsync();
+
+            var response = Mapper.Map<Fish, GetFishResponse>(fish);
+
+            //finding parents of child in asotiations table
+            var assotiationsWithParent = Context.ParentChild.Where(x => x.ChildId == fishId).ToList();
+            if (assotiationsWithParent.Count() == 2)
+            {
+                response.Parent1 = Mapper.Map<Fish, ParentOfFishForGetFishResponse>(assotiationsWithParent[0].Parent);
+                response.Parent2 = Mapper.Map<Fish, ParentOfFishForGetFishResponse>(assotiationsWithParent[1].Parent);
+            }
+
+            return new ServiceResponse<GetFishResponse>(HttpStatusCode.OK, response);
         }
 
         public async Task<ServiceResponse> CreateFish(CreateFishRequest request)
@@ -139,6 +157,9 @@ namespace Application.Services
 
             if(fish.OwnerId != CurrentlyLoggedUser.Id)
                 throw new RestException(HttpStatusCode.Unauthorized, "Cannot kill fish that don't belongs to you.");
+
+            if(!fish.IsAlive)
+                return new ServiceResponse(HttpStatusCode.BadRequest,new []{"Fish is already Death"});
 
             fish.IsAlive = false;
             await SaveChangesAsync();
