@@ -3,10 +3,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Models.Entities;
 using Domain.Models.Entities.Association;
+using Domain.Models.Interfaces;
 
 namespace Domain.Models
 {
-    public class Fish
+    public class Fish : IHasIntId
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -24,5 +25,8 @@ namespace Domain.Models
 
         [InverseProperty("Parent")]
         public virtual ICollection<ParentChild> Childs { get; set; }
+
+        public string? OwnerId { get; set; }
+        public virtual ApplicationUser? Owner { get; set; }
     }
 }

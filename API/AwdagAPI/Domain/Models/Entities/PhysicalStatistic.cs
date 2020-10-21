@@ -9,7 +9,7 @@ namespace Domain.Models
         public float X { get; set; }
         public float Y { get; set; }
         /// <summary>
-        /// speed of fish, the movement of fidh will be described by vectors vx and vy this variable will be used to specify second vector to optimize speed of fish
+        /// speed of fish v = sqrt(vx^2+vy^2)
         /// </summary>
         public float V { get; set; }
         public float Vx { get; set; }

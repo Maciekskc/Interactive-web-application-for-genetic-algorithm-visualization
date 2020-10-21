@@ -8,11 +8,12 @@ namespace Domain.Models.Entities.Association
 {
     public class ParentChild
     {
-        [Key, Column(Order = 1)]
+        [Key, Column(Order = 0)]
         public int ParentId { get; set; }
         public virtual Fish Parent { get; set; }
 
-        [Key, Column(Order = 2)]
+
+        [Key, Column(Order = 1)]
         public int ChildId { get; set; }
         public virtual Fish Child { get; set; }
     }

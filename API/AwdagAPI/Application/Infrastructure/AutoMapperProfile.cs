@@ -9,10 +9,9 @@ using System;
 using System.Globalization;
 using System.IO;
 using Application.Dtos.Auth.Responses;
+using Application.Dtos.Fish.Response;
 using Application.Dtos.Hub;
-using Application.Dtos.NewFolder.Response;
 using Domain.Models;
-using PhysicalStatsForGetFishFromAquariumResponse = Application.Dtos.NewFolder.Response.PhysicalStatsForGetFishFromAquariumResponse;
 
 namespace Application.Infrastructure
 {
@@ -76,8 +75,19 @@ namespace Application.Infrastructure
 
         private void MapsForFishes()
         {
-            CreateMap<Fish, GetFishFromAquariumResponse>();
-            CreateMap<PhysicalStatistic, PhysicalStatsForGetFishFromAquariumResponse>();
+            CreateMap<Fish, FishForGetFishesFromAquariumResponse>();
+            CreateMap<PhysicalStatistic, PhysicalStatsForFishForGetFishFromAquariumResponse>();
+            CreateMap<LifeTimeStatistic, LifeTimeStatisticForFishForGetFishFromAquariumResponse>();
+            CreateMap<LifeParameters, LifeParametersForFishForGetFishFromAquariumResponse>();
+
+            CreateMap<Fish, GetFishResponse>();
+            CreateMap<PhysicalStatistic, PhysicalStatisticForGetFishResponse>();
+            CreateMap<SetOfMutations, SetOfMutationsForGetFishResponse>();
+            CreateMap<LifeTimeStatistic, LifeTimeStatisticForGetFishResponse>();
+            CreateMap<LifeParameters, LifeParametersForGetFishResponse>();
+            CreateMap<Fish, ParentOfFishForGetFishResponse>().ForMember(opt=>opt.Color,par=>par.MapFrom(src=>src.PhysicalStatistic.Color));
+
+            CreateMap<Fish, FishForGetUserFishesResponse>();
         }
 
         private void MapsForHub()

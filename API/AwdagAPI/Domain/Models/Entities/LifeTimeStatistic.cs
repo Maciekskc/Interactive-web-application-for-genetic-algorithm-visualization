@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Models
 {
@@ -10,7 +11,7 @@ namespace Domain.Models
         public DateTime BirthDate { get; set; }
 
         [DefaultValue(null)]
-        public DateTime DeathDate { get; set; }
+        public DateTime? DeathDate { get; set; }
 
         [DefaultValue(0)]
         public int FoodCollected { get; set; }
