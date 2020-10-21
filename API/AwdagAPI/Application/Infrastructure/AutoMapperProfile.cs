@@ -8,6 +8,7 @@ using Domain.Models.Entities;
 using System;
 using System.Globalization;
 using System.IO;
+using Application.Dtos.Aquarium.Responses;
 using Application.Dtos.Auth.Responses;
 using Application.Dtos.Fish.Response;
 using Application.Dtos.Hub;
@@ -24,7 +25,7 @@ namespace Application.Infrastructure
             MapsForAdmin();
             MapsForLogs();
             MapsForFishes();
-
+            MapsForAquariums();
             MapsForHub();
         }
 
@@ -88,6 +89,21 @@ namespace Application.Infrastructure
             CreateMap<Fish, ParentOfFishForGetFishResponse>().ForMember(opt=>opt.Color,par=>par.MapFrom(src=>src.PhysicalStatistic.Color));
 
             CreateMap<Fish, FishForGetUserFishesResponse>();
+        }
+
+        private void MapsForAquariums()
+        {
+            CreateMap<Aquarium, GetAquariumResponse>()
+                .ForMember(opt => opt.CurrentFoodsAmount,
+                    par => par.MapFrom(src => src.Foods.Count))
+                .ForMember(opt => opt.CurrentPopulationCount,
+                par => par.MapFrom(src => src.Fishes.Count));
+
+            CreateMap<Aquarium, AquariumForGetAllAquariumsResponse>()
+                .ForMember(opt => opt.CurrentFoodsAmount,
+                    par => par.MapFrom(src => src.Foods.Count))
+                .ForMember(opt => opt.CurrentPopulationCount,
+                    par => par.MapFrom(src => src.Fishes.Count));
         }
 
         private void MapsForHub()
