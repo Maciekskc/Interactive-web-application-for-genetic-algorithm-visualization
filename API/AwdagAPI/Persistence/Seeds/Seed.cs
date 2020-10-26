@@ -229,8 +229,8 @@ namespace Persistence.Seeds
                             Vx = random.Next(-3, 3),
                             Vy = random.Next(-3, 3),
                             V = random.Next(2, 4),
-                            VisionAngle = random.Next(30,60),
-                            VisionRange = random.Next(20,40),
+                            VisionAngle = random.Next(15,30),
+                            VisionRange = random.Next(20,50),
                             Color = String.Format("#{0:X6}", random.Next(0x1000000)),
                             FishId = ++seed.PhysicalStatisticId
                         }
@@ -251,10 +251,12 @@ namespace Persistence.Seeds
                     lifeParameters.Add(
                         new LifeParameters()
                         {
-                            HungerInterval = new TimeSpan(0,0,random.Next(30,60)),
+                            HungerInterval = new TimeSpan(0,0,random.Next(50,100)),
                             LastHungerUpdate = DateTime.UtcNow,
                             VitalityInterval = new TimeSpan(0, 0, random.Next(55, 60)),
                             LastVitalityUpdate = DateTime.UtcNow,
+                            Vitality = LifeParameters.MAX_VITALITY,
+                            Hunger = 3.0F,
                             FishId = ++seed.LifeParameterId
                         }
                     );

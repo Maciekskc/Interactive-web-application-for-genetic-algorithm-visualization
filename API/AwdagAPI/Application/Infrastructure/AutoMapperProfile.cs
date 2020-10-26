@@ -8,6 +8,7 @@ using Domain.Models.Entities;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using Application.Dtos.Aquarium.Requests;
 using Application.Dtos.Aquarium.Responses;
 using Application.Dtos.Auth.Responses;
@@ -119,7 +120,8 @@ namespace Application.Infrastructure
         {
             CreateMap<Aquarium, HubTransferData>()
                 .ForMember(opt=>opt.AquariumWidth,src => src.MapFrom(aq=>aq.Width))
-                .ForMember(opt => opt.AquariumHeight, src => src.MapFrom(aq => aq.Height));
+                .ForMember(opt => opt.AquariumHeight, src => src.MapFrom(aq => aq.Height))
+                .ForMember(opt=> opt.Fishes, src => src.MapFrom(aq=>aq.Fishes.Where(f=>f.IsAlive)));
             CreateMap<Fish, FishForHubTransferData>();
             CreateMap<PhysicalStatistic, PhysicalStatsForFishForHubTransferData>();
             CreateMap<Food, FoodForHubTransferData>();
