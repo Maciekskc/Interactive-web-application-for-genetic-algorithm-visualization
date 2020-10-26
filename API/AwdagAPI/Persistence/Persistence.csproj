@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201026172022_AddedImportantFlagToPredatorMutationAndTryToRepairAsotiationsTable.cs" />
+    <Compile Remove="Migrations\20201026172022_AddedImportantFlagToPredatorMutationAndTryToRepairAsotiationsTable.Designer.cs" />
+    <Compile Remove="Migrations\20201026172550_AddedImportantFlagToPredatorMutationAndTryToRepairAsotiationsTable.cs" />
+    <Compile Remove="Migrations\20201026172550_AddedImportantFlagToPredatorMutationAndTryToRepairAsotiationsTable.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2">

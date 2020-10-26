@@ -43,8 +43,11 @@ namespace Persistence
                 .HasOne<Fish>(x => x.Parent)
                 .WithMany(x => x.Childs)
                 .HasForeignKey(x => x.ChildId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+                .IsRequired();
+
+
+            //dodaj  w 2 drugą strone
+
 
             builder.Entity<LifeTimeStatistic>()
                 .HasOne<Fish>(x => x.Fish)
