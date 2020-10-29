@@ -131,6 +131,9 @@ namespace Application.Services
                 if (angleDif > (double)(fish.PhysicalStatistic.VisionAngle * Math.PI / 180))
                     continue;
 
+                //w tym momencie już widzi jedzenie i następuje aktualizacja ruchu i ewentualnych mutacji
+                EnableHungryChargeMutationIfCould(fish);
+
                 if (angleDif == 0)
                     break;
 
@@ -194,6 +197,7 @@ namespace Application.Services
                 if (angleDif > (double)(fish.PhysicalStatistic.VisionAngle * Math.PI / 180))
                     continue;
 
+
                 if (angleDif == 0)
                     break;
 
@@ -201,11 +205,9 @@ namespace Application.Services
                 if (target.LifeParameters.Vitality < fish.LifeParameters.Vitality)
                     continue;
 
-                if (!fish.SetOfMutations.HungryCharge)
-                {
-                    fish.SetOfMutations.HungryCharge = true;
-                    fish.PhysicalStatistic.V *= 2;
-                }
+                //w tym momencie już widzi jedzenie i następuje aktualizacja ruchu i ewentualnych mutacji
+                EnableHungryChargeMutationIfCould(fish);
+                
 
                 //wyznaczamy wektor kierunkowy do obiektu
                 var a = (double)(target.PhysicalStatistic.X - fish.PhysicalStatistic.X);
@@ -316,6 +318,7 @@ namespace Application.Services
                     : LifeParameters.MAX_HUNGER - fish.LifeParameters.Hunger;
             fish.LifeParameters.LastHungerUpdate = DateTime.UtcNow;
             fish.LifeTimeStatistic.FoodCollected++;
+            DisableHungryChargeMutationIfNeed(fish);
         }
 
         /// <summary>
@@ -548,7 +551,7 @@ namespace Application.Services
 
             var fish = new Fish()
             {
-                Name = $"Desc{parent1.Name}&{parent2.Name}",
+                Name = $"DescId{parent1.Id}&Id{parent2.Id}",
                 AquariumId = parent1.AquariumId,
                 IsAlive = true,
                 OwnerId = null,
@@ -621,6 +624,41 @@ namespace Application.Services
         private async Task MakeFishReadyToProcreate(Fish fish)
         {
             fish.LifeParameters.ReadyToProcreate = true;
+        }
+
+        /// <summary>
+        /// włącza hungary charge jeśli rybka posiada takowa mutacje
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
+        private async Task EnableHungryChargeMutationIfCould(Fish fish)
+        {
+            if (fish.SetOfMutations.HungryCharge && !fish.SetOfMutations.HungryChargeEnabled)
+            {
+                
+                fish.PhysicalStatistic.V = fish.PhysicalStatistic.V * (4.0F / 3.0F);
+                fish.PhysicalStatistic.Vx = fish.PhysicalStatistic.Vx * (4.0F / 3.0F);
+                fish.PhysicalStatistic.Vy = fish.PhysicalStatistic.Vy * (4.0F / 3.0F);
+                fish.LifeParameters.HungerInterval = new TimeSpan((long) (fish.LifeParameters.HungerInterval.Ticks * (3.0F / 4.0F)));
+                fish.SetOfMutations.HungryChargeEnabled = true;
+            }
+        }
+
+        /// <summary>
+        /// wyłącza hungary charge jeżeli rybka z taką muytacją zje jedzenie
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
+        private async Task DisableHungryChargeMutationIfNeed(Fish fish)
+        {
+            if (fish.SetOfMutations.HungryCharge && fish.SetOfMutations.HungryChargeEnabled)
+            {
+                fish.PhysicalStatistic.V = fish.PhysicalStatistic.V * (3.0F / 4.0F);
+                fish.PhysicalStatistic.Vx = fish.PhysicalStatistic.Vx * (3.0F / 4.0F);
+                fish.PhysicalStatistic.Vy = fish.PhysicalStatistic.Vy * (3.0F / 4.0F);
+                fish.LifeParameters.HungerInterval = new TimeSpan((long) (fish.LifeParameters.HungerInterval.Ticks * (4.0F / 3.0F)));
+                fish.SetOfMutations.HungryChargeEnabled = false;
+            }
         }
     }
 }
