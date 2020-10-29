@@ -19,10 +19,16 @@ namespace Domain.Models.Entities
         public bool PredatorAttackCharge { get; set; }
 
         /// <summary>
-        /// Variable that allow fish to fastest its speed whitch will decrease its hunger time iterval
+        /// mutacja pozwalająca szarżować po zauważeniu jedzenia kosztem szybszej utraty głodu
         /// </summary>
         [DefaultValue(false)]
         public bool HungryCharge { get; set; }
+
+        /// <summary>
+        /// Zmienna do uzyskiwania informacji czy aktualnie wykorzystuje swoją mutacje szarży 
+        /// </summary>
+        [DefaultValue(false)]
+        public bool HungryChargeEnabled { get; set; }
 
         public virtual Fish Fish { get; set; }
         public int FishId { get; set; }

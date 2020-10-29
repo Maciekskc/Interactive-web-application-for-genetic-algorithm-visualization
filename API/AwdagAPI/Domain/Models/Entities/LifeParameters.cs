@@ -42,6 +42,8 @@ namespace Domain.Models.Entities
         /// </summary>
         public DateTime LastVitalityUpdate { get; set; }
 
+        public bool ReadyToProcreate { get; set; }
+
         public virtual Fish Fish { get; set; }
         public int FishId { get; set; }
     }

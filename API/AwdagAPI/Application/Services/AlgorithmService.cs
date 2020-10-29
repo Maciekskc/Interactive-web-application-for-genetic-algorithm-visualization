@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +9,7 @@ using Application.HubConfig;
 using AutoMapper;
 using Domain.Models;
 using Domain.Models.Entities;
+using Domain.Models.Entities.Association;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -46,7 +49,8 @@ namespace Application.Services
                 {
                     //pętla organizująca algorytm
                     var stats = _context.PhysicalStatistics.ToList();
-                    foreach (var fish in _context.Fishes.Where(f=>f.IsAlive).ToList())
+                    var fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
+                    foreach (var fish in fishes)
                     {
                         if(await CheckAndUpdateLifeParametersAsync(fish))
                             await MakeAMoveAsync(fish);
@@ -68,6 +72,11 @@ namespace Application.Services
             };
         }
 
+        /// <summary>
+        /// główna metoda odpowiedzialna za wykonanie ruchu przez rybkę
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
         private async Task MakeAMoveAsync(Fish fish)
         {
             float fishOldX = fish.PhysicalStatistic.X;
@@ -87,7 +96,8 @@ namespace Application.Services
             }
             else
             {
-                //tutaj wykonamy krzyżowanie
+                if(fish.LifeParameters.ReadyToProcreate && fish.Aquarium.Fishes.Where(f=>f.IsAlive).Count() < fish.Aquarium.Capacity * 2)
+                    await ProcreationProcess(fish);
             }
 
             fish.PhysicalStatistic.X += fish.PhysicalStatistic.Vx;
@@ -99,6 +109,11 @@ namespace Application.Services
             var val = await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// sprawdza czu rybka widzi jedzenie i ustawia ją w jego kierunku
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
         private async Task CheckIfSeeFoodAndChangeDirectionIfNeedAsync(Fish fish)
         {
             //tutaj sprawdzamy czy w zasięgu wzroku jest jakies jedzenie
@@ -138,21 +153,31 @@ namespace Application.Services
                         Y = (float) random.Next(0, fish.Aquarium.Height),
                         AquariumId = fish.AquariumId,
                     });
-                    await _context.SaveChangesAsync();
                     //zostawimy ten update pod zapisaem ponieważ po ruchu również odbywa się aktualizacja
                     UpdateLifeTimeStatisticOfFishAfterEat(fish);
+                    //jeżeli to pożywienie sprawiło że rybka osiągnęła stan najedzenia to ustawiamy flagi zdolności do prokreacji
+                    if (fish.LifeParameters.Hunger >= 4.0F)
+                    {
+                        MakeFishReadyToProcreate(fish);
+                    }
+                    await _context.SaveChangesAsync();
                 }
                 break;
             }
         }
 
+        /// <summary>
+        /// sprawdza czu rybka widzi inną rybkę i ustawia ją w jej kierunku TYLKO DLA DRAPIEŻNIKA
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
         private async Task CheckIfSeeFoodAndChangeDirectionIfNeedForPredatorAsync(Fish fish)
         {
             //tutaj sprawdzamy czy w zasięgu wzroku jest jakaś rybka
             var listOfTargetInAquarium = fish.Aquarium.Fishes.Where(f=>f.IsAlive);
             foreach (var target in listOfTargetInAquarium)
             {
-                //pomijamy opcje zaatakowania samej siebie
+                //pomijamy samą siebie
                 if(target == fish)
                     continue;
 
@@ -207,11 +232,23 @@ namespace Application.Services
 
                     await _context.SaveChangesAsync();
                     UpdateLifeTimeStatisticOfFishAfterEat(fish);
+                    //jeżeli to pożywienie sprawiło że rybka osiągnęła stan najedzenia to ustawiamy flagi zdolności do prokreacji
+                    if (fish.LifeParameters.Hunger >= 4.0F)
+                    {
+                        MakeFishReadyToProcreate(fish);
+                    }
                 }
                 break;
             }
         }
 
+        /// <summary>
+        /// Sprawdza czy rybka udeżyła w ściany akwarium i zmienia kierunek płynięcia
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <param name="fishOldX"></param>
+        /// <param name="fishOldY"></param>
+        /// <returns></returns>
         private async Task CheckIfHitBorderAndChangeDirectionIdNeed(Fish fish, float fishOldX, float fishOldY)
         {
             Random random = new Random();
@@ -292,6 +329,8 @@ namespace Application.Services
             var diference = fish.LifeParameters.LastVitalityUpdate - DateTime.UtcNow;
             var diferenceOtherSiide = DateTime.UtcNow- fish.LifeParameters.LastVitalityUpdate;
 
+            var fishPrevHungerLevel = fish.LifeParameters.Hunger;
+
             var span = fish.LifeParameters.VitalityInterval;
             if (DateTime.UtcNow - fish.LifeParameters.LastVitalityUpdate > fish.LifeParameters.VitalityInterval)
             {
@@ -306,6 +345,8 @@ namespace Application.Services
             {
                 fish.LifeParameters.Hunger -= 0.5F;
                 fish.LifeParameters.LastHungerUpdate = DateTime.UtcNow;
+                if (fish.LifeParameters.Hunger < 4 && fishPrevHungerLevel >= 4)
+                    fish.LifeParameters.ReadyToProcreate = false;
             }
 
             if (fish.LifeParameters.Hunger <= 0)
@@ -320,6 +361,266 @@ namespace Application.Services
                 return true;
 
             return false;
+        }
+
+        /// <summary>
+        /// zaczyna akcje związane z rozmnażaniem
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
+        private async Task ProcreationProcess(Fish fish)
+        {
+            Fish partner = await FindPartnerToProcreate(fish);
+            if (partner != null)
+            {
+                //wyznaczamy wektor kierunkowy do obiektu
+                var a = (double)(partner.PhysicalStatistic.X - fish.PhysicalStatistic.X);
+                var b = (double)(partner.PhysicalStatistic.Y - fish.PhysicalStatistic.Y);
+                var length = (double)Math.Sqrt(Math.Pow(a, 2) - Math.Pow(b, 2));
+
+                if (length > 0)
+                {
+                    fish.PhysicalStatistic.Vx = (float)(a * fish.PhysicalStatistic.V / length);
+                    fish.PhysicalStatistic.Vy = (float)(b * fish.PhysicalStatistic.V / length);
+                }
+
+                if (length <= fish.PhysicalStatistic.V)
+                {
+                    await Procreate(fish, partner);
+
+                    //po krzyżowaniu należy zmienić u rodziców flage zdolności do prokreacji, chcemy żeby w stanie najedzenia mogli stworzyć tylko jednego potomka
+                    fish.LifeParameters.ReadyToProcreate = false;
+                    partner.LifeParameters.ReadyToProcreate = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// przeszukuje akwarium i znajduje najbliższego partnera do prokreacji
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
+        private async Task<Fish> FindPartnerToProcreate(Fish fish)
+        {
+            var listOfTargetInAquarium = fish.Aquarium.Fishes.Where(f => f.IsAlive && f.LifeParameters.ReadyToProcreate);
+            Fish partner = null;
+            float nearestDistance = fish.Aquarium.Width;
+            foreach (var target in listOfTargetInAquarium)
+            {
+                //pomijamy samą siebie
+                if (target == fish)
+                    continue;
+
+                //szukamy najbliższego partnera 
+                var distance = (float) Math.Sqrt(Math.Pow(target.PhysicalStatistic.X - fish.PhysicalStatistic.X, 2.0) +
+                                               Math.Pow(target.PhysicalStatistic.Y - fish.PhysicalStatistic.Y, 2.0));
+                if (distance < nearestDistance)
+                    partner = target;
+            }
+            return partner;
+        }
+
+        /// <summary>
+        /// rozmnaża 2 podane rybki na podstawie ich statystyk tworzy potomka który może okazać się odpowiednio lepszy luub gorszy od rodziców
+        /// </summary>
+        /// <param name="parent1"></param>
+        /// <param name="parent2"></param>
+        /// <returns></returns>
+        private async Task Procreate(Fish parent1, Fish parent2)
+        {
+            //tutaj przeprowadzamy krzyzowanie w ściśle określonych warunkach
+            Random random = new Random();
+            //do najważniejsze parametry to prędkość, wzrok oraz kolor(ze względu na zauważalność)
+            //krzyżowanie bedzie w przedziałach między statystykami rodziców + możliwy bonus w zależności od zebranego przez rodziców pożywenia
+            var foodCollectedByParents =
+                parent1.LifeTimeStatistic.FoodCollected + parent2.LifeTimeStatistic.FoodCollected;
+
+            //podstawowe statystyki
+            #region Velocity
+            var parentSpeedDiference = Math.Abs(parent1.PhysicalStatistic.V - parent2.PhysicalStatistic.V);
+            var minimalDescendantSpeed = Math.Min(parent1.PhysicalStatistic.V, parent2.PhysicalStatistic.V);
+            const float speedBonusPerFoodCollected = 0.2F;
+            //                         Minimalna prędkość   +   losowy procent różnicy                 +                      + bonus związany z jedzeniem LUB - 1, potomek może okazać się gorszy, raczejrybki nie mają prędkości mniejszej niż 2 więc może się okazać że  potometk bedzie miał prędkość 1 czyli duużo gorszą od rodzicó
+            var childSpeed = (float) (minimalDescendantSpeed + random.NextDouble() * parentSpeedDiference  + (random.Next(0, 100) > 50 ? random.NextDouble() * foodCollectedByParents * speedBonusPerFoodCollected : -1));
+            #endregion
+
+            #region VisionAngle
+            var parentVisionAngleDiference = Math.Abs(parent1.PhysicalStatistic.VisionAngle - parent2.PhysicalStatistic.VisionAngle);
+            var minimalDescendantVisionAngle = Math.Min(parent1.PhysicalStatistic.VisionAngle, parent2.PhysicalStatistic.VisionAngle);
+            const float visionAngleBonusPerFoodCollected = 0.34F;
+            var childVisionAngle =
+                (int) Math.Round(
+                    minimalDescendantVisionAngle + random.NextDouble() * parentVisionAngleDiference +
+                    random.NextDouble() * foodCollectedByParents * visionAngleBonusPerFoodCollected,
+                    MidpointRounding.ToPositiveInfinity);
+            #endregion
+
+            #region VisionRange
+            var parentVisionRangeDiference = Math.Abs(parent1.PhysicalStatistic.VisionRange - parent2.PhysicalStatistic.VisionRange);
+            var minimalDescendantVisionRange = Math.Min(parent1.PhysicalStatistic.VisionRange, parent2.PhysicalStatistic.VisionRange);
+            const float visionRangeBonusPerFoodCollected = 0.5F;
+            var childVisionRange =
+                (int) Math.Round(
+                    minimalDescendantVisionRange + random.NextDouble() * parentVisionRangeDiference +
+                    random.NextDouble() * foodCollectedByParents * visionRangeBonusPerFoodCollected,
+                    MidpointRounding.ToPositiveInfinity);
+            #endregion
+
+            //interwały czasowe
+            #region HungerInterval
+            var parentHungaryIntervalDiference = Math.Abs(parent1.LifeParameters.HungerInterval.TotalSeconds - parent2.LifeParameters.HungerInterval.TotalSeconds);
+            var minimalDescendantHungaryInterval = Math.Min(parent1.LifeParameters.HungerInterval.TotalSeconds, parent2.LifeParameters.HungerInterval.TotalSeconds);
+            const int hungaryIntervalBonusPerFoodCollected = 1;
+            var childHungaryInterval = new TimeSpan(0,0,0,
+                (int)Math.Round(
+                    minimalDescendantHungaryInterval + random.NextDouble() * parentHungaryIntervalDiference
+                    + (random.Next(0, 100) > 50 ? random.NextDouble() * foodCollectedByParents * hungaryIntervalBonusPerFoodCollected : -1),
+                    MidpointRounding.ToPositiveInfinity));
+            //nie ma tu warunku granicznego zakładam że nie bedzie potrzebny
+            #endregion
+
+            #region VitalityInterval
+            var parentVitalityIntervalDiference = Math.Abs(parent1.LifeParameters.HungerInterval.TotalSeconds - parent2.LifeParameters.HungerInterval.TotalSeconds);
+            var maximalDescendantVitalityInterval = Math.Max(parent1.LifeParameters.HungerInterval.TotalSeconds, parent2.LifeParameters.HungerInterval.TotalSeconds);
+            const int vitalityIntervaBonusPerFoodCollected = 1;
+            var childVitalityIntervalInSeconds = 
+                (int)Math.Round(
+                    maximalDescendantVitalityInterval - random.NextDouble() * parentVitalityIntervalDiference +
+                    random.NextDouble() - (random.Next(0, 100) > 50 ? random.NextDouble() * foodCollectedByParents * vitalityIntervaBonusPerFoodCollected : -1),
+                    MidpointRounding.ToNegativeInfinity);
+            var childVitalityInterval = new TimeSpan(0,0,0,childVitalityIntervalInSeconds < 5 ? 5 : childVitalityIntervalInSeconds);
+            #endregion
+
+            #region BoundaryConditions
+            //warunki graniczne parametrów fizycznych, nie chcemy nie aby zmienne osiągneły zbyt duży poziom
+            //prędkość nie większa niż 10
+            childSpeed = childSpeed > 10 ? 10 : childSpeed;
+            //kąt wzroku do 80 stopni
+            childVisionAngle = childVisionAngle > 80 ? 80 : childVisionAngle;
+            //zasięg wzroku na conajwyżej pół akwarium
+            childVisionRange = childVisionRange > parent1.Aquarium.Width/2 ? parent1.Aquarium.Width / 2 : childVisionRange;
+            #endregion
+
+            //kolor rybki, będzie to prosta średnia arytmetyczna koliorów rodzica
+            #region Color
+            var parent1Color = ColorTranslator.FromHtml(parent1.PhysicalStatistic.Color);
+            var parent2Color = ColorTranslator.FromHtml(parent1.PhysicalStatistic.Color);
+            var childColor = Color.FromArgb((byte) (parent1Color.R + parent2Color.R) / 2,
+                (byte) (parent1Color.G + parent2Color.G) / 2, (byte) (parent1Color.G + parent2Color.G) / 2);
+            #endregion
+
+            //Mutacje
+            #region Predator
+            var predatorParentsCount = (parent1.SetOfMutations.Predator ? 1 : 0) + (parent2.SetOfMutations.Predator ? 1 : 0);
+            int percentageChanceForPredator = 10;
+            switch (predatorParentsCount)
+            {
+                case 1:
+                    percentageChanceForPredator += 30;
+                    break;
+                case 2:
+                    percentageChanceForPredator += 65;
+                    break;
+                default:
+                    percentageChanceForPredator += 0;
+                    break;
+            }
+            bool IfChildIsPredator = random.Next(0, 100) <= percentageChanceForPredator;
+            #endregion
+
+            #region HungaryCharge
+            var hungaryChargeParentsCount = (parent1.SetOfMutations.HungryCharge ? 1 : 0) + (parent2.SetOfMutations.HungryCharge ? 1 : 0);
+            int percentageChanceForHungaryCharge = 10;
+            switch (hungaryChargeParentsCount)
+            {
+                case 1:
+                    percentageChanceForHungaryCharge += 30;
+                    break;
+                case 2:
+                    percentageChanceForHungaryCharge += 65;
+                    break;
+                default:
+                    percentageChanceForHungaryCharge += 0;
+                    break;
+            }
+            bool IfChildGotHungaryCharge = random.Next(0, 100) <= percentageChanceForHungaryCharge;
+            #endregion
+
+            var fish = new Fish()
+            {
+                Name = $"Desc{parent1.Name}&{parent2.Name}",
+                AquariumId = parent1.AquariumId,
+                IsAlive = true,
+                OwnerId = null,
+                PhysicalStatistic = new PhysicalStatistic()
+                {
+                    //pojawi się w miejscu rodziców
+                    X = parent1.PhysicalStatistic.X,
+                    Y = parent1.PhysicalStatistic.Y,
+                    //z obliczoną na podstawie 'krzyżowania' prędkością
+                    V = childSpeed,
+                    //popłynie z przeskalowaną prędkością w kierunku preciwnym do parent 1
+                    Vx = -parent1.PhysicalStatistic.Vx * childSpeed / parent1.PhysicalStatistic.V,
+                    Vy = -parent1.PhysicalStatistic.Vy * childSpeed / parent1.PhysicalStatistic.V,
+                    //kolor przekonwertowany na hex
+                    Color = "#" + childColor.R.ToString("X2")+ childColor.G.ToString("X2")+ childColor.B.ToString("X2"),
+                    VisionAngle = childVisionAngle,
+                    VisionRange = childVisionRange
+                },
+                SetOfMutations = new SetOfMutations()
+                {
+                    //zestaw mutacji został policzony ze względu na mutacje rodziców
+                    Predator = IfChildIsPredator,
+                    HungryCharge = IfChildGotHungaryCharge
+                },
+                LifeTimeStatistic = new LifeTimeStatistic()
+                {
+                    BirthDate = DateTime.UtcNow,
+                    DeathDate = null,
+                },
+                LifeParameters = new LifeParameters()
+                {
+                    //nowy osobnik na start jest najedzony, to załatwi przykr przypadek atakowania rodzica w przypadku okazania się drapieżnikiem
+                    Hunger = 4.0F,
+                    //mimo najedzenia flaga prokreacji zostaje zdjęta
+                    ReadyToProcreate = false,
+                    HungerInterval = childHungaryInterval,
+                    LastHungerUpdate = DateTime.UtcNow,
+                    Vitality = LifeParameters.MAX_VITALITY,
+                    VitalityInterval = childVitalityInterval,
+                    LastVitalityUpdate = DateTime.UtcNow
+                }
+            };
+            _context.Fishes.Add(fish);
+
+            //todo poprawić tabele parentchild
+            //na koniec tworzymy jeszcze informacje o rodzicach
+            //var parentChilds = new List<ParentChild>()
+            //{
+            //    new ParentChild()
+            //    {
+            //        Parent = parent1,
+            //        Child = fish
+            //    },
+            //    new ParentChild()
+            //    {
+            //        Parent = parent2,
+            //        Child = fish
+            //    }
+            //};
+            //_context.ParentChild.AddRange(parentChilds);
+
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Odblokowuje flage zdolności do prokreacji, metoda powinna być wykorzystana w momencie zjadania jedzenia które przebija punkt najedzenia
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
+        private async Task MakeFishReadyToProcreate(Fish fish)
+        {
+            fish.LifeParameters.ReadyToProcreate = true;
         }
     }
 }
