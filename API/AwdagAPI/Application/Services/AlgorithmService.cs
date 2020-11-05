@@ -596,22 +596,20 @@ namespace Application.Services
             };
             _context.Fishes.Add(fish);
 
-            //todo poprawić tabele parentchild
-            //na koniec tworzymy jeszcze informacje o rodzicach
-            //var parentChilds = new List<ParentChild>()
-            //{
-            //    new ParentChild()
-            //    {
-            //        Parent = parent1,
-            //        Child = fish
-            //    },
-            //    new ParentChild()
-            //    {
-            //        Parent = parent2,
-            //        Child = fish
-            //    }
-            //};
-            //_context.ParentChild.AddRange(parentChilds);
+            var parentChilds = new List<ParentChild>()
+            {
+                new ParentChild()
+                {
+                    Parent = parent1,
+                    Child = fish
+                },
+                new ParentChild()
+                {
+                    Parent = parent2,
+                    Child = fish
+                }
+            };
+            _context.ParentChild.AddRange(parentChilds);
 
             await _context.SaveChangesAsync();
         }
