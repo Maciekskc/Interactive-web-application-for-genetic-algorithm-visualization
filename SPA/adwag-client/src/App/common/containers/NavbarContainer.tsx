@@ -63,19 +63,23 @@ const NavbarContainer: React.FC<{}> = () => {
 			return (
 				<Menu mode='horizontal' selectedKeys={[location.pathname]} className='menu-padding'>
 					{home}
+					<Menu.Item key='/fish/1'>
+						<Link to='/fish/1'>Rybka1</Link>
+					</Menu.Item>
 					<Menu.Item key='/admin/users'>
 						<Link to='/admin/users'>{t('Common.NavbarContainer.Admin')}</Link>
 					</Menu.Item>
 					{accountMenu}
 				</Menu>
 			);
-		}
-
-		else if (user.roles.includes(Role.USER)) {
+		} else if (user.roles.includes(Role.USER)) {
 			// user
 			return (
 				<Menu mode='horizontal' selectedKeys={[location.pathname]} className='menu-padding'>
 					{home}
+					<Menu.Item key='/fish/1'>
+						<Link to='/fish/1'>Rybka1</Link>
+					</Menu.Item>
 					{accountMenu}
 				</Menu>
 			);
@@ -85,6 +89,9 @@ const NavbarContainer: React.FC<{}> = () => {
 		return (
 			<Menu mode='horizontal' selectedKeys={[location.pathname]} className='menu-padding'>
 				{home}
+				<Menu.Item key='/fish/1'>
+					<Link to='/fish/1'>Rybka1</Link>
+				</Menu.Item>
 				<Menu.Item key='/sign-up' style={{ float: 'right' }}>
 					<Link to='/sign-up'>{t('Common.NavbarContainer.SignUp')}</Link>
 				</Menu.Item>
