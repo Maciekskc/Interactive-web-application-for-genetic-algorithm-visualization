@@ -1,0 +1,78 @@
+{
+    "User": {
+        "Labels": {
+            "Email": "Email address",
+			"Password": "Password",
+			"ConfirmPassword": "Confirm password",
+			"FirstName": "First name",
+			"LastName": "Last name",
+            "Roles": "Roles",
+            "PhoneNumber": "Phone number",
+            "UserName": "User name",
+            "AccessFailedCount": "Access failed count",
+			"LockedUntil": "Account locked until",
+			"TwoFactor": "Two factor",
+            "EmailConfirmed": "Email confirmed",
+            "EmailLanguage": "Email language"
+        },
+        "Placeholders": {
+            "SelectRoles": "Select user roles",
+			"Email": "Please enter email address",
+			"Password": "Please enter password",
+			"FirstName": "Please enter first name",
+            "LastName": "Please enter last name",
+            "EmailLanguage": "Select email language"
+        }
+    },
+    "Login": {
+        "Labels": {
+            "Email": "Email address",
+			"Password": "Password",
+            "RememberMe": "Remember me"
+        },
+        "Placeholders": {
+			"Email": "Please enter email address",
+			"Password": "Please enter password"
+        }
+    },
+    "ValidationMessages": {
+        "TypeTemplate": "'${arg}' is not a valid ${type}",
+        "Default": "Validation error on field '${arg}'",
+        "Required": "'${arg}' is required",
+        "Enum": "'${arg}' must be one of [${enum}]",
+        "Whitespace": "'${arg}' cannot be empty",
+        "Date": {
+            "Format": "'${arg}' is invalid for format date",
+            "Parse": "'${arg}' could not be parsed as date",
+            "Invalid": "'${arg}' is invalid date"
+        },
+        "String": {
+            "Len": "'${arg}' must be exactly ${len} characters",
+            "Min": "'${arg}' must be at least ${min} characters",
+            "Max": "'${arg}' cannot be longer than ${max} characters",
+            "Range": "'${arg}' must be between ${min} and ${max} characters"
+        },
+        "Number": {
+            "Len": "'${arg}' must be equal ${len}",
+            "Min": "'${arg}' cannot be less than ${min}",
+            "Max": "'${arg}' cannot be greater than ${max}",
+            "Range": "'${arg}' must be between ${min} and ${max}"
+        },
+        "Array": {
+            "Len": "'${arg}' must be exactly ${len} in length",
+            "Min": "'${arg}' cannot be less than ${min} in length",
+            "Max": "'${arg}' cannot be greater than ${max} in length",
+            "Range": "'${arg}' must be between ${min} and ${max} in length"
+        },
+        "Pattern": {
+			"Mismatch": "'${arg}' does not match pattern ${pattern}"
+        },
+        "Custom": {
+            "MustContainLowercase": "'{{arg}}' must contain lower case character",
+            "MustContainUppercase": "'{{arg}}' must contain upper case character",
+            "MustContainNumber": "'{{arg}}' must contain a number",
+            "MustContainSpecial": "'{{arg}}' must contain a special character",
+            "FieldsMustBeEqual": "Field '{{arg.0}}' and '{{arg.1}}' must be equal"
+        }
+    }
+}

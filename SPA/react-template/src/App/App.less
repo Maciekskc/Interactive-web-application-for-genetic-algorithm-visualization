@@ -1,0 +1,76 @@
+
+.bg-site{
+  background-color: white !important;
+}
+
+.content-layout {
+  background: #fff;
+  min-height: calc(100vh - 64px);
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.body{
+  overflow-y: hidden;
+  height:100vh;
+}
+
+div.fix-large-addon{
+  margin-bottom: 0;
+}
+
+div.fix-large-addon .ant-form-item-control-input{
+  min-height:unset;
+}
+
+span.red-outline{
+  font-size: 1em;
+  transform: scale(1.0);
+  transition: all 0.2s ease-out;
+  color: #e73a3a;
+}
+
+span.red-outline:hover{
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+.w-256px{
+  width:256px !important;
+}
+
+.w-fit{
+  width: fit-content !important;
+}
+
+.p-6{
+  padding:2em;
+}
+
+// stylowanie scrollbara
+body::-webkit-scrollbar {
+  width: 0.5em;
+}
+ 
+body::-webkit-scrollbar-track {
+  border: 0.1px solid lightgray;
+  border-radius: 0.25em;
+}
+ 
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  border-radius: 0.25em;
+}
+
+.ant-table-content > table{
+  table-layout: fixed !important;
+}
+
+.fixed-header{
+  position: fixed;
+  z-index: 1;
+  width: 100% ;
+}
