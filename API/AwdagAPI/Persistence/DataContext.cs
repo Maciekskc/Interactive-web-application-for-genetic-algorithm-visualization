@@ -40,14 +40,20 @@ namespace Persistence
             ConfigureEnums(builder);
 
             builder.Entity<ParentChild>()
-                .HasOne<Fish>(x => x.Parent)
-                .WithMany(x => x.Childs)
-                .HasForeignKey(x => x.ChildId)
-                .IsRequired();
+                .HasKey(u => new { u.ParentId, u.ChildId });
+
+            builder.Entity<Fish>()
+                .HasMany(p => p.Parents)
+                .WithOne(pc => pc.Child)
+                .HasForeignKey(pc=>pc.ChildId)
+                .OnDelete(DeleteBehavior.NoAction);
 
 
-            //dodaj  w 2 drugą strone
-
+            builder.Entity<Fish>()
+                .HasMany(p => p.Descendants)
+                .WithOne(pc => pc.Parent)
+                .HasForeignKey(pc => pc.ParentId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.Entity<LifeTimeStatistic>()
                 .HasOne<Fish>(x => x.Fish)

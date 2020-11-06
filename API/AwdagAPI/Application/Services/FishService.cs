@@ -110,7 +110,7 @@ namespace Application.Services
         {
             //TODO: TA METODA JEST BARDZO WAŻNA ALE JEJ PRZEROBIENIE WYMAGA DOGŁĘBNEGO SPRAWDZENIA
             var aquarium = await GetEntityByIdAsync<Aquarium>(request.AquariumId);
-            if (aquarium.Fishes.Count>=aquarium.Capacity)
+            if (aquarium.Fishes.Where(f=>f.IsAlive).Count()>=aquarium.Capacity)
                 throw new RestException(HttpStatusCode.BadRequest, "Cannot create another object. Aquarium has maximum capacity.");
 
             Random random = new Random();
@@ -128,6 +128,8 @@ namespace Application.Services
                     Vx = random.Next(2,4) * random.Next(0, 100) > 50 ? 1 : -1,
                     Vy = random.Next(2, 4) * random.Next(0, 100) > 50 ? 1 : -1,
                     Color = String.Format("#{0:X6}", random.Next(0x1000000)),
+                    VisionAngle = random.Next(30, 60),
+                    VisionRange = random.Next(20, 40),
                 },
                 SetOfMutations = new SetOfMutations()
                 {
@@ -140,8 +142,10 @@ namespace Application.Services
                 },
                 LifeParameters = new LifeParameters()
                 {
+                    Hunger = 3.0F,
                     HungerInterval = new TimeSpan(0, 0, random.Next(30, 60)),
                     LastHungerUpdate = DateTime.UtcNow,
+                    Vitality = LifeParameters.MAX_VITALITY,
                     VitalityInterval = new TimeSpan(0, 0, random.Next(55, 60)),
                     LastVitalityUpdate = DateTime.UtcNow
                 }

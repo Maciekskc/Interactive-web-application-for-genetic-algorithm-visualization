@@ -23,8 +23,8 @@ namespace Domain.Models
         public virtual SetOfMutations SetOfMutations { get; set; }
         public virtual LifeTimeStatistic LifeTimeStatistic { get; set; }
 
-        [InverseProperty("Parent")]
-        public virtual ICollection<ParentChild> Childs { get; set; }
+        public virtual ICollection<ParentChild> Parents { get; set; }
+        public virtual ICollection<ParentChild> Descendants { get; set; }
 
         public string? OwnerId { get; set; }
         public virtual ApplicationUser? Owner { get; set; }

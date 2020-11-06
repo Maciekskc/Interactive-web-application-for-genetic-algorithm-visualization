@@ -69,5 +69,12 @@ namespace API.Controllers
             var response = await _adminService.SetUserPasswordAsync(userId, request);
             return SendResponse(response);
         }
+
+        [HttpPost("createFish")]
+        public async Task<IActionResult> CreateExtraordinaryFish([FromBody] Fish fish)
+        {
+            var response = await _adminService.CreateExtraordinaryFish(fish);
+            return SendResponse(response);
+        }
     }
 }

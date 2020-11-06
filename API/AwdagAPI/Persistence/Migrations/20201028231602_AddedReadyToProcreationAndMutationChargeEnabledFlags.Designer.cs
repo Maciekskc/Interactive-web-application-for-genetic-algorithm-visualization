@@ -3,19 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201028231602_AddedReadyToProcreationAndMutationChargeEnabledFlags")]
+    partial class AddedReadyToProcreationAndMutationChargeEnabledFlags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -129,9 +131,14 @@ namespace Persistence.Migrations
                     b.Property<int>("ChildId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ChildId1")
+                        .HasColumnType("int");
+
                     b.HasKey("ParentId", "ChildId");
 
                     b.HasIndex("ChildId");
+
+                    b.HasIndex("ChildId1");
 
                     b.ToTable("ParentChild");
                 });
@@ -495,17 +502,15 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Models.Entities.Association.ParentChild", b =>
                 {
-                    b.HasOne("Domain.Models.Fish", "Child")
-                        .WithMany("Parents")
+                    b.HasOne("Domain.Models.Fish", "Parent")
+                        .WithMany("Childs")
                         .HasForeignKey("ChildId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.Fish", "Parent")
-                        .WithMany("Descendants")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                    b.HasOne("Domain.Models.Fish", "Child")
+                        .WithMany()
+                        .HasForeignKey("ChildId1");
                 });
 
             modelBuilder.Entity("Domain.Models.Entities.Food", b =>
