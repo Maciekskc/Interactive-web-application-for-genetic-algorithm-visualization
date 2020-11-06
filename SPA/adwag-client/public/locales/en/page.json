@@ -1,0 +1,75 @@
+{
+	"Common": {
+		"NavbarContainer": {
+			"Home": "Home",
+			"SignIn": "Sign in",
+			"SignUp": "Sign up",
+			"Admin": "Admin",
+			"Logout": "Logout",
+			"Language": "Language",
+			"Settings": "Settings"
+		}
+	},
+	"AdminPage": {
+		"AdminNavbarContainer": {
+			"Users": "Users",
+			"UserList": "User list",
+			"AddUser": "Add user",
+			"Logs": "Logs",
+			"LogList": "Log list"
+		},
+		"AllLogsCard": {
+			"CardTitle": "All logs"
+		},
+		"GetLogsContainer": {
+			"PageTitle": "Logs",
+			"TextAreaPlaceholder": "Logs"
+		},
+		"GetUserTabs": {
+			"TabGeneral": "General",
+			"TabSecurity": "Security"
+		},
+		"UserGeneralTab": {
+			"StatusConfirmed": "confirmed",
+			"StatusUnConfirmed": "unconfirmed",
+			"BlankPhoneNumber": "none"
+		},
+		"UserSecurityTab": {
+			"Active": "active",
+			"Inactive": "inactive"
+		},
+		"GetUserContainer": {
+			"StatusConfirmed": "confirmed",
+			"StatusUnConfirmed": "unconfirmed"
+		},
+		"GetUsersContainer": {
+			"NewUserButton": "New user",
+			"SuccessDescription": "User was deleted"
+		},
+		"UpdateUserContainer": {
+			"PageHeaderTitle": "Edit user details",
+			"SuccessDescription": "User was updated"
+		},
+		"CreateUserContainer": {
+			"PageHeaderTitle": "Create new user",
+			"SuccessDescription": "User was created"
+		},
+		"UsersTable": {
+			"Actions": "Actions",
+			"ConfirmUserDeletionTitle": "Are you sure you want to remove the user"
+		}
+	},
+	"LoginPage": {
+		"LoginForm": {
+		    "ForgotPassword": "Forgot password"
+		},
+		"LoginPageContainer": {
+			"PageHeaderTitle": "Sign in"
+		}
+	},
+	"NotFoundPage": {
+		"NotFoundPageContainer": {
+			"WeAreSorry": "Sorry, this page does not exist"
+		}
+	}
+}

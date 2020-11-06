@@ -1,0 +1,146 @@
+{
+	"00": {
+		"01": {
+			"DescriptionFormatter": "The length of the field {{args.0}} must not be greater than {{args.1}}"
+		},
+		"02": {
+			"DescriptionFormatter": "The length of the field {{args.0}} must not be less than {{args.1}}"
+		},
+		"03": {
+			"DescriptionFormatter": "Field {{args.0}} is required"
+		},
+		"04": {
+			"DescriptionFormatter": "The field value {{args.0}} must be within [{{args.1}}, {{args.2}}]"
+		},
+		"05": {
+			"DescriptionFormatter": "Fields {{args.0}} and {{args.1}} are not equal"
+		},
+		"06": {
+			"DescriptionFormatter": "The field {{args.0}} must contain a lowercase character"
+		},
+		"07": {
+			"DescriptionFormatter": "The field {{args.0}} must contain a uppercase character"
+		},
+		"08": {
+			"DescriptionFormatter": "The field {{args.0}} must contain the number"
+		},
+		"09": {
+			"DescriptionFormatter": "The {{args.0}} field must contain a special character e.g. #$^+=!*()@%&"
+		},
+		"10": {
+			"DescriptionFormatter": "The {{args.0}} field must have at least {{args.1}} characters"
+		},
+		"11": {
+			"DescriptionFormatter": "Field {{args.0}} contains an incorrect role name"
+		},
+		"12": {
+			"DescriptionFormatter": "Field {{args.0}} is an incorrect URL"
+		},
+		"13": {
+			"DescriptionFormatter": "Field {{args.0}} is an invalid email address"
+		},
+		"14": {
+			"DescriptionFormatter": "The {{args.0}} field is an incorrect phone number"
+		},
+		"15": {
+			"DescriptionFormatter": "The value of {{args.0}} for the {{args.1}} field is incorrect"
+		},
+		"16": {
+			"DescriptionFormatter": "The value {{args.0}} is incorrect"
+		},
+		"17": {
+			"DescriptionFormatter": "The value {{args.0}} is incorrect"
+		},
+		"18": {
+			"DescriptionFormatter": "An error has occurred"
+		},
+		"19": {
+			"DescriptionFormatter": "The file {{args.0}} is larger than {{args.1}} MB"
+		},
+		"20": {
+			"DescriptionFormatter": "Only the following extensions are allowed: {{args.0}}"
+		}
+	},
+	"01": {
+		"01": {
+			"DescriptionFormatter": "User not found"
+		},
+		"02": {
+			"DescriptionFormatter": "Could not find the user with email {{args.0}}"
+		},
+		"03": {
+			"DescriptionFormatter": "An error occured while updating user account"
+		},
+		"04": {
+			"DescriptionFormatter": "An error occured while confirming email address"
+		},
+		"05": {
+			"DescriptionFormatter": "An error occured while changing password"
+		},
+		"06": {
+			"DescriptionFormatter": "An error occured while resetting password"
+		},
+		"07": {
+			"DescriptionFormatter": "An error occured while creating user"
+		},
+		"08": {
+			"DescriptionFormatter": "An error occured while removing user"
+		},
+		"09": {
+			"DescriptionFormatter": "An error occured while setting password"
+		},
+		"10": {
+			"DescriptionFormatter": "Deleted account cannot be confirmed"
+		},
+		"11": {
+			"DescriptionFormatter": "The account with email address {{args.0}} is already confirmed"
+		}
+	},
+	"02": {
+		"01": {
+			"DescriptionFormatter": "The start date must not be greater than the end date"
+		}
+	},
+	"03": {
+		"01": {
+			"DescriptionFormatter": "An error occurred while writing to the database"
+		},
+		"02": {
+			"DescriptionFormatter": "Invalid resource identifier"
+		}
+	},
+	"04": {
+		"01": {
+			"DescriptionFormatter": "An error occurred while sending an email with a confirmation link to {{args.0}}"
+		}
+	},
+	"05": {
+		"01": {
+			"DescriptionFormatter": "Role {{args.0}} does not exist"
+		},
+		"02": {
+			"DescriptionFormatter": "Email address {{args.0}} is already taken"
+		}
+	},
+	"06": {
+		"01": {
+			"DescriptionFormatter": "Your account was deleted"
+		},
+		"02": {
+			"DescriptionFormatter": "An authentication error has occurred"
+		}
+	},
+	"07": {
+		"01": {
+			"DescriptionFormatter": "Unsupported file type. The allowed extension is {{args.0}}"
+		}
+	},
+	"08": {
+		"01": {
+			"DescriptionFormatter": "The date could not be converted from the file name"
+		},
+		"02": {
+			"DescriptionFormatter": "Data processing error"
+		}
+	}
+}

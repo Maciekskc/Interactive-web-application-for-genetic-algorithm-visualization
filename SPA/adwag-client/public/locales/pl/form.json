@@ -1,0 +1,78 @@
+{
+    "User": {
+        "Labels": {
+            "Email": "Adres email",
+            "Password": "Hasło",
+            "ConfirmPassword": "Potwierdź hasło",
+			"FirstName": "Imię",
+			"LastName": "Nazwisko",
+            "Roles": "Role",
+            "PhoneNumber": "Numer telefonu",
+            "UserName": "Nazwa użytkownika",
+            "AccessFailedCount": "Niepoprawne próby logowania",
+			"LockedUntil": "Konto zablokowane do",
+			"TwoFactor": "Uwierzytelnianie dwuskładnikowe",
+			"EmailConfirmed": "Email potwierdzony",
+			"EmailLanguage": "Język emaila"
+        },
+        "Placeholders": {
+            "SelectRoles": "Wybierz role użytkownika",
+			"Email": "Wprowadź adres email",
+			"Password": "Wprowadź hasło",
+			"FirstName": "Wprowadź imię",
+            "LastName": "Wprowadź nazwisko",
+            "EmailLanguage": "Wybierz język emaila"
+        }
+    },
+    "Login": {
+        "Labels": {
+            "Email": "Adres email",
+            "Password": "Hasło",
+            "RememberMe": "Zapamiętaj mnie"
+        },
+        "Placeholders": {
+			"Email": "Wprowadź adres email",
+			"Password": "Wprowadź hasło"
+        }
+    },
+    "ValidationMessages": {
+        "TypeTemplate": "Pole '${arg}' nie jest prawidłowym typem ${type}",
+        "Default": "Błąd walidacji pola ${arg}",
+        "Required": "Pole '${arg}' jest wymagane",
+        "Enum": "Pole '${arg}' musi być jednym z [${enum}]",
+        "Whitespace": "Pole '${arg}' nie może być puste",
+        "Date": {
+            "Format": "Pole '${arg}' jest nieprawidłowe dla formatu daty",
+            "Parse": "Pole '${arg}' nie mogło zostać przetworzone jako data",
+            "Invalid": "Pole '${arg}' jest nieprawidłową datą"
+        },
+        "String": {
+            "Len": "Pole '${arg}' musi składać się z dokładnie ${len} znaków",
+            "Min": "Pole '${arg}' musi składać się z co najmniej ${min} znaków",
+            "Max": "Pole '${arg}' nie może być dłuższe niż ${max} znaków",
+            "Range": "Pole '${arg}' musi składać się z co najmniej ${min} i co najwyżej ${max} znaków"
+        },
+        "Number": {
+            "Len": "Pole '${arg}' musi być równa ${len}",
+            "Min": "Pole '${arg}' nie może być mniejsze niż ${min}",
+            "Max": "Pole '${arg}' nie może być większe niż ${max}",
+            "Range": "Pole '${arg}' musi być z zakresu ${min} i ${max}"
+        },
+        "Array": {
+            "Len": "Pole '${arg}' musi zawierać dokładnie ${len} elementów",
+            "Min": "Pole '${arg}' nie może zawierać mniej niż ${min} elementów",
+            "Max": "Pole '${arg}' nie może zawierać więcej niż ${max} elementów",
+            "Range": "Pole '${arg}' musi zawierać między ${min} a ${max} elementów"
+        },
+        "Pattern": {
+			"Mismatch": "Pole '${arg}' nie pasuje do ${pattern}"
+        },
+        "Custom": {
+            "MustContainLowercase": "Pole '{{arg}}' musi zawierać małą literę",
+            "MustContainUppercase": "Pole '{{arg}}' musi zawierać wielką literę",
+            "MustContainNumber": "Pole '{{arg}}' musi zawierać cyfrę",
+            "MustContainSpecial": "Pole '{{arg}}' musi zawierać znak specjalny",
+            "FieldsMustBeEqual": "Pole '{{arg.0}}' i '{{arg.1}}' muszą być sobie równe"
+        }
+    }
+}

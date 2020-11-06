@@ -1,0 +1,75 @@
+{
+	"Common": {
+		"NavbarContainer": {
+			"Home": "Strona główna",
+			"SignIn": "Logowanie",
+			"SignUp": "Rejestracja",
+			"Admin": "Admin",
+			"Logout": "Wyloguj",
+			"Language": "Język",
+			"Settings": "Ustawienia"
+		}
+	},
+	"AdminPage": {
+		"AdminNavbarContainer": {
+			"Users": "Użytkownicy",
+			"UserList": "Lista użytkowników",
+			"AddUser": "Dodaj użytkownika",
+			"Logs": "Logi",
+			"LogList": "Lista logów"
+		},
+		"AllLogsCard": {
+			"CardTitle": "Wszystkie logi"
+		},
+		"GetLogsContainer": {
+			"PageTitle": "Logi",
+			"TextAreaPlaceholder": "Logi"
+		},
+		"GetUserTabs": {
+			"TabGeneral": "Ogólne",
+			"TabSecurity": "Bezpieczeństwo"
+		},
+		"UserGeneralTab": {
+			"StatusConfirmed": "potwierdzony",
+			"StatusUnConfirmed": "niepotwierdzony",
+			"BlankPhoneNumber": "brak"
+		},
+		"UserSecurityTab": {
+			"Active": "aktywne",
+			"Inactive": "nieaktywne"
+		},
+		"GetUserContainer": {
+			"StatusConfirmed": "potwierdzony",
+			"StatusUnConfirmed": "niepotwierdzony"
+		},
+		"GetUsersContainer": {
+			"NewUserButton": "Nowy użytkownik",
+			"SuccessDescription": "Użytkownik został usunięty"
+		},
+		"UpdateUserContainer": {
+			"PageHeaderTitle": "Edycja danych użytkownika",
+			"SuccessDescription": "Zaktualizowano dane użytkownika"
+		},
+		"CreateUserContainer": {
+			"PageHeaderTitle": "Tworzenie użytkownika",
+			"SuccessDescription": "Stworzono użytkownika"
+		},
+		"UsersTable": {
+			"Actions": "Akcje",
+			"ConfirmUserDeletionTitle": "Czy na pewno chcesz usunąć użytkownika"
+		}
+	},
+	"LoginPage": {
+		"LoginForm": {
+		    "ForgotPassword": "Zapomniałem hasła"
+		},
+		"LoginPageContainer": {
+			"PageHeaderTitle": "Logowanie"
+		}
+	},
+	"NotFoundPage": {
+		"NotFoundPageContainer": {
+			"WeAreSorry": "Przykro nam, ale taka strona nie istnieje"
+		}
+	}
+}

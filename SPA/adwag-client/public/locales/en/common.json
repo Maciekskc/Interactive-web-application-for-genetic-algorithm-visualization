@@ -1,0 +1,31 @@
+{
+	"Roles": {
+		"User": "User",
+		"Administrator": "Administrator"
+    },
+    "Actions": {
+		"Save": "Save",
+		"Submit": "Submit",
+		"Add": "Add",
+		"Create": "Create",
+		"Remove": "Remove",
+		"GoBack": "Back",
+		"BackToHome": "Back to home",
+        "Edit": "Edit",
+        "Yes": "Yes",
+		"No": "No",
+		"SignIn": "Sign in"
+	},
+	"Success": {
+		"Success": "Success",
+		"OperationSuccess": "Operation successful"
+	},
+	"Errors": {
+		"Error": "Error",
+		"AnErrorOccured": "An error occured",
+		"UserNotFound": "User not found"
+	},
+    "Warnings": {
+		"ActionWillBeIrreversible": "The execution of this action will be irreversible"
+	}
+}
