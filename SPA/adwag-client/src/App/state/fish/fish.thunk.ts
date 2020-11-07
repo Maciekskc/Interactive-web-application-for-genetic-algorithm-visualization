@@ -1,7 +1,7 @@
 import {
-	// getUsersStart,
-	// getUsersSuccess,
-	// getUsersFailure,
+	getFishesFromAquariumStart,
+	getFishesFromAquariumSuccess,
+	getFishesFromAquariumFailure,
 	getFishStart,
 	getFishSuccess,
 	getFishFailure
@@ -17,13 +17,16 @@ import {
 } from './fish.slice';
 import { AppThunk } from 'App/state/store';
 import agent from 'App/api/agent/agent';
+import { GetFishesFromAquariumRequest } from 'App/api/endpoints/fish/requests/getFishesFromAquariumRequest';
 
-// export const getUsers = (params: GetUsersRequest): AppThunk => async (dispatch) => {
-// 	dispatch(getUsersStart());
-// 	agent.Admin.getUsers(params)
-// 		.then((response) => dispatch(getUsersSuccess(response)))
-// 		.catch((error) => dispatch(getUsersFailure(error)));
-// };
+export const getFishesFromAquarium = (params: GetFishesFromAquariumRequest, aquariumId: string): AppThunk => async (
+	dispatch
+) => {
+	dispatch(getFishesFromAquariumStart());
+	agent.Fish.getFishesFromAquarium(params, aquariumId)
+		.then((response) => dispatch(getFishesFromAquariumSuccess(response)))
+		.catch((error) => dispatch(getFishesFromAquariumFailure(error)));
+};
 
 export const getFish = (fishId: string): AppThunk => async (dispatch) => {
 	dispatch(getFishStart());

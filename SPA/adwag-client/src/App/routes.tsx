@@ -10,6 +10,7 @@ import { default as AdminPage } from './pages/AdminPage/AdminPageContainer';
 import { default as ResetPasswordPage } from './pages/ResetPasswordPage/ResetPasswordPageContainer';
 import { default as FishPage } from './pages/FishPage/FishPageContainer';
 import Role from './types/role';
+import GetFishesFromAquariumContainer from './pages/FishPage/container/GetFishesFromAquariumContainer';
 
 const Routes: React.FC = () => {
 	return (
@@ -18,7 +19,8 @@ const Routes: React.FC = () => {
 			<Route exact path='/sign-in' component={LoginPage} />
 			// todo rejestracja
 			{/* <Route exact path='/sign-up' component={RegisterPage} /> */}
-			<Route exact path='/fish/:fishId' component={FishPage} />
+			<Route exact path='/fish' component={FishPage} />
+			<Route path='/fishes/aquarium/:aquariumId' component={GetFishesFromAquariumContainer} />
 			<Route exact path='/reset-password' component={ResetPasswordPage} />
 			<ProtectedRoute
 				path='/auth'

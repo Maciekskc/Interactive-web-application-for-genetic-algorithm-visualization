@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FishesState, fishesInitialState } from './fish.state';
 import { StatusType } from 'App/types/requestStatus';
 import { GetFishResponse } from 'App/api/endpoints/fish/responses/getFishResponse';
+import { GetFishesFromAquariumResponse } from 'App/api/endpoints/fish/responses/getFishesFromAquariumResponse';
 
 const { FAILED, LOADING, SUCCESS } = StatusType;
 
@@ -10,6 +11,21 @@ export const fishesSlice = createSlice({
 	name: 'fishes',
 	initialState: fishesInitialState,
 	reducers: {
+		//pobieranie rybek z akwarium
+		getFishesFromAquariumStart: (state: FishesState) => {
+			state.status.getFishesFromAquarium = LOADING;
+			state.error = null;
+			state.fishesFromAquarium = [];
+		},
+		getFishesFromAquariumSuccess(state: FishesState, action: PayloadAction<GetFishesFromAquariumResponse>) {
+			state.status.getFishesFromAquarium = SUCCESS;
+			state.fishesFromAquarium = action.payload.data;
+			state.getFishesFromAquiariumParams = action.payload;
+		},
+		getFishesFromAquariumFailure(state: FishesState, action: PayloadAction<string[]>) {
+			state.status.getFishesFromAquarium = FAILED;
+			state.error = action.payload;
+		},
 		getFishStart: (state: FishesState) => {
 			state.status.getFish = LOADING;
 			state.error = null;
@@ -22,7 +38,7 @@ export const fishesSlice = createSlice({
 		getFishFailure(state: FishesState, action: PayloadAction<string[]>) {
 			state.status.getFish = FAILED;
 			state.error = action.payload;
-		}
+		},
 		// getUserStart: (state: AdminUsersState) => {
 		// 	state.status.getUser = LOADING;
 		// 	state.error = null;
@@ -77,13 +93,14 @@ export const fishesSlice = createSlice({
 		// 	state.status.updateUser = FAILED;
 		// 	state.error = action.payload;
 		// },
-		// cleanUpUserStatus: (state: AdminUsersState) => {
-		// 	state.status = adminUsersInitialState.status;
-		// 	state.error = adminUsersInitialState.error;
-		// },
-		// cleanUpSelectedUser: (state: AdminUsersState) => {
-		// 	state.selectedUser = adminUsersInitialState.selectedUser;
-		// }
+		cleanUpFishStatus: (state: FishesState) => {
+			state.status = fishesInitialState.status;
+			state.error = fishesInitialState.error;
+		},
+
+		cleanUpSelectedFish: (state: FishesState) => {
+			state.selectedFish = fishesInitialState.selectedFish;
+		}
 	}
 });
 
@@ -92,10 +109,10 @@ export default fishesSlice;
 export const {
 	getFishStart,
 	getFishSuccess,
-	getFishFailure
-	// getUserStart,
-	// getUserSuccess,
-	// getUserFailure,
+	getFishFailure,
+	getFishesFromAquariumStart,
+	getFishesFromAquariumSuccess,
+	getFishesFromAquariumFailure,
 	// deleteUserStart,
 	// deleteUserSuccess,
 	// deleteUserFailure,
@@ -105,6 +122,6 @@ export const {
 	// updateUserStart,
 	// updateUserSuccess,
 	// updateUserFailure,
-	// cleanUpUserStatus,
-	// cleanUpSelectedUser
+	cleanUpFishStatus,
+	cleanUpSelectedFish
 } = fishesSlice.actions;
