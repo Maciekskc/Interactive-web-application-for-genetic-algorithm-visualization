@@ -28,9 +28,17 @@ const NavbarContainer: React.FC<{}> = () => {
 	};
 
 	const home = (
-		<Menu.Item key='/'>
-			<Link to='/'>{t('Common.NavbarContainer.Home')}</Link>
-		</Menu.Item>
+		<>
+			<Menu.Item key='/'>
+				<Link to='/'>{t('Common.NavbarContainer.Home')}</Link>
+			</Menu.Item>
+			<Menu.Item key='/fishes'>
+				<Link to='/fishes'>Rybka</Link>
+			</Menu.Item>
+			<Menu.Item key='/aquariums'>
+				<Link to='/aquariums'>Akwaria</Link>
+			</Menu.Item>
+		</>
 	);
 
 	const accountMenu = (
@@ -63,9 +71,6 @@ const NavbarContainer: React.FC<{}> = () => {
 			return (
 				<Menu mode='horizontal' selectedKeys={[location.pathname]} className='menu-padding'>
 					{home}
-					<Menu.Item key='/fish'>
-						<Link to='/fish'>Rybka</Link>
-					</Menu.Item>
 					<Menu.Item key='/admin/users'>
 						<Link to='/admin/users'>{t('Common.NavbarContainer.Admin')}</Link>
 					</Menu.Item>
@@ -77,9 +82,6 @@ const NavbarContainer: React.FC<{}> = () => {
 			return (
 				<Menu mode='horizontal' selectedKeys={[location.pathname]} className='menu-padding'>
 					{home}
-					<Menu.Item key='/fish'>
-						<Link to='/fish'>Rybka</Link>
-					</Menu.Item>
 					{accountMenu}
 				</Menu>
 			);
@@ -89,9 +91,6 @@ const NavbarContainer: React.FC<{}> = () => {
 		return (
 			<Menu mode='horizontal' selectedKeys={[location.pathname]} className='menu-padding'>
 				{home}
-				<Menu.Item key='/fish'>
-					<Link to='/fish'>Rybka</Link>
-				</Menu.Item>
 				<Menu.Item key='/sign-up' style={{ float: 'right' }}>
 					<Link to='/sign-up'>{t('Common.NavbarContainer.SignUp')}</Link>
 				</Menu.Item>

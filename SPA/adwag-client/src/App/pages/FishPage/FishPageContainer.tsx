@@ -8,19 +8,20 @@ import GetFishContainer from './container/GetFishContainer';
 import GetFishesFromAquariumContainer from './container/GetFishesFromAquariumContainer';
 import { Button, Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
+import GetUserFishesContainer from './container/GetUserFishesContainer';
 
 const FishPageContainer: React.FC<{}> = () => {
 	const Content = (
 		<Switch>
-			<Route path='/fish/:fishId' component={GetFishContainer} />
+			<Route exact path='/fishes/:fishId' component={GetFishContainer} />
 			<Route path='/fishes/aquarium/:aquariumId' component={GetFishesFromAquariumContainer} />
-			{/* <ProtectedRoute
-							acceptedRoles={[Role.ADMIN]}
-							exact
-							path='/admin/users/:userId/update'
-							component={UpdateUserContainer}
-						/>
-						<ProtectedRoute acceptedRoles={[Role.ADMIN]} path='/admin/users/:userId' component={GetUserContainer} /> */}
+			<ProtectedRoute
+				exact
+				path='fishes/user-fishes/all'
+				component={GetUserFishesContainer}
+				acceptedRoles={[Role.USER]}
+				others={{ text: 'This is visible only for users' }}
+			/>
 		</Switch>
 	);
 	return <Layout.Content className='pt-3'>{Content}</Layout.Content>;

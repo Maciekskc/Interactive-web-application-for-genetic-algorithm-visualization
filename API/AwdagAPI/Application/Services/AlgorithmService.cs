@@ -48,12 +48,11 @@ namespace Application.Services
                 try
                 {
                     //pętla organizująca algorytm
-                    var stats = _context.PhysicalStatistics.ToList();
                     var fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
                     foreach (var fish in fishes)
                     {
-                        if(await CheckAndUpdateLifeParametersAsync(fish))
-                            await MakeAMoveAsync(fish);
+                        //if(await CheckAndUpdateLifeParametersAsync(fish))
+                        //    await MakeAMoveAsync(fish);
                     }
 
                     //przesyłanie danych poprzez hub

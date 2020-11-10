@@ -10,38 +10,38 @@ import { getUsers } from 'App/state/admin/users/users.thunk';
 import { RootState } from 'App/state/root.reducer';
 import { StatusType } from 'App/types/requestStatus';
 import { useTranslation } from 'react-i18next';
-import { getFishesFromAquarium } from 'App/state/fish/fish.thunk';
-import { cleanUpFishStatus } from 'App/state/fish/fish.slice';
-
-interface RouteParams {
-	aquariumId: string;
-}
-
-interface GetFishesFromAquariumContainerProps extends RouteComponentProps<RouteParams> {}
+import { getUserFishes } from 'App/state/fish/fish.thunk';
+import { cleanUpFishStatus, getUserFishesStart } from 'App/state/fish/fish.slice';
 
 const { LOADING, SUCCESS } = StatusType;
 
-const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerProps> = ({
-	match
-}: GetFishesFromAquariumContainerProps) => {
-	const aquariumId = match.params.aquariumId;
+const GetUserFishesContainer = () => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
-
-	const fishes = useSelector((state: RootState) => state.fish.fishesFromAquarium);
+	//todo
+	const fishes = useSelector((state: RootState) => state.fish.userFishes);
 	const fishesStatus = useSelector((state: RootState) => state.fish.status);
 
 	const { pageNumber, pageSize, totalNumberOfItems } = useSelector(
-		(state: RootState) => state.fish.getFishesFromAquiariumParams
+		(state: RootState) => state.fish.getUserFishesParams
 	);
 
 	useEffect(() => {
-		dispatch(getFishesFromAquarium(defaultPageQueryParams, aquariumId));
+		dispatch(getUserFishes(defaultPageQueryParams));
 		console.log(fishes);
 		return () => {
 			dispatch(cleanUpFishStatus());
 		};
 	}, [dispatch]);
+
+	// useEffect(() => {
+	// 	if (fishesStatus.deleteUser === SUCCESS) {
+	// 		notification.success({
+	// 			message: t('common:Success.Success'),
+	// 			description: t('AdminPage.GetUsersContainer.SuccessDescription')
+	// 		});
+	// 	}
+	// }, [dispatch, t, usersStatus.deleteUser]);
 
 	const handleTableChange = (pagination: any): any => {
 		dispatch(
@@ -76,13 +76,10 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 						allowClear
 						onChange={(val) =>
 							dispatch(
-								getFishesFromAquarium(
-									{
-										...defaultPageQueryParams,
-										query: val.currentTarget.value
-									},
-									aquariumId
-								)
+								getUserFishes({
+									...defaultPageQueryParams,
+									query: val.currentTarget.value
+								})
 							)
 						}
 					/>
@@ -96,11 +93,8 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 					/>
 				</Col>
 			</Row>
-			{fishes.map((item) => {
-				return <div>{item.name}</div>;
-			})}
 		</>
 	);
 };
 
-export default GetFishesFromAquariumContainer;
+export default GetUserFishesContainer;

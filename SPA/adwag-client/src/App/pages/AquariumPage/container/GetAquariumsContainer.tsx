@@ -6,38 +6,35 @@ import { Row, Col, Button, Table, Input, notification } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import defaultPageQueryParams from 'App/common/utils/defaultPageQueryParams';
-import { getUsers } from 'App/state/admin/users/users.thunk';
 import { RootState } from 'App/state/root.reducer';
 import { StatusType } from 'App/types/requestStatus';
 import { useTranslation } from 'react-i18next';
-import { getFishesFromAquarium } from 'App/state/fish/fish.thunk';
 import { cleanUpFishStatus } from 'App/state/fish/fish.slice';
+import { getAquariums } from 'App/state/aquarium/aquarium.thunk';
+import { renderTableColumns } from '../utils/AquariumTable';
 
 interface RouteParams {
 	aquariumId: string;
 }
 
-interface GetFishesFromAquariumContainerProps extends RouteComponentProps<RouteParams> {}
+interface GetAquariumsContainerContainerProps extends RouteComponentProps<RouteParams> {}
 
 const { LOADING, SUCCESS } = StatusType;
 
-const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerProps> = ({
-	match
-}: GetFishesFromAquariumContainerProps) => {
-	const aquariumId = match.params.aquariumId;
+const GetAquariumsContainer = () => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
 
-	const fishes = useSelector((state: RootState) => state.fish.fishesFromAquarium);
-	const fishesStatus = useSelector((state: RootState) => state.fish.status);
+	const aquariums = useSelector((state: RootState) => state.aquarium.aquariums);
+	const aquariumsStatus = useSelector((state: RootState) => state.aquarium.status);
 
 	const { pageNumber, pageSize, totalNumberOfItems } = useSelector(
-		(state: RootState) => state.fish.getFishesFromAquiariumParams
+		(state: RootState) => state.aquarium.getAquariumsParams
 	);
 
 	useEffect(() => {
-		dispatch(getFishesFromAquarium(defaultPageQueryParams, aquariumId));
-		console.log(fishes);
+		dispatch(getAquariums(defaultPageQueryParams));
+		console.log(aquariums);
 		return () => {
 			dispatch(cleanUpFishStatus());
 		};
@@ -45,7 +42,7 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 
 	const handleTableChange = (pagination: any): any => {
 		dispatch(
-			getUsers({
+			getAquariums({
 				...defaultPageQueryParams,
 				pageNumber: pagination.current || 1,
 				pageSize: pagination.pageSize || 10,
@@ -61,12 +58,13 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 		showSizeChanger: true
 	};
 
+	console.log(aquariums);
 	return (
 		<>
 			<Row>
 				<Col span={23}>
-					<Link to='/fish/create'>
-						<Button icon={<PlusOutlined />}>Nowy Obiekt</Button>
+					<Link to='/aquariums/create'>
+						<Button icon={<PlusOutlined />}>Nowe Środowisko</Button>
 					</Link>
 				</Col>
 			</Row>
@@ -76,31 +74,25 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 						allowClear
 						onChange={(val) =>
 							dispatch(
-								getFishesFromAquarium(
-									{
-										...defaultPageQueryParams,
-										query: val.currentTarget.value
-									},
-									aquariumId
-								)
+								getAquariums({
+									...defaultPageQueryParams,
+									query: val.currentTarget.value
+								})
 							)
 						}
 					/>
 					<Table
 						pagination={paginationConfig}
 						onChange={handleTableChange}
-						loading={fishesStatus.getFishesFromAquarium === LOADING}
-						//columns={renderTableColumns(fishes, dispatch, t)}
-						dataSource={fishes}
+						loading={aquariumsStatus.getAquariums === LOADING}
+						columns={renderTableColumns(aquariums, dispatch, t)}
+						dataSource={aquariums}
 						rowKey='id'
 					/>
 				</Col>
 			</Row>
-			{fishes.map((item) => {
-				return <div>{item.name}</div>;
-			})}
 		</>
 	);
 };
 
-export default GetFishesFromAquariumContainer;
+export default GetAquariumsContainer;

@@ -4,6 +4,7 @@ import { FishesState, fishesInitialState } from './fish.state';
 import { StatusType } from 'App/types/requestStatus';
 import { GetFishResponse } from 'App/api/endpoints/fish/responses/getFishResponse';
 import { GetFishesFromAquariumResponse } from 'App/api/endpoints/fish/responses/getFishesFromAquariumResponse';
+import { GetUserFishesResponse } from 'App/api/endpoints/fish/responses/getUserFishesResponse';
 
 const { FAILED, LOADING, SUCCESS } = StatusType;
 
@@ -24,6 +25,21 @@ export const fishesSlice = createSlice({
 		},
 		getFishesFromAquariumFailure(state: FishesState, action: PayloadAction<string[]>) {
 			state.status.getFishesFromAquarium = FAILED;
+			state.error = action.payload;
+		},
+		//pobieranie rybek uzytkownika
+		getUserFishesStart: (state: FishesState) => {
+			state.status.getUserFishes = LOADING;
+			state.error = null;
+			state.userFishes = [];
+		},
+		getUserFishesSuccess(state: FishesState, action: PayloadAction<GetUserFishesResponse>) {
+			state.status.getUserFishes = SUCCESS;
+			state.userFishes = action.payload.data;
+			state.getUserFishesParams = action.payload;
+		},
+		getUserFishesFailure(state: FishesState, action: PayloadAction<string[]>) {
+			state.status.getUserFishes = FAILED;
 			state.error = action.payload;
 		},
 		getFishStart: (state: FishesState) => {
@@ -113,6 +129,9 @@ export const {
 	getFishesFromAquariumStart,
 	getFishesFromAquariumSuccess,
 	getFishesFromAquariumFailure,
+	getUserFishesStart,
+	getUserFishesSuccess,
+	getUserFishesFailure,
 	// deleteUserStart,
 	// deleteUserSuccess,
 	// deleteUserFailure,

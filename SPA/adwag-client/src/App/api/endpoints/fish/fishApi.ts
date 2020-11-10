@@ -5,6 +5,8 @@ import appConfig from 'app.config';
 import { GetFishResponse } from './responses/getFishResponse';
 import { GetFishesFromAquariumRequest } from './requests/getFishesFromAquariumRequest';
 import { GetFishesFromAquariumResponse } from './responses/getFishesFromAquariumResponse';
+import { GetUserFishesRequest } from './requests/getUserFishesRequest';
+import { GetUserFishesResponse } from './responses/getUserFishesResponse';
 
 const { urlToIncludeInEmail } = appConfig;
 
@@ -14,7 +16,9 @@ export const FishApi = {
 	getFishesFromAquarium: (
 		paramas: GetFishesFromAquariumRequest,
 		aquariumId: string
-	): Promise<GetFishesFromAquariumResponse> => requests.get(`/fish/aquarium/${aquariumId}`)
+	): Promise<GetFishesFromAquariumResponse> => requests.get(`/fish/aquarium/${aquariumId}`),
+
+	getUserFishes: (paramas: GetUserFishesRequest): Promise<GetUserFishesResponse> => requests.get(`/get-user-fishes`)
 
 	// createUser: (body: CreateUserRequest): Promise<CreateUserResponse> =>
 	// 	requests.post(`/admin/users`, { ...body, urlToIncludeInEmail }),
