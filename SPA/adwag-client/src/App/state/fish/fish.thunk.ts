@@ -7,13 +7,13 @@ import {
 	getUserFishesFailure,
 	getFishStart,
 	getFishSuccess,
-	getFishFailure
+	getFishFailure,
 	// deleteUserStart,
 	// deleteUserSuccess,
 	// deleteUserFailure,
-	// createUserStart,
-	// createUserSuccess,
-	// createUserFailure,
+	createFishStart,
+	createFishSuccess,
+	createFishFailure
 	// updateUserStart,
 	// updateUserSuccess,
 	// updateUserFailure
@@ -22,6 +22,7 @@ import { AppThunk } from 'App/state/store';
 import agent from 'App/api/agent/agent';
 import { GetFishesFromAquariumRequest } from 'App/api/endpoints/fish/requests/getFishesFromAquariumRequest';
 import { GetUserFishesRequest } from 'App/api/endpoints/fish/requests/getUserFishesRequest';
+import { CreateFishRequest } from 'App/api/endpoints/fish/requests/CreateFishRequest';
 
 export const getFishesFromAquarium = (params: GetFishesFromAquariumRequest, aquariumId: string): AppThunk => async (
 	dispatch
@@ -53,12 +54,12 @@ export const getFish = (fishId: string): AppThunk => async (dispatch) => {
 // 		.catch((error) => dispatch(deleteUserFailure(error)));
 // };
 
-// export const createUser = (userToCreate: CreateUserRequest): AppThunk => async (dispatch) => {
-// 	dispatch(createUserStart());
-// 	agent.Admin.createUser(userToCreate)
-// 		.then(() => dispatch(createUserSuccess()))
-// 		.catch((error) => dispatch(createUserFailure(error)));
-// };
+export const createFish = (fishToCreate: CreateFishRequest): AppThunk => async (dispatch) => {
+	dispatch(createFishStart());
+	agent.Fish.createFish(fishToCreate)
+		.then(() => dispatch(createFishSuccess()))
+		.catch((error) => dispatch(createFishFailure(error)));
+};
 
 // export const updateUser = (userId: string, userToUpdate: UpdateUserRequest): AppThunk => async (dispatch) => {
 // 	dispatch(updateUserStart());

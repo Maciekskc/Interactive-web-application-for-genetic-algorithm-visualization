@@ -55,19 +55,6 @@ export const fishesSlice = createSlice({
 			state.status.getFish = FAILED;
 			state.error = action.payload;
 		},
-		// getUserStart: (state: AdminUsersState) => {
-		// 	state.status.getUser = LOADING;
-		// 	state.error = null;
-		// 	state.selectedUser = null;
-		// },
-		// getUserSuccess: (state: AdminUsersState, action: PayloadAction<GetUserResponse>) => {
-		// 	state.status.getUser = SUCCESS;
-		// 	state.selectedUser = action.payload;
-		// },
-		// getUserFailure: (state: AdminUsersState, action: PayloadAction<string[]>) => {
-		// 	state.status.getUser = FAILED;
-		// 	state.error = action.payload;
-		// },
 		// deleteUserStart: (state: AdminUsersState) => {
 		// 	state.status.deleteUser = LOADING;
 		// 	state.error = null;
@@ -80,17 +67,17 @@ export const fishesSlice = createSlice({
 		// 	state.status.deleteUser = FAILED;
 		// 	state.error = action.payload;
 		// },
-		// createUserStart: (state: AdminUsersState) => {
-		// 	state.error = null;
-		// 	state.status.createUser = LOADING;
-		// },
-		// createUserSuccess: (state: AdminUsersState) => {
-		// 	state.status.createUser = SUCCESS;
-		// },
-		// createUserFailure: (state: AdminUsersState, action: PayloadAction<string[]>) => {
-		// 	state.status.createUser = FAILED;
-		// 	state.error = action.payload;
-		// },
+		createFishStart: (state: FishesState) => {
+			state.error = null;
+			state.status.createFish = LOADING;
+		},
+		createFishSuccess: (state: FishesState) => {
+			state.status.createFish = SUCCESS;
+		},
+		createFishFailure: (state: FishesState, action: PayloadAction<string[]>) => {
+			state.status.createFish = FAILED;
+			state.error = action.payload;
+		},
 		// updateUserStart: (state: AdminUsersState) => {
 		// 	state.status.updateUser = LOADING;
 		// 	state.error = null;
@@ -135,9 +122,9 @@ export const {
 	// deleteUserStart,
 	// deleteUserSuccess,
 	// deleteUserFailure,
-	// createUserStart,
-	// createUserSuccess,
-	// createUserFailure,
+	createFishStart,
+	createFishSuccess,
+	createFishFailure,
 	// updateUserStart,
 	// updateUserSuccess,
 	// updateUserFailure,

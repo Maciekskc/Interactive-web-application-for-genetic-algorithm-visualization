@@ -9,10 +9,12 @@ import GetFishesFromAquariumContainer from './container/GetFishesFromAquariumCon
 import { Button, Layout, Menu } from 'antd';
 import { Link } from 'react-router-dom';
 import GetUserFishesContainer from './container/GetUserFishesContainer';
+import CreateFishContainer from './container/CreateFishContainer';
 
 const FishPageContainer: React.FC<{}> = () => {
 	const Content = (
 		<Switch>
+			<Route exact path='/fishes/create' component={CreateFishContainer} />
 			<Route exact path='/fishes/:fishId' component={GetFishContainer} />
 			<Route path='/fishes/aquarium/:aquariumId' component={GetFishesFromAquariumContainer} />
 			<ProtectedRoute

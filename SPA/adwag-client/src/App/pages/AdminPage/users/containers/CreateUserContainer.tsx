@@ -18,7 +18,7 @@ const { LOADING, SUCCESS } = StatusType;
 export const CreateUserContainer = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
-	const {t} = useTranslation(['page', 'common']);
+	const { t } = useTranslation(['page', 'common']);
 
 	let usersStatus = useSelector((state: RootState) => state.admin.users.status);
 
@@ -33,13 +33,13 @@ export const CreateUserContainer = () => {
 	}, [dispatch]);
 
 	useEffect(() => {
-		if(usersStatus.createUser === SUCCESS) {
+		if (usersStatus.createUser === SUCCESS) {
 			notification.success({
 				message: t('common:Success.Success'),
 				description: t('AdminPage.CreateUserContainer.SuccessDescription')
-			})
+			});
 		}
-	}, [dispatch, t, usersStatus.createUser])
+	}, [dispatch, t, usersStatus.createUser]);
 
 	return (
 		<React.Fragment>
@@ -57,15 +57,12 @@ export const CreateUserContainer = () => {
 			</Row>
 			<Row justify='center'>
 				<Col span={24}>
-				<Row justify="center">
+					<Row justify='center'>
 						<Col>
 							<PageHeader title={t('AdminPage.CreateUserContainer.PageHeaderTitle')} />
 						</Col>
 					</Row>
-					<CreateUserForm
-						loading={usersStatus.createUser === LOADING}
-						onFinish={handleFormSubmit}
-					/>
+					<CreateUserForm loading={usersStatus.createUser === LOADING} onFinish={handleFormSubmit} />
 				</Col>
 			</Row>
 		</React.Fragment>

@@ -12,6 +12,7 @@ import { StatusType } from 'App/types/requestStatus';
 import { useTranslation } from 'react-i18next';
 import { getFishesFromAquarium } from 'App/state/fish/fish.thunk';
 import { cleanUpFishStatus } from 'App/state/fish/fish.slice';
+import { renderFishesFromAquariumTableColumns } from '../utils/FishTable';
 
 interface RouteParams {
 	aquariumId: string;
@@ -60,7 +61,6 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 		total: totalNumberOfItems,
 		showSizeChanger: true
 	};
-
 	return (
 		<>
 			<Row>
@@ -90,15 +90,12 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 						pagination={paginationConfig}
 						onChange={handleTableChange}
 						loading={fishesStatus.getFishesFromAquarium === LOADING}
-						//columns={renderTableColumns(fishes, dispatch, t)}
+						columns={renderFishesFromAquariumTableColumns(fishes, dispatch, t)}
 						dataSource={fishes}
 						rowKey='id'
 					/>
 				</Col>
 			</Row>
-			{fishes.map((item) => {
-				return <div>{item.name}</div>;
-			})}
 		</>
 	);
 };

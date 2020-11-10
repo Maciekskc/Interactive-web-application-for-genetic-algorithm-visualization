@@ -34,7 +34,6 @@ const GetAquariumsContainer = () => {
 
 	useEffect(() => {
 		dispatch(getAquariums(defaultPageQueryParams));
-		console.log(aquariums);
 		return () => {
 			dispatch(cleanUpFishStatus());
 		};
@@ -58,7 +57,6 @@ const GetAquariumsContainer = () => {
 		showSizeChanger: true
 	};
 
-	console.log(aquariums);
 	return (
 		<>
 			<Row>

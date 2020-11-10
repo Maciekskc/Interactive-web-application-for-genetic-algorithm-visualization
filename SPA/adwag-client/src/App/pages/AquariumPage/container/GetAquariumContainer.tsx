@@ -9,6 +9,9 @@ import { StatusType } from 'App/types/requestStatus';
 import { useTranslation } from 'react-i18next';
 import { getAquarium } from 'App/state/aquarium/aquarium.thunk';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import GetAquariumAnimation from './GetAquariumAnimation';
+import { Link } from 'react-router-dom';
+import { cleanUpAquariumStatus, cleanUpSelectedAquarium } from 'App/state/aquarium/aquarium.slice';
 
 interface RouteParams {
 	aquariumId: string;
@@ -27,19 +30,19 @@ const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: Ge
 
 	const aquarium = useSelector((state: RootState) => state.aquarium.selectedAquarium);
 	const aquariumStatus = useSelector((state: RootState) => state.aquarium.status);
-	console.log(aquarium);
+
 	useEffect(() => {
 		if (!aquarium) {
 			dispatch(getAquarium(aquariumId));
 		}
 	}, [dispatch, aquarium, aquariumId]);
 
-	// useEffect(() => {
-	// 	return () => {
-	// 		dispatch(cleanUpUserStatus());
-	// 		dispatch(cleanUpSelectedUser());
-	// 	};
-	// }, [dispatch]);
+	useEffect(() => {
+		return () => {
+			dispatch(cleanUpAquariumStatus());
+			dispatch(cleanUpSelectedAquarium());
+		};
+	}, [dispatch]);
 
 	return aquariumStatus.getAquarium === LOADING ? (
 		<LoadingScreen container='screen' />
@@ -50,7 +53,9 @@ const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: Ge
 			</Button>
 
 			<Row justify='center'>
-				<Col>Tutaj wrzucimy podgląd akwarium</Col>
+				<Col>
+					<Link to={`/aquariums/${aquariumId}/animation`}>Animacja</Link>
+				</Col>
 			</Row>
 			{/*			
 			<Row justify='center'>

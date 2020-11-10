@@ -29,12 +29,12 @@ const NavbarContainer: React.FC<{}> = () => {
 
 	const home = (
 		<>
-			<Menu.Item key='/'>
+			{/* <Menu.Item key='/'>
 				<Link to='/'>{t('Common.NavbarContainer.Home')}</Link>
 			</Menu.Item>
 			<Menu.Item key='/fishes'>
 				<Link to='/fishes'>Rybka</Link>
-			</Menu.Item>
+			</Menu.Item> */}
 			<Menu.Item key='/aquariums'>
 				<Link to='/aquariums'>Akwaria</Link>
 			</Menu.Item>

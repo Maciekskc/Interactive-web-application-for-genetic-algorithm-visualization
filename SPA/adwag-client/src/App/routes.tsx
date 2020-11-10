@@ -16,12 +16,12 @@ import GetFishesFromAquariumContainer from './pages/FishPage/container/GetFishes
 const Routes: React.FC = () => {
 	return (
 		<Switch>
-			<Route exact path='/' component={HomePage} />
+			<Route path='/aquariums' component={AquariumPage} />
+			{/* <Route exact path='/' component={HomePage} /> */}
 			<Route exact path='/sign-in' component={LoginPage} />
 			// todo rejestracja
 			{/* <Route exact path='/sign-up' component={RegisterPage} /> */}
 			<Route path='/fishes' component={FishPage} />
-			<Route path='/aquariums' component={AquariumPage} />
 			<Route exact path='/reset-password' component={ResetPasswordPage} />
 			<ProtectedRoute
 				path='/auth'
