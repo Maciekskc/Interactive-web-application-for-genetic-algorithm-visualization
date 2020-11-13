@@ -7,8 +7,10 @@ import LoadingScreen from 'App/common/components/LoadingScreen';
 import { RootState } from 'App/state/root.reducer';
 import { StatusType } from 'App/types/requestStatus';
 import { useTranslation } from 'react-i18next';
-import { getUser } from 'App/state/admin/users/users.thunk';
 import { getFish } from 'App/state/fish/fish.thunk';
+import { cleanUpFishStatus, cleanUpSelectedFish } from 'App/state/fish/fish.slice';
+import { GetFishTabs } from '../components/GetFishTab';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 
 interface RouteParams {
 	fishId: string;
@@ -27,62 +29,28 @@ const GetFishContainer: React.FC<GetFishContainerProps> = ({ match }: GetFishCon
 
 	const fish = useSelector((state: RootState) => state.fish.selectedFish);
 	const fishStatus = useSelector((state: RootState) => state.fish.status);
-	console.log(fish);
+
 	useEffect(() => {
 		if (!fish) {
 			dispatch(getFish(fishId));
 		}
 	}, [dispatch, fish, fishId]);
 
-	// useEffect(() => {
-	// 	return () => {
-	// 		dispatch(cleanUpUserStatus());
-	// 		dispatch(cleanUpSelectedUser());
-	// 	};
-	// }, [dispatch]);
+	useEffect(() => {
+		return () => {
+			dispatch(cleanUpFishStatus());
+			dispatch(cleanUpSelectedFish());
+		};
+	}, [dispatch]);
 
 	return fishStatus.getFish === LOADING ? (
 		<LoadingScreen container='screen' />
 	) : fish ? (
 		<>
-			{/* <Button
-				style={{ marginLeft: 16 }}
-				onClick={() => history.push('/admin/users')}
-				icon={<ArrowLeftOutlined />}
-			>
+			<Button style={{ marginLeft: 16 }} onClick={() => history.push(`/aquariums`)} icon={<ArrowLeftOutlined />}>
 				{t('common:Actions.GoBack')}
 			</Button>
-
-			<Row justify='center'>
-				<Col>
-					<Avatar size={128} icon={<UserOutlined />} />
-				</Col>
-			</Row>
-			<Row justify='center'>
-				<Col>
-					<Badge style={{ color: gold[5] }} count={user.lockoutEnabled ? <LockOutlined /> : 0}>
-						<Typography.Text delete={user.isDeleted} strong style={{ fontSize: '1.5rem' }}>
-							{user.firstName} {user.lastName}
-						</Typography.Text>
-					</Badge>
-				</Col>
-			</Row>
-			<Row justify='center'>
-				<Col>
-					<Badge
-						status={user.emailConfirmed ? 'success' : 'default'}
-						title={
-							user.emailConfirmed
-								? t('AdminPage.GetUserContainer.StatusConfirmed')
-								: t('AdminPage.GetUserContainer.StatusUnConfirmed')
-						}
-					>
-						<Typography.Text type='secondary'>{user.email}</Typography.Text>
-					</Badge>
-				</Col>
-			</Row>
-			<GetUserTabs user={user} /> */}
-			<h1>Jest rybka , confirmed</h1>
+			<GetFishTabs fish={fish} />
 		</>
 	) : (
 		<Result

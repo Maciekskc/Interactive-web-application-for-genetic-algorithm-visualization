@@ -55,18 +55,18 @@ export const fishesSlice = createSlice({
 			state.status.getFish = FAILED;
 			state.error = action.payload;
 		},
-		// deleteUserStart: (state: AdminUsersState) => {
-		// 	state.status.deleteUser = LOADING;
-		// 	state.error = null;
-		// },
-		// deleteUserSuccess: (state: AdminUsersState, action: PayloadAction<string>) => {
-		// 	state.status.deleteUser = SUCCESS;
-		// 	state.users = state.users.filter((u) => u.id !== action.payload);
-		// },
-		// deleteUserFailure: (state: AdminUsersState, action: PayloadAction<string[]>) => {
-		// 	state.status.deleteUser = FAILED;
-		// 	state.error = action.payload;
-		// },
+		killFishStart: (state: FishesState) => {
+			state.status.killFish = LOADING;
+			state.error = null;
+		},
+		killFishSuccess: (state: FishesState, action: PayloadAction<string>) => {
+			state.status.killFish = SUCCESS;
+			//state.users = state.users.filter((u) => u.id !== action.payload);
+		},
+		killFishFailure: (state: FishesState, action: PayloadAction<string[]>) => {
+			state.status.killFish = FAILED;
+			state.error = action.payload;
+		},
 		createFishStart: (state: FishesState) => {
 			state.error = null;
 			state.status.createFish = LOADING;
@@ -119,9 +119,9 @@ export const {
 	getUserFishesStart,
 	getUserFishesSuccess,
 	getUserFishesFailure,
-	// deleteUserStart,
-	// deleteUserSuccess,
-	// deleteUserFailure,
+	killFishStart,
+	killFishSuccess,
+	killFishFailure,
 	createFishStart,
 	createFishSuccess,
 	createFishFailure,

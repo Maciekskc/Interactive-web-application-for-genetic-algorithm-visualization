@@ -19,6 +19,7 @@ namespace Application.Dtos.Fish.Response
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int AquariumId { get; set; }
         public bool IsAlive { get; set; }
     }
 }

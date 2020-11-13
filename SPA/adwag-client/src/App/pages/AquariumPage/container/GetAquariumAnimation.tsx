@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import * as signalR from '@microsoft/signalr';
 import { HubData } from '../components/HubTransferedDataInterfaces';
 import { AnimationCanvas } from '../components/AnimationCanvas';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'App/state/root.reducer';
 import { RouteComponentProps, useHistory } from 'react-router';
 import { Button, Col, Row } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';

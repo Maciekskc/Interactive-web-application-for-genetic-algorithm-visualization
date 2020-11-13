@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, useHistory } from 'react-router-dom';
 
-import { Row, Col, Button, Table, Input, notification } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Row, Col, Button, Table, Input, Typography } from 'antd';
+import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 
 import defaultPageQueryParams from 'App/common/utils/defaultPageQueryParams';
-import { getUsers } from 'App/state/admin/users/users.thunk';
 import { RootState } from 'App/state/root.reducer';
 import { StatusType } from 'App/types/requestStatus';
 import { useTranslation } from 'react-i18next';
 import { getFishesFromAquarium } from 'App/state/fish/fish.thunk';
 import { cleanUpFishStatus } from 'App/state/fish/fish.slice';
 import { renderFishesFromAquariumTableColumns } from '../utils/FishTable';
+const { Title } = Typography;
 
 interface RouteParams {
 	aquariumId: string;
@@ -20,13 +20,14 @@ interface RouteParams {
 
 interface GetFishesFromAquariumContainerProps extends RouteComponentProps<RouteParams> {}
 
-const { LOADING, SUCCESS } = StatusType;
+const { LOADING } = StatusType;
 
 const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerProps> = ({
 	match
 }: GetFishesFromAquariumContainerProps) => {
 	const aquariumId = match.params.aquariumId;
 	const dispatch = useDispatch();
+	const history = useHistory();
 	const { t } = useTranslation();
 
 	const fishes = useSelector((state: RootState) => state.fish.fishesFromAquarium);
@@ -38,7 +39,6 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 
 	useEffect(() => {
 		dispatch(getFishesFromAquarium(defaultPageQueryParams, aquariumId));
-		console.log(fishes);
 		return () => {
 			dispatch(cleanUpFishStatus());
 		};
@@ -46,12 +46,15 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 
 	const handleTableChange = (pagination: any): any => {
 		dispatch(
-			getUsers({
-				...defaultPageQueryParams,
-				pageNumber: pagination.current || 1,
-				pageSize: pagination.pageSize || 10,
-				query: ''
-			})
+			getFishesFromAquarium(
+				{
+					pageNumber: pagination.current || 1,
+					pageSize: pagination.pageSize || 10,
+					query: '',
+					orderBy: ''
+				},
+				aquariumId
+			)
 		);
 	};
 
@@ -64,8 +67,22 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 	return (
 		<>
 			<Row>
+				<Col span={4}>
+					<Button
+						style={{ marginLeft: 16 }}
+						onClick={() => history.push('/aquariums')}
+						icon={<ArrowLeftOutlined />}
+					>
+						{t('common:Actions.GoBack')}
+					</Button>
+				</Col>
+				<Col span={20} style={{ textAlign: 'center' }}>
+					<Title level={2}>Populacja w akwarium #{aquariumId}</Title>
+				</Col>
+			</Row>
+			<Row>
 				<Col span={23}>
-					<Link to='/fish/create'>
+					<Link to='/fishes/create'>
 						<Button icon={<PlusOutlined />}>Nowy Obiekt</Button>
 					</Link>
 				</Col>

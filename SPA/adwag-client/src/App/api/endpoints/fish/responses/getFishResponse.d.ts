@@ -1,51 +1,52 @@
 export interface GetFishResponse {
-	Name: string;
-	IsAlive: boolean;
+	id: string;
+	name: string;
+	isAlive: boolean;
 	AquariumId: number;
 
-	PhysicalStatistic: PhysicalStatisticForGetFishResponse;
-	LifeParameters: LifeParametersForGetFishResponse;
-	SetOfMutations: SetOfMutationsForGetFishResponse;
-	LifeTimeStatistic: LifeTimeStatisticForGetFishResponse;
+	physicalStatistic: PhysicalStatisticForGetFishResponse;
+	lifeParameters: LifeParametersForGetFishResponse;
+	setOfMutations: SetOfMutationsForGetFishResponse;
+	lifeTimeStatistic: LifeTimeStatisticForGetFishResponse;
 
-	Parent1: ParentOfFishForGetFishResponse | null;
-	Parent2: ParentOfFishForGetFishResponse | null;
+	parent1: ParentOfFishForGetFishResponse | null;
+	parent2: ParentOfFishForGetFishResponse | null;
 }
 
 export interface PhysicalStatisticForGetFishResponse {
-	X: number;
-	Y: number;
-	V: number;
-	Vx: number;
-	Vy: number;
-	Color: string;
-	VisionAngle: number;
-	VisionRange: number;
+	x: number;
+	y: number;
+	v: number;
+	vx: number;
+	vy: number;
+	color: string;
+	visionAngle: number;
+	visionRange: number;
 }
 
 export interface SetOfMutationsForGetFishResponse {
-	Predator: boolean;
-	HungryCharge: boolean;
+	predator: boolean;
+	hungryCharge: boolean;
 }
 
 export interface LifeParametersForGetFishResponse {
-	Hunger: number;
-	LastHungerUpdate: Date;
-	Vitality: number;
+	hunger: number;
+	lastHungerUpdate: Date;
+	vitality: number;
 }
 
 export interface LifeTimeStatisticForGetFishResponse {
-	BirthDate: Date;
-	DeathDate: Date;
+	birthDate: Date;
+	deathDate: Date;
 
-	FoodCollected: number;
-	DistanceSwimmed: number;
-	Descendants: number;
+	foodCollected: number;
+	distanceSwimmed: number;
+	descendants: number;
 }
 
 export interface ParentOfFishForGetFishResponse {
-	Id: number;
-	Name: string;
-	IsAlive: boolean;
-	Color: string;
+	id: string;
+	name: string;
+	isAlive: boolean;
+	color: string;
 }

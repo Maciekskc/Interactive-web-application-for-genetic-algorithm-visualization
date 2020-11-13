@@ -1,26 +1,32 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'App/state/root.reducer';
 import { useTranslation } from 'react-i18next';
 import Role from 'App/types/role';
 import { CheckOutlined, LogoutOutlined, SettingOutlined, TranslationOutlined } from '@ant-design/icons';
 import i18n, { fullLanguages, languages } from 'i18n';
 import './NavbarContainer.less';
+import { devalidateSession } from 'App/state/session/session.thunk';
 
 const NavbarContainer: React.FC<{}> = () => {
 	// const userIsLoggedIn = useSelector<RootState>(
 	// 	(state: RootState) => !!(state.session.info && state.session.info.token)
 	// );
-
+	const dispatch = useDispatch();
+	const history = useHistory();
 	const user = useSelector((state: RootState) => state.session.user);
 	const { t } = useTranslation('page');
 
 	const location = useLocation();
 
 	const logout = () => {
-		// todo implement
+		dispatch(
+			devalidateSession(() => {
+				history.push('/');
+			})
+		);
 	};
 
 	const changeLanguage = (values: any) => {
@@ -82,6 +88,9 @@ const NavbarContainer: React.FC<{}> = () => {
 			return (
 				<Menu mode='horizontal' selectedKeys={[location.pathname]} className='menu-padding'>
 					{home}
+					<Menu.Item key='/fishes/user-fishes/all'>
+						<Link to='/fishes/user-fishes/all'>Rybki</Link>
+					</Menu.Item>
 					{accountMenu}
 				</Menu>
 			);

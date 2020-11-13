@@ -8,9 +8,9 @@ import {
 	getFishStart,
 	getFishSuccess,
 	getFishFailure,
-	// deleteUserStart,
-	// deleteUserSuccess,
-	// deleteUserFailure,
+	killFishStart,
+	killFishSuccess,
+	killFishFailure,
 	createFishStart,
 	createFishSuccess,
 	createFishFailure
@@ -28,6 +28,7 @@ export const getFishesFromAquarium = (params: GetFishesFromAquariumRequest, aqua
 	dispatch
 ) => {
 	dispatch(getFishesFromAquariumStart());
+	console.log(params);
 	agent.Fish.getFishesFromAquarium(params, aquariumId)
 		.then((response) => dispatch(getFishesFromAquariumSuccess(response)))
 		.catch((error) => dispatch(getFishesFromAquariumFailure(error)));
@@ -47,12 +48,12 @@ export const getFish = (fishId: string): AppThunk => async (dispatch) => {
 		.catch((error) => dispatch(getFishFailure(error)));
 };
 
-// export const deleteUser = (userId: string): AppThunk => async (dispatch) => {
-// 	dispatch(deleteUserStart());
-// 	agent.Admin.deleteUser(userId)
-// 		.then(() => dispatch(deleteUserSuccess(userId)))
-// 		.catch((error) => dispatch(deleteUserFailure(error)));
-// };
+export const killFish = (userId: string): AppThunk => async (dispatch) => {
+	dispatch(killFishStart());
+	agent.Fish.killFish(userId)
+		.then(() => dispatch(killFishSuccess(userId)))
+		.catch((error) => dispatch(killFishFailure(error)));
+};
 
 export const createFish = (fishToCreate: CreateFishRequest): AppThunk => async (dispatch) => {
 	dispatch(createFishStart());

@@ -1,4 +1,4 @@
 export interface CreateFishRequest {
 	name: string;
-	aquariumId: number;
+	aquariumId: string;
 }

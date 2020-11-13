@@ -11,13 +11,12 @@ import { default as ResetPasswordPage } from './pages/ResetPasswordPage/ResetPas
 import { default as FishPage } from './pages/FishPage/FishPageContainer';
 import { default as AquariumPage } from './pages/AquariumPage/AquariumPageContainer';
 import Role from './types/role';
-import GetFishesFromAquariumContainer from './pages/FishPage/container/GetFishesFromAquariumContainer';
 
 const Routes: React.FC = () => {
 	return (
 		<Switch>
 			<Route path='/aquariums' component={AquariumPage} />
-			{/* <Route exact path='/' component={HomePage} /> */}
+			<Route exact path='/' component={HomePage} />
 			<Route exact path='/sign-in' component={LoginPage} />
 			// todo rejestracja
 			{/* <Route exact path='/sign-up' component={RegisterPage} /> */}
