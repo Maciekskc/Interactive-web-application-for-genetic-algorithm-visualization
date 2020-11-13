@@ -14,9 +14,6 @@ import {
 	createFishStart,
 	createFishSuccess,
 	createFishFailure
-	// updateUserStart,
-	// updateUserSuccess,
-	// updateUserFailure
 } from './fish.slice';
 import { AppThunk } from 'App/state/store';
 import agent from 'App/api/agent/agent';
@@ -48,10 +45,10 @@ export const getFish = (fishId: string): AppThunk => async (dispatch) => {
 		.catch((error) => dispatch(getFishFailure(error)));
 };
 
-export const killFish = (userId: string): AppThunk => async (dispatch) => {
+export const killFish = (fishId: string): AppThunk => async (dispatch) => {
 	dispatch(killFishStart());
-	agent.Fish.killFish(userId)
-		.then(() => dispatch(killFishSuccess(userId)))
+	agent.Fish.killFish(fishId)
+		.then(() => dispatch(killFishSuccess(fishId)))
 		.catch((error) => dispatch(killFishFailure(error)));
 };
 
@@ -61,10 +58,3 @@ export const createFish = (fishToCreate: CreateFishRequest): AppThunk => async (
 		.then(() => dispatch(createFishSuccess()))
 		.catch((error) => dispatch(createFishFailure(error)));
 };
-
-// export const updateUser = (userId: string, userToUpdate: UpdateUserRequest): AppThunk => async (dispatch) => {
-// 	dispatch(updateUserStart());
-// 	agent.Admin.updateUser(userId, userToUpdate)
-// 		.then((res) => dispatch(updateUserSuccess(res)))
-// 		.catch((error) => dispatch(updateUserFailure(error)));
-// };

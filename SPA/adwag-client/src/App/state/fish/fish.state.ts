@@ -18,7 +18,6 @@ export interface FishesState {
 		getUserFishes: StatusType;
 		createFish: StatusType;
 		killFish: StatusType;
-		// updateUser: StatusType;
 	};
 	error: string[];
 	fishesFromAquarium: FishForGetFishesFromAquariumResponse[];
@@ -36,7 +35,6 @@ export const fishesInitialState: FishesState = {
 		getUserFishes: INITIAL,
 		createFish: INITIAL,
 		killFish: INITIAL
-		// updateUser: INITIAL
 	},
 	error: null,
 	fishesFromAquarium: [],

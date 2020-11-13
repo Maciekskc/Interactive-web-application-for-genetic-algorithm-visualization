@@ -46,6 +46,42 @@ export const aquariumsSlice = createSlice({
 
 		cleanUpSelectedAquarium: (state: AquariumState) => {
 			state.selectedAquarium = aquariumInitialState.selectedAquarium;
+		},
+
+		createAquariumStart: (state: AquariumState) => {
+			state.status.createAquarium = LOADING;
+			state.error = null;
+		},
+		createAquariumSuccess: (state: AquariumState) => {
+			state.status.createAquarium = SUCCESS;
+		},
+		createAquariumFailure: (state: AquariumState, action: PayloadAction<string[]>) => {
+			state.status.createAquarium = FAILED;
+			state.error = action.payload;
+		},
+		updateAquariumStart: (state: AquariumState) => {
+			state.status.updateAquarium = LOADING;
+			state.error = null;
+		},
+		updateAquariumSuccess: (state: AquariumState, action: PayloadAction<GetAquariumResponse>) => {
+			state.status.updateAquarium = SUCCESS;
+			state.selectedAquarium = action.payload;
+		},
+		updateAquariumFailure: (state: AquariumState, action: PayloadAction<string[]>) => {
+			state.status.updateAquarium = FAILED;
+			state.error = action.payload;
+		},
+		deleteAquariumStart: (state: AquariumState) => {
+			state.status.deleteAquarium = LOADING;
+			state.error = null;
+		},
+		deleteAquariumSuccess: (state: AquariumState) => {
+			state.status.deleteAquarium = SUCCESS;
+			state.error = null;
+		},
+		deleteAquariumFailure: (state: AquariumState, action: PayloadAction<string[]>) => {
+			state.status.deleteAquarium = FAILED;
+			state.error = action.payload;
 		}
 	}
 });
@@ -60,5 +96,14 @@ export const {
 	getAquariumsStart,
 	getAquariumsSuccess,
 	cleanUpAquariumStatus,
-	cleanUpSelectedAquarium
+	cleanUpSelectedAquarium,
+	createAquariumFailure,
+	createAquariumStart,
+	createAquariumSuccess,
+	updateAquariumFailure,
+	updateAquariumStart,
+	updateAquariumSuccess,
+	deleteAquariumFailure,
+	deleteAquariumStart,
+	deleteAquariumSuccess
 } = aquariumsSlice.actions;

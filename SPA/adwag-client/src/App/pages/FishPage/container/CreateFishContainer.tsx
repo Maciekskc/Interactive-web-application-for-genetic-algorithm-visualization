@@ -12,12 +12,11 @@ import CreateFishForm from '../components/CreateFishForm';
 
 const { LOADING, SUCCESS } = StatusType;
 
-export const CreateUserContainer = () => {
+export const CreateFishContainer = () => {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
 	let fishesStatus = useSelector((state: RootState) => state.fish.status);
-	let aquarium = useSelector((state: RootState) => state.aquarium.selectedAquarium);
 
 	const handleFormSubmit = (values: CreateFishRequest) => {
 		dispatch(createFish(values));
@@ -66,4 +65,4 @@ export const CreateUserContainer = () => {
 	);
 };
 
-export default CreateUserContainer;
+export default CreateFishContainer;

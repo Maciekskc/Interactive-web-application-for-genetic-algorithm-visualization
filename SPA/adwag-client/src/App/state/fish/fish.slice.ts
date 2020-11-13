@@ -78,24 +78,6 @@ export const fishesSlice = createSlice({
 			state.status.createFish = FAILED;
 			state.error = action.payload;
 		},
-		// updateUserStart: (state: AdminUsersState) => {
-		// 	state.status.updateUser = LOADING;
-		// 	state.error = null;
-		// },
-		// updateUserSuccess: (state: AdminUsersState, action: PayloadAction<UpdateUserResponse>) => {
-		// 	state.status.updateUser = SUCCESS;
-		// 	const user = state.users.find((u) => u.id === action.payload.id);
-		// 	if (user) {
-		// 		const { firstName, lastName, roles } = action.payload;
-		// 		user.firstName = firstName;
-		// 		user.lastName = lastName;
-		// 		user.roles = roles;
-		// 	}
-		// },
-		// updateUserFailure: (state: AdminUsersState, action: PayloadAction<string[]>) => {
-		// 	state.status.updateUser = FAILED;
-		// 	state.error = action.payload;
-		// },
 		cleanUpFishStatus: (state: FishesState) => {
 			state.status = fishesInitialState.status;
 			state.error = fishesInitialState.error;
@@ -125,9 +107,6 @@ export const {
 	createFishStart,
 	createFishSuccess,
 	createFishFailure,
-	// updateUserStart,
-	// updateUserSuccess,
-	// updateUserFailure,
 	cleanUpFishStatus,
 	cleanUpSelectedFish
 } = fishesSlice.actions;

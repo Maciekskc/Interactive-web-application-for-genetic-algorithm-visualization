@@ -4,20 +4,24 @@ import appConfig from 'app.config';
 import { GetAquariumResponse } from './responses/getAquariumResponse';
 import { GetAquariumsRequest } from './requests/getAquariumsRequest';
 import { GetAquariumsResponse } from './responses/getAquariumsResponse';
+import { HttpStatusCodeResponse } from 'App/types/httpResponse';
+import CreateAquariumRequest from './requests/createAquariumRequest';
+import UpdateAquariumRequest from './requests/updateAquariumRequest';
 
 const { urlToIncludeInEmail } = appConfig;
 
 export const AquariumApi = {
 	getAquarium: (aquariumId: string): Promise<GetAquariumResponse> => requests.get(`/aquarium/${aquariumId}`),
 
-	getAquariums: (paramas: GetAquariumsRequest): Promise<GetAquariumsResponse> =>
-		requests.get('aquarium/get-all-aquariums')
+	getAquariums: (params: GetAquariumsRequest): Promise<GetAquariumsResponse> =>
+		requests.get('/aquarium/get-all-aquariums', params),
 
-	// createUser: (body: CreateUserRequest): Promise<CreateUserResponse> =>
-	// 	requests.post(`/admin/users`, { ...body, urlToIncludeInEmail }),
+	createAquarium: (body: CreateAquariumRequest): Promise<GetAquariumResponse> =>
+		requests.post(`/aquarium/create`, body),
 
-	// updateUser: (userId: string, body: UpdateUserRequest): Promise<UpdateUserResponse> =>
-	// 	requests.put(`/admin/users/${userId}`, body),
+	updateAquarium: (aquariumId: string, body: UpdateAquariumRequest): Promise<GetAquariumResponse> =>
+		requests.put(`/aquarium/${aquariumId}/edit`, body),
 
-	// deleteUser: (userId: string): Promise<HttpStatusCodeResponse> => requests.delete(`/admin/users/${userId}`)
+	deleteAquarium: (aquariumId: string): Promise<HttpStatusCodeResponse> =>
+		requests.delete(`/aquarium/${aquariumId}/remove`)
 };
