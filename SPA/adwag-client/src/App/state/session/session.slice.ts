@@ -59,6 +59,15 @@ const sessionSlice = createSlice({
 		cleanUpSessionStatusStart: (state: SessionState) => {
 			state.status = sessionInitialState.status;
 			state.error = sessionInitialState.error;
+		},
+		registerStart: (state: SessionState) => {
+			state.status.register = LOADING;
+		},
+		registerSuccess: (state: SessionState) => {
+			state.status.register = SUCCESS;
+		},
+		registerFailure: (state: SessionState) => {
+			state.status.register = FAILED;
 		}
 	}
 });
@@ -76,5 +85,9 @@ export const {
 	devalidateSessionStart,
 	devalidateSessionSuccess,
 
-	cleanUpSessionStatusStart
+	cleanUpSessionStatusStart,
+
+	registerStart,
+	registerSuccess,
+	registerFailure
 } = sessionSlice.actions;

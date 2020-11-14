@@ -5,6 +5,8 @@ import { AdminApi } from '../endpoints/admin/adminApi';
 import { LogsApi } from '../endpoints/logs/logsApi';
 import { AuthApi } from '../endpoints/auth/authApi';
 import { baseURL } from './axios/configuration';
+import { FishApi } from '../endpoints/fish/fishApi';
+import { AquariumApi } from '../endpoints/aquarium/aquariumApi';
 
 const responseBodyAxios = (response: AxiosResponse) => {
 	if (response.data && 'data' in response.data && Object.keys(response.data).length === 1) {
@@ -50,5 +52,7 @@ export default {
 	Account: AccountApi,
 	Auth: AuthApi,
 	Logs: LogsApi,
-	Admin: AdminApi
+	Admin: AdminApi,
+	Fish: FishApi,
+	Aquarium: AquariumApi
 };

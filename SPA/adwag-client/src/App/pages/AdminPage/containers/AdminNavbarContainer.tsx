@@ -25,6 +25,10 @@ const AdminNavbarContainer: React.FC<{}> = () => {
 		{
 			key: '/admin/logs',
 			subkeys: ['/admin/logs']
+		},
+		{
+			key: '/admin/aquariums',
+			subkeys: ['/admin/aquariums', '/admin/aquariums/create']
 		}
 	] as NavbarItems[];
 
@@ -77,6 +81,17 @@ const AdminNavbarContainer: React.FC<{}> = () => {
 		</Menu.SubMenu>
 	);
 
+	const aquariumsSubMenu = (
+		<Menu.SubMenu key={navbarItems[2].key} icon={<FileTextOutlined />} title='Akwarium'>
+			<Menu.Item key={navbarItems[2].subkeys[0]}>
+				<Link to={navbarItems[2].subkeys[0]}>Lista Akwarii</Link>
+			</Menu.Item>
+			<Menu.Item key={navbarItems[2].subkeys[1]}>
+				<Link to={navbarItems[2].subkeys[1]}>Dodaj Akwarium</Link>
+			</Menu.Item>
+		</Menu.SubMenu>
+	);
+
 	return (
 		!loading && (
 			<Menu
@@ -87,6 +102,7 @@ const AdminNavbarContainer: React.FC<{}> = () => {
 			>
 				{usersSubMenu}
 				{logsSubMenu}
+				{aquariumsSubMenu}
 			</Menu>
 		)
 	);

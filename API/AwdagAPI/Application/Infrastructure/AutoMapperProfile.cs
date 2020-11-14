@@ -105,13 +105,13 @@ namespace Application.Infrastructure
                 .ForMember(opt => opt.CurrentFoodsAmount,
                     par => par.MapFrom(src => src.Foods.Count))
                 .ForMember(opt => opt.CurrentPopulationCount,
-                par => par.MapFrom(src => src.Fishes.Count));
+                    par => par.MapFrom(src => src.Fishes.Where(f=>f.IsAlive).Count()));
 
             CreateMap<Aquarium, AquariumForGetAllAquariumsResponse>()
                 .ForMember(opt => opt.CurrentFoodsAmount,
                     par => par.MapFrom(src => src.Foods.Count))
                 .ForMember(opt => opt.CurrentPopulationCount,
-                    par => par.MapFrom(src => src.Fishes.Count));
+                    par => par.MapFrom(src => src.Fishes.Where(f => f.IsAlive).Count()));
 
             CreateMap<CreateAquariumRequest, Aquarium>();
         }
