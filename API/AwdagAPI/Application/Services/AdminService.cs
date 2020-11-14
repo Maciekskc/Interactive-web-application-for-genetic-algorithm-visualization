@@ -12,6 +12,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Application.Utilities;
 using Application.Utilities.QuerySorters;
+using Domain.Models;
 using Validation;
 using Validation.Models;
 
@@ -153,6 +154,19 @@ namespace Application.Services
                 throw new RestException(HttpStatusCode.BadRequest, new ErrorResult(Errors.AccountErrors.ErrorOccuredWhileSettingPassword, resetPasswordResult.Errors.Select(e => e.Description)));
 
             return new ServiceResponse(HttpStatusCode.OK);
+        }
+
+        public async Task<ServiceResponse> CreateExtraordinaryFish(Fish fish)
+        {
+            fish.LifeTimeStatistic.BirthDate = DateTime.UtcNow;
+            fish.LifeParameters.VitalityInterval = new TimeSpan(0,0,0,5);
+            fish.LifeParameters.LastVitalityUpdate = DateTime.UtcNow;
+            fish.LifeParameters.HungerInterval = new TimeSpan(0, 0, 0, 200);
+            fish.LifeParameters.LastHungerUpdate = DateTime.UtcNow;
+
+            Context.Fishes.Add(fish);
+            await Context.SaveChangesAsync();
+            return new ServiceResponse(HttpStatusCode.Created);
         }
     }
 }

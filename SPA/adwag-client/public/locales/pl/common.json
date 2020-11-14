@@ -1,0 +1,31 @@
+{
+	"Roles": {
+		"User": "Użytkownik",
+		"Administrator": "Administrator"
+    },
+    "Actions": {
+		"Save": "Zapisz",
+		"Submit": "Wyślij",
+		"Add": "Dodaj",
+		"Create": "Stwórz",
+		"Remove": "Usuń",
+		"GoBack": "Wstecz",
+		"BackToHome": "Wróć do strony głównej",
+        "Edit": "Edytuj",
+        "Yes": "Tak",
+		"No": "Nie",
+		"SignIn": "Zaloguj się"
+	},
+	"Success": {
+		"Success": "Sukces",
+		"OperationSuccess": "Pomyślnie wykonano akcję"
+	},
+	"Errors": {
+		"Error": "Błąd",
+		"AnErrorOccured": "Wystąpił błąd",
+		"UserNotFound": "Nie znaleziono użytkownika"
+	},
+    "Warnings": {
+		"ActionWillBeIrreversible": "Wykonanie tej akcji będzie nieodwracalne!"
+	}
+}

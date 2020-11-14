@@ -8,11 +8,13 @@ using Domain.Models.Entities;
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using Application.Dtos.Aquarium.Requests;
+using Application.Dtos.Aquarium.Responses;
 using Application.Dtos.Auth.Responses;
+using Application.Dtos.Fish.Response;
 using Application.Dtos.Hub;
-using Application.Dtos.NewFolder.Response;
 using Domain.Models;
-using PhysicalStatsForGetFishFromAquariumResponse = Application.Dtos.NewFolder.Response.PhysicalStatsForGetFishFromAquariumResponse;
 
 namespace Application.Infrastructure
 {
@@ -25,7 +27,7 @@ namespace Application.Infrastructure
             MapsForAdmin();
             MapsForLogs();
             MapsForFishes();
-
+            MapsForAquariums();
             MapsForHub();
         }
 
@@ -74,17 +76,52 @@ namespace Application.Infrastructure
                 .ForMember(log => log.Name, opt => opt.MapFrom(fileInfo => Path.GetFileNameWithoutExtension(fileInfo.Name)));
         }
 
+        /// <summary>
+        /// Mapy dla kontrolera Fishes
+        /// </summary>
         private void MapsForFishes()
         {
-            CreateMap<Fish, GetFishFromAquariumResponse>();
-            CreateMap<PhysicalStatistic, PhysicalStatsForGetFishFromAquariumResponse>();
+            CreateMap<Fish, FishForGetFishesFromAquariumResponse>();
+            CreateMap<PhysicalStatistic, PhysicalStatsForFishForGetFishFromAquariumResponse>();
+            CreateMap<LifeTimeStatistic, LifeTimeStatisticForFishForGetFishFromAquariumResponse>();
+            CreateMap<LifeParameters, LifeParametersForFishForGetFishFromAquariumResponse>();
+
+            CreateMap<Fish, GetFishResponse>();
+            CreateMap<PhysicalStatistic, PhysicalStatisticForGetFishResponse>();
+            CreateMap<SetOfMutations, SetOfMutationsForGetFishResponse>();
+            CreateMap<LifeTimeStatistic, LifeTimeStatisticForGetFishResponse>();
+            CreateMap<LifeParameters, LifeParametersForGetFishResponse>();
+            CreateMap<Fish, ParentOfFishForGetFishResponse>().ForMember(opt=>opt.Color,par=>par.MapFrom(src=>src.PhysicalStatistic.Color));
+
+            CreateMap<Fish, FishForGetUserFishesResponse>();
+        }
+
+        /// <summary>
+        /// Mapy dla kontrolera Aquarium
+        /// </summary>
+        private void MapsForAquariums()
+        {
+            CreateMap<Aquarium, GetAquariumResponse>()
+                .ForMember(opt => opt.CurrentFoodsAmount,
+                    par => par.MapFrom(src => src.Foods.Count))
+                .ForMember(opt => opt.CurrentPopulationCount,
+                    par => par.MapFrom(src => src.Fishes.Where(f=>f.IsAlive).Count()));
+
+            CreateMap<Aquarium, AquariumForGetAllAquariumsResponse>()
+                .ForMember(opt => opt.CurrentFoodsAmount,
+                    par => par.MapFrom(src => src.Foods.Count))
+                .ForMember(opt => opt.CurrentPopulationCount,
+                    par => par.MapFrom(src => src.Fishes.Where(f => f.IsAlive).Count()));
+
+            CreateMap<CreateAquariumRequest, Aquarium>();
         }
 
         private void MapsForHub()
         {
             CreateMap<Aquarium, HubTransferData>()
                 .ForMember(opt=>opt.AquariumWidth,src => src.MapFrom(aq=>aq.Width))
-                .ForMember(opt => opt.AquariumHeight, src => src.MapFrom(aq => aq.Height));
+                .ForMember(opt => opt.AquariumHeight, src => src.MapFrom(aq => aq.Height))
+                .ForMember(opt=> opt.Fishes, src => src.MapFrom(aq=>aq.Fishes.Where(f=>f.IsAlive)));
             CreateMap<Fish, FishForHubTransferData>();
             CreateMap<PhysicalStatistic, PhysicalStatsForFishForHubTransferData>();
             CreateMap<Food, FoodForHubTransferData>();

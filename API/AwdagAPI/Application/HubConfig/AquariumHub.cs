@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Application.Dtos.Hub;
-using Application.Dtos.NewFolder.Response;
 using Application.Services;
 using Domain.Models;
 using Microsoft.AspNetCore.SignalR;

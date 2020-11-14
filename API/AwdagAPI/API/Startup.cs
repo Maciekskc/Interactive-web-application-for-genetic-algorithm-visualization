@@ -184,6 +184,7 @@ namespace API
             services.AddTransient<ILogsService, LogsService>();
 
             services.AddTransient<IFishService, FishService>();
+            services.AddTransient<IAquariumService, AquariumService>();
         }
 
         private static void AddMvc(IServiceCollection services)

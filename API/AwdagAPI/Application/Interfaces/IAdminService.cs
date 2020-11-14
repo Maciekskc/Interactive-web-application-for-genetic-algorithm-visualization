@@ -2,6 +2,7 @@
 using Application.Dtos.Admin.Responses;
 using System.Threading.Tasks;
 using Application.Utilities;
+using Domain.Models;
 
 namespace Application.Interfaces
 {
@@ -51,5 +52,12 @@ namespace Application.Interfaces
         /// <param name="request"></param>
         /// <returns></returns>
         Task<ServiceResponse> SetUserPasswordAsync(string userId, SetUserPasswordRequest request);
+
+        /// <summary>
+        /// Metoda Do tworzenia rybki pozwalająca edytować wszystkie statystyki
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
+        Task<ServiceResponse> CreateExtraordinaryFish(Fish fish);
     }
 }

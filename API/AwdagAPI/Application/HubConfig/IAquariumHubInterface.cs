@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Application.Dtos.Hub;
-using Application.Dtos.NewFolder.Response;
-using Application.Services;
-using Domain.Models;
 
 namespace Application.HubConfig
 {

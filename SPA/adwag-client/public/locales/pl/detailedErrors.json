@@ -1,0 +1,146 @@
+{
+	"00": {
+		"01": {
+			"DescriptionFormatter": "Długość pola {{args.0}} nie może być większa, niż {{args.1}}"
+		},
+		"02": {
+			"DescriptionFormatter": "Długość pola {{args.0}} nie może być mniejsza, niż {{args.1}}"
+		},
+		"03": {
+			"DescriptionFormatter": "Pole {{args.0}} jest wymagane"
+		},
+		"04": {
+			"DescriptionFormatter": "Wartość pola {{args.0}} musi być z przedziału [{{args.1}}, {{args.2}}]"
+		},
+		"05": {
+			"DescriptionFormatter": "Pola {{args.0}} oraz {{args.1}} nie są sobie równe"
+		},
+		"06": {
+			"DescriptionFormatter": "Pole {{args.0}} musi zawierać małą literę"
+		},
+		"07": {
+			"DescriptionFormatter": "Pole {{args.0}} musi zawierać wielką literę"
+		},
+		"08": {
+			"DescriptionFormatter": "Pole {{args.0}} musi zawierać cyfrę"
+		},
+		"09": {
+			"DescriptionFormatter": "Pole {{args.0}} musi zawierać znak specjalny np. #$^+=!*()@%&"
+		},
+		"10": {
+			"DescriptionFormatter": "Pole {{args.0}} musi mieć co najmniej {{args.1}} znaków"
+		},
+		"11": {
+			"DescriptionFormatter": "Pole {{args.0}} zawiera niepoprawną nazwę roli"
+		},
+		"12": {
+			"DescriptionFormatter": "Pole {{args.0}} jest niepoprawnym adresem URL"
+		},
+		"13": {
+			"DescriptionFormatter": "Pole {{args.0}} jest niepoprawnym adresem email"
+		},
+		"14": {
+			"DescriptionFormatter": "Pole {{args.0}} jest niepoprawnym numerem telefonu"
+		},
+		"15": {
+			"DescriptionFormatter": "Wartość {{args.0}} dla pola {{args.1}} jest niepoprawna"
+		},
+		"16": {
+			"DescriptionFormatter": "Wartość {{args.0}} jest niepoprawna"
+		},
+		"17": {
+			"DescriptionFormatter": "Wartość {{args.0}} jest niepoprawna"
+		},
+		"18": {
+			"DescriptionFormatter": "Wystąpił błąd"
+		},
+		"19": {
+			"DescriptionFormatter": "Plik {{args.0}} jest większy niż {{args.1}} MB"
+		},
+		"20": {
+			"DescriptionFormatter": "Tylko następujące rozszerzenia są dozwolone: {{args.0}}"
+		}
+	},
+	"01": {
+		"01": {
+			"DescriptionFormatter": "Nie znaleziono użytkownika"
+		},
+		"02": {
+			"DescriptionFormatter": "Nie znaleziono użytkownika o podanym mailu {{args.0}}"
+		},
+		"03": {
+			"DescriptionFormatter": "Wystąpił błąd podczas aktualizowania konta użytkownika"
+		},
+		"04": {
+			"DescriptionFormatter": "Wystąpił błąd podczas potwierdzania adresu email"
+		},
+		"05": {
+			"DescriptionFormatter": "Wystąpił błąd podczas zmiany hasła"
+		},
+		"06": {
+			"DescriptionFormatter": "Wystąpił błąd podczas resetowania hasła"
+		},
+		"07": {
+			"DescriptionFormatter": "Wystąpił błąd podczas tworzenia użytkownika"
+		},
+		"08": {
+			"DescriptionFormatter": "Wystąpił błąd podczas usuwania użytkownika"
+		},
+		"09": {
+			"DescriptionFormatter": "Wystąpił błąd podczas ustawiania hasła użytkownika"
+		},
+		"10": {
+			"DescriptionFormatter": "Usunięte konto nie może zostać potwierdzone"
+		},
+		"11": {
+			"DescriptionFormatter": "Konto z adresem email {{args.0}} jest już potwierdzone"
+		}
+	},
+	"02": {
+		"01": {
+			"DescriptionFormatter": "Data rozpoczęcia nie może być większa, niż data zakończenia"
+		}
+	},
+	"03": {
+		"01": {
+			"DescriptionFormatter": "Wystąpił błąd podczas zapisu do bazy"
+		},
+		"02": {
+			"DescriptionFormatter": "Nieprawidłowy identyfikator zasobu"
+		}
+	},
+	"04": {
+		"01": {
+			"DescriptionFormatter": "Wystąpił błąd podczas wysyłania emaila z linkiem potwierdzającym pod adres {{args.0}}"
+		}
+	},
+	"05": {
+		"01": {
+			"DescriptionFormatter": "Rola {{args.0}} nie istnieje"
+		},
+		"02": {
+			"DescriptionFormatter": "Adres email {{args.0}} jest już zajęty"
+		}
+	},
+	"06": {
+		"01": {
+			"DescriptionFormatter": "Twoje konto zostało usunięte"
+		},
+		"02": {
+			"DescriptionFormatter": "Wystąpił błąd uwierzytelniania"
+		}
+	},
+	"07": {
+		"01": {
+			"DescriptionFormatter": "Nieobsługiwany typ pliku. Dozwolone rozszerzenie to {{args.0}}"
+		}
+	},
+	"08": {
+		"01": {
+			"DescriptionFormatter": "Nie udało się skonwertować daty z nazwy pliku"
+		},
+		"02": {
+			"DescriptionFormatter": "Błąd przetwarzania danych"
+		}
+	}
+}

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Models.Entities.Association;
 
 namespace Persistence.Seeds
 {
@@ -12,12 +13,11 @@ namespace Persistence.Seeds
     {
         public class SeedIdHelper
         {
-            public int aquariumId = 3;
-            public int fishId = 0;
-            public int lifeParameterId = 0;
-            public int lifeTimeStatisticId = 0;
-            public int setOfMutationsId = 0;
-            public int physicalStatisticId = 0;
+            public int AquariumId = 3;
+            public int LifeParameterId = 0;
+            public int LifeTimeStatisticId = 0;
+            public int SetOfMutationsId = 0;
+            public int PhysicalStatisticId = 0;
         }
 
         public static SeedIdHelper seed = new SeedIdHelper();
@@ -34,6 +34,40 @@ namespace Persistence.Seeds
             await SeedLifeTimeStatistic(context);
             await SeedSetOfMutations(context);
             await SeedFoods(context);
+            await SeedParentChilds(context);
+        }
+
+        private static async Task SeedParentChilds(DataContext context)
+        {
+            if (!context.ParentChild.Any())
+            {
+                var fishRelationshipList = new List<ParentChild>()
+                {
+                    new ParentChild()
+                    {
+                        ParentId = 1,
+                        ChildId = 3,
+                    },
+                    new ParentChild()
+                    {
+                        ParentId = 2,
+                        ChildId = 3,
+                    },
+                    new ParentChild()
+                    {
+                        ParentId = 3,
+                        ChildId = 2,
+                    },
+                    new ParentChild()
+                    {
+                        ParentId = 4,
+                        ChildId = 2,
+                    },
+                };
+                seed.AquariumId = 3;
+                context.ParentChild.AddRange(fishRelationshipList);
+                await context.SaveChangesAsync();
+            }
         }
 
 
@@ -142,7 +176,6 @@ namespace Persistence.Seeds
                     },
                     new Aquarium()
                     {
-                        //Id = ++seed.aquariumId,
                         Width = 1100,
                         Height = 720,
                         Capacity = 15,
@@ -150,14 +183,13 @@ namespace Persistence.Seeds
                     },
                     new Aquarium()
                     {
-                        //Id = ++seed.aquariumId,
                         Width = 1080,
                         Height = 720,
                         Capacity = 15,
                         FoodMaximalAmount = 7
                     },
                 };
-                seed.aquariumId = 3;
+                seed.AquariumId = 3;
                 context.Aquariums.AddRange(aquariums);
                 await context.SaveChangesAsync();
             }
@@ -173,9 +205,9 @@ namespace Persistence.Seeds
                     fishes.Add(
                     new Fish()
                         {
-                            //Id = ++seed.fishId,
-                            AquariumId = random.Next(1,seed.aquariumId),
-                            Name = $"Object#{i}"
+                            AquariumId = random.Next(1,seed.AquariumId),
+                            Name = $"Object#{i}",
+                            IsAlive = true
                         }
                     );
                 context.Fishes.AddRange(fishes);
@@ -192,16 +224,15 @@ namespace Persistence.Seeds
                     physicalStats.Add(
                         new PhysicalStatistic()
                         {
-                            //Id = ++seed.physicalStatisticId,
                             X = random.Next(300,700),
                             Y = random.Next(300, 700),
                             Vx = random.Next(-3, 3),
                             Vy = random.Next(-3, 3),
                             V = random.Next(2, 4),
-                            VisionAngle = random.Next(30,60),
-                            VisionRange = random.Next(20,40),
+                            VisionAngle = random.Next(15,30),
+                            VisionRange = random.Next(20,50),
                             Color = String.Format("#{0:X6}", random.Next(0x1000000)),
-                            FishId = ++seed.physicalStatisticId
+                            FishId = ++seed.PhysicalStatisticId
                         }
                     );
                 
@@ -220,12 +251,13 @@ namespace Persistence.Seeds
                     lifeParameters.Add(
                         new LifeParameters()
                         {
-                            //Id = ++seed.lifeParameterId,
-                            HungerInterval = new TimeSpan(0,0,random.Next(30,60)),
+                            HungerInterval = new TimeSpan(0,0,random.Next(50,100)),
                             LastHungerUpdate = DateTime.UtcNow,
                             VitalityInterval = new TimeSpan(0, 0, random.Next(55, 60)),
                             LastVitalityUpdate = DateTime.UtcNow,
-                            FishId = ++seed.lifeParameterId
+                            Vitality = LifeParameters.MAX_VITALITY,
+                            Hunger = 3.0F,
+                            FishId = ++seed.LifeParameterId
                         }
                     );
 
@@ -244,9 +276,9 @@ namespace Persistence.Seeds
                     lifeTimeStatistics.Add(
                         new LifeTimeStatistic()
                         {
-                            //Id = ++seed.lifeTimeStatisticId,
                             BirthDate = DateTime.UtcNow,
-                            FishId = ++seed.lifeTimeStatisticId
+                            DeathDate = null,
+                            FishId = ++seed.LifeTimeStatisticId
                         }
                     );
 
@@ -265,8 +297,7 @@ namespace Persistence.Seeds
                     lifeTimeStatistics.Add(
                         new SetOfMutations()
                         {
-                            //Id = ++seed.setOfMutationsId,
-                            FishId = ++seed.setOfMutationsId
+                            FishId = ++seed.SetOfMutationsId
                         }
                     );
 

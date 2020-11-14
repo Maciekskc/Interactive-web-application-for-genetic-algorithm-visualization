@@ -1,61 +1,70 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Application.DataStorage;
-using Application.Dtos.Admin.Requests;
-using Application.Dtos.Admin.Responses;
-using Application.Dtos.NewFolder.Response;
-using Application.HubConfig;
-using Application.HubConfig.TimerManager;
+﻿using System.Threading.Tasks;
+using Application.Dtos.Fish.Request;
+using Application.Dtos.Fish.Response;
 using Application.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     public class FishController : BaseController
     {
         private readonly IFishService _fishService;
-        private readonly IHubContext<AquariumHub> _hub;
 
-        public FishController(IFishService fishService, IHubContext<AquariumHub> hub)
+        public FishController(IFishService fishService)
         {
             _fishService = fishService;
-            _hub = hub;
         }
 
-        [Produces(typeof(GetFishFromAquariumResponse))]
-        [HttpGet("aquarium/{aquariumId}")]
-        public async Task<IActionResult> GetFishesFromAquarium([FromRoute] int aquariumId)
+        [AllowAnonymous]
+        [Produces(typeof(GetFishResponse))]
+        [HttpGet("{fishId}")]
+        public async Task<IActionResult> GetFish([FromRoute] int fishId)
         {
-            var response = await _fishService.GetFishesFromAquarium(aquariumId);
+            var response = await _fishService.GetFish(fishId);
             return SendResponse(response);
         }
 
-        [Produces(typeof(GetFishFromAquariumResponse))]
-        [HttpGet("aquarium/{aquariumId}/hub")]
-        public async Task<IActionResult> GetFishesFromAquariumHUB([FromRoute] int aquariumId)
+        [AllowAnonymous]
+        [Produces(typeof(GetFishesFromAquariumResponse))]
+        [HttpGet("aquarium/{aquariumId}")]
+        public async Task<IActionResult> GetFishesFromAquarium([FromRoute] int aquariumId, [FromQuery] GetFishesFromAquariumRequest request)
         {
-            var response = await _fishService.GetFishesFromAquarium(aquariumId);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                //TUTAJ JEST WERROR BO JEDNOCZEŚNIE DANE SIĘ NADPISUJĄ I WYSYŁAJĄ, TRZEBA TO ZROBIC W TEN SPOSÓB ŻE AWEITUJEMY NADPISYWANIE I ODYŁAMY DANE
+            var response = await _fishService.GetFishesFromAquarium(aquariumId, request);
+            return SendResponse(response);
+        }
 
-                //_algorithmInterface.Start();
+        [Authorize(Roles = Role.User)]
+        [Produces(typeof(GetUserFishesResponse))]
+        [HttpGet("get-user-fishes")]
+        public async Task<IActionResult> GetUserFishes([FromQuery] GetUserFishesRequest request)
+        {
+            var response = await _fishService.GetUserFishes(request);
+            return SendResponse(response);
+        }
 
-                var timerManager =
-                    new TimerManager(() => _hub.Clients.Group($"aq-{aquariumId}").SendAsync($"transferfishes-{aquariumId}", response.Payload));
+        [Produces(typeof(GetFishResponse))]
+        [HttpPut("{fishId}/edit")]
+        public async Task<IActionResult> EditFish([FromRoute] int fishId, [FromBody] EditFishRequest request)
+        {
+            var response = await _fishService.EditFish(fishId, request);
+            return SendResponse(response);
+        }
 
-                return Ok(response.Payload);
-            }
-            else
-                return Ok("Not found");
+        [Produces(typeof(GetFishResponse))]
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateFish([FromBody] CreateFishRequest request)
+        {
+            var response = await _fishService.CreateFish(request);
+            return SendResponse(response);
+        }
+
+        [HttpPost("kill/{fishId}")]
+        public async Task<IActionResult> KillFish([FromRoute] int fishId)
+        {
+            var response = await _fishService.KillFish(fishId);
+            return SendResponse(response);
         }
     }
 }

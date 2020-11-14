@@ -15,7 +15,7 @@ namespace Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -129,14 +129,9 @@ namespace Persistence.Migrations
                     b.Property<int>("ChildId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ChildId1")
-                        .HasColumnType("int");
-
                     b.HasKey("ParentId", "ChildId");
 
                     b.HasIndex("ChildId");
-
-                    b.HasIndex("ChildId1");
 
                     b.ToTable("ParentChild");
                 });
@@ -186,6 +181,9 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("LastVitalityUpdate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("ReadyToProcreate")
+                        .HasColumnType("bit");
+
                     b.Property<float>("Vitality")
                         .HasColumnType("real");
 
@@ -213,7 +211,13 @@ namespace Persistence.Migrations
                     b.Property<bool>("HungryCharge")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("HungryChargeEnabled")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("Predator")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("PredatorAttackCharge")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -240,9 +244,14 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AquariumId");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Fishes");
                 });
@@ -257,7 +266,7 @@ namespace Persistence.Migrations
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeathDate")
+                    b.Property<DateTime?>("DeathDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Descendants")
@@ -486,15 +495,17 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Models.Entities.Association.ParentChild", b =>
                 {
-                    b.HasOne("Domain.Models.Fish", "Parent")
-                        .WithMany("Childs")
+                    b.HasOne("Domain.Models.Fish", "Child")
+                        .WithMany("Parents")
                         .HasForeignKey("ChildId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Domain.Models.Fish", "Child")
-                        .WithMany()
-                        .HasForeignKey("ChildId1");
+                    b.HasOne("Domain.Models.Fish", "Parent")
+                        .WithMany("Descendants")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Domain.Models.Entities.Food", b =>
@@ -531,6 +542,10 @@ namespace Persistence.Migrations
                         .HasForeignKey("AquariumId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Domain.Models.Entities.ApplicationUser", "Owner")
+                        .WithMany("Fishes")
+                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("Domain.Models.LifeTimeStatistic", b =>
