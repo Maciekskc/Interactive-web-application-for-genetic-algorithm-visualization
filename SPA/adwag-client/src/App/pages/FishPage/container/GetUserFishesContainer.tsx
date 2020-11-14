@@ -1,24 +1,24 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { Row, Col, Button, Table, Input, notification } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Row, Col, Button, Table, Input, notification, Typography } from 'antd';
+import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 
 import defaultPageQueryParams from 'App/common/utils/defaultPageQueryParams';
-import { getUsers } from 'App/state/admin/users/users.thunk';
 import { RootState } from 'App/state/root.reducer';
 import { StatusType } from 'App/types/requestStatus';
 import { useTranslation } from 'react-i18next';
 import { getUserFishes } from 'App/state/fish/fish.thunk';
-import { cleanUpFishStatus, getUserFishesStart } from 'App/state/fish/fish.slice';
-
+import { cleanUpFishStatus } from 'App/state/fish/fish.slice';
+import { renderUserFishesTableColumns } from '../utils/FishTable';
+const { Title } = Typography;
 const { LOADING, SUCCESS } = StatusType;
 
 const GetUserFishesContainer = () => {
 	const dispatch = useDispatch();
 	const { t } = useTranslation();
-	//todo
+
 	const fishes = useSelector((state: RootState) => state.fish.userFishes);
 	const fishesStatus = useSelector((state: RootState) => state.fish.status);
 
@@ -28,24 +28,23 @@ const GetUserFishesContainer = () => {
 
 	useEffect(() => {
 		dispatch(getUserFishes(defaultPageQueryParams));
-		console.log(fishes);
 		return () => {
 			dispatch(cleanUpFishStatus());
 		};
 	}, [dispatch]);
 
-	// useEffect(() => {
-	// 	if (fishesStatus.deleteUser === SUCCESS) {
-	// 		notification.success({
-	// 			message: t('common:Success.Success'),
-	// 			description: t('AdminPage.GetUsersContainer.SuccessDescription')
-	// 		});
-	// 	}
-	// }, [dispatch, t, usersStatus.deleteUser]);
+	useEffect(() => {
+		if (fishesStatus.killFish === SUCCESS) {
+			notification.success({
+				message: t('common:Success.Success'),
+				description: t('AdminPage.GetUsersContainer.SuccessDescription')
+			});
+		}
+	}, [dispatch, t, fishesStatus.killFish]);
 
 	const handleTableChange = (pagination: any): any => {
 		dispatch(
-			getUsers({
+			getUserFishes({
 				...defaultPageQueryParams,
 				pageNumber: pagination.current || 1,
 				pageSize: pagination.pageSize || 10,
@@ -64,7 +63,17 @@ const GetUserFishesContainer = () => {
 	return (
 		<>
 			<Row>
-				<Col span={23}>
+				<Col span={4}>
+					<Link to='/aquariums'>
+						<Button style={{ marginLeft: 16 }} icon={<ArrowLeftOutlined />}>
+							{t('common:Actions.GoBack')}
+						</Button>
+					</Link>
+				</Col>
+				<Col span={16} style={{ textAlign: 'center' }}>
+					<Title level={2}>Obiekty użytkownika</Title>
+				</Col>
+				<Col span={4}>
 					<Link to='/fish/create'>
 						<Button icon={<PlusOutlined />}>Nowy Obiekt</Button>
 					</Link>
@@ -87,7 +96,7 @@ const GetUserFishesContainer = () => {
 						pagination={paginationConfig}
 						onChange={handleTableChange}
 						loading={fishesStatus.getFishesFromAquarium === LOADING}
-						//columns={renderTableColumns(fishes, dispatch, t)}
+						columns={renderUserFishesTableColumns(fishes, dispatch, t)}
 						dataSource={fishes}
 						rowKey='id'
 					/>

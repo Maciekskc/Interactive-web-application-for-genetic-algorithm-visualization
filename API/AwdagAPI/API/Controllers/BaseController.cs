@@ -55,7 +55,7 @@ namespace API.Controllers
                     return Forbid();
 
                 case HttpStatusCode.Created:
-                    return Created(response.CreatedUrlLocation, response.Payload);
+                    return Created("uri",response.Payload);
 
                 default:
                     return BadRequest(new ErrorResponse(response.Errors));

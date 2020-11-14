@@ -28,6 +28,6 @@ export const renderTableColumns = (
 	},
 	{
 		title: 'Animacja',
-		render: (id, record) => <Link to={`/aquariums/${record.id}`}>Animacja</Link>
+		render: (id, record) => <Link to={`/aquariums/${record.id}/animation`}>Animacja</Link>
 	}
 ];

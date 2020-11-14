@@ -3,7 +3,7 @@ import { ICollectionResponse } from 'App/types/pagination/pagination';
 export interface GetAquariumsResponse extends ICollectionResponse<AquariumForGetAquariumsResponse> {}
 
 export interface AquariumForGetAquariumsResponse {
-	id: number;
+	id: string;
 	width: number;
 	height: number;
 

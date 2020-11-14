@@ -11,13 +11,13 @@ export interface FishForGetFishesFromAquariumResponse {
 }
 
 export interface LifeTimeStatisticForFishForGetFishFromAquariumResponse {
-	BirthDate: Date;
+	birthDate: Date;
 }
 
 export interface LifeParametersForFishForGetFishFromAquariumResponse {
-	Hunger: number;
+	hunger: number;
 }
 
 export interface PhysicalStatsForFishForGetFishFromAquariumResponse {
-	V: number;
+	v: number;
 }

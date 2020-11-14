@@ -7,6 +7,7 @@ import { GetFishesFromAquariumRequest } from './requests/getFishesFromAquariumRe
 import { GetFishesFromAquariumResponse } from './responses/getFishesFromAquariumResponse';
 import { GetUserFishesRequest } from './requests/getUserFishesRequest';
 import { GetUserFishesResponse } from './responses/getUserFishesResponse';
+import { CreateFishRequest } from './requests/CreateFishRequest';
 
 const { urlToIncludeInEmail } = appConfig;
 
@@ -14,17 +15,17 @@ export const FishApi = {
 	getFish: (fishId: string): Promise<GetFishResponse> => requests.get(`/fish/${fishId}`),
 
 	getFishesFromAquarium: (
-		paramas: GetFishesFromAquariumRequest,
+		params: GetFishesFromAquariumRequest,
 		aquariumId: string
-	): Promise<GetFishesFromAquariumResponse> => requests.get(`/fish/aquarium/${aquariumId}`),
+	): Promise<GetFishesFromAquariumResponse> => requests.get(`/fish/aquarium/${aquariumId}`, params),
 
-	getUserFishes: (paramas: GetUserFishesRequest): Promise<GetUserFishesResponse> => requests.get(`/get-user-fishes`)
+	getUserFishes: (params: GetUserFishesRequest): Promise<GetUserFishesResponse> =>
+		requests.get(`/fish/get-user-fishes`, params),
 
-	// createUser: (body: CreateUserRequest): Promise<CreateUserResponse> =>
-	// 	requests.post(`/admin/users`, { ...body, urlToIncludeInEmail }),
+	createFish: (body: CreateFishRequest): Promise<CreateFishRequest> => requests.post(`/fish/create`, { ...body }),
 
 	// updateUser: (userId: string, body: UpdateUserRequest): Promise<UpdateUserResponse> =>
 	// 	requests.put(`/admin/users/${userId}`, body),
 
-	// deleteUser: (userId: string): Promise<HttpStatusCodeResponse> => requests.delete(`/admin/users/${userId}`)
+	killFish: (fishId: string): Promise<HttpStatusCodeResponse> => requests.post(`/fish/kill/${fishId}`, null)
 };

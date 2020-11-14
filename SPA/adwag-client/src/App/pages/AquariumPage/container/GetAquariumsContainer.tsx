@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
-import { Row, Col, Button, Table, Input, notification } from 'antd';
+import { Row, Col, Button, Table, Input, notification, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 import defaultPageQueryParams from 'App/common/utils/defaultPageQueryParams';
@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { cleanUpFishStatus } from 'App/state/fish/fish.slice';
 import { getAquariums } from 'App/state/aquarium/aquarium.thunk';
 import { renderTableColumns } from '../utils/AquariumTable';
+const { Title } = Typography;
 
 interface RouteParams {
 	aquariumId: string;
@@ -34,7 +35,6 @@ const GetAquariumsContainer = () => {
 
 	useEffect(() => {
 		dispatch(getAquariums(defaultPageQueryParams));
-		console.log(aquariums);
 		return () => {
 			dispatch(cleanUpFishStatus());
 		};
@@ -58,15 +58,10 @@ const GetAquariumsContainer = () => {
 		showSizeChanger: true
 	};
 
-	console.log(aquariums);
 	return (
 		<>
-			<Row>
-				<Col span={23}>
-					<Link to='/aquariums/create'>
-						<Button icon={<PlusOutlined />}>Nowe Środowisko</Button>
-					</Link>
-				</Col>
+			<Row justify='center'>
+				<Title level={2}>Lista Akwarium</Title>
 			</Row>
 			<Row className='overflow-hidden'>
 				<Col span={24}>

@@ -19,9 +19,14 @@ const HomePageContainer: React.FC<{}> = () => {
 
 	return (
 		<div>
-			<h1>Strona główna</h1>
-			<Button onClick={logState}>Log Redux State</Button>
-			<Button onClick={getAllCokies}>Log Document Cookies</Button>
+			<h1>Witamy w ADWAG</h1>
+			<h2>Adwag, to interaktywna aplikacja webowa do wizualizacji algorytmu genetycznego</h2>
+			<h2>
+				Aby przyjrzeć się bliżej jak działa algorytm populacyjny, przejdź do zakładki akwarium i wybierz
+				populacje którą chciałbyś obserwować
+			</h2>
+			{/* <Button onClick={logState}>Log Redux State</Button>
+			<Button onClick={getAllCokies}>Log Document Cookies</Button> */}
 		</div>
 	);
 };

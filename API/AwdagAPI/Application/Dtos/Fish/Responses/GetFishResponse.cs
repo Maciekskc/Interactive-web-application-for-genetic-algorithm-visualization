@@ -4,6 +4,7 @@ namespace Application.Dtos.Fish.Response
 {
     public class GetFishResponse
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public bool IsAlive { get; set; }
         public int AquariumId { get; set; }

@@ -9,6 +9,7 @@ export interface SessionState {
 		authentication: StatusType;
 		getUserDetails: StatusType;
 		devalidateSession: StatusType;
+		register: StatusType;
 	};
 	info: LoginResponse | null;
 	isCorrectRole: boolean;
@@ -21,6 +22,7 @@ export const sessionInitialState: SessionState = {
 		authentication: INITIAL,
 		getUserDetails: INITIAL,
 		devalidateSession: INITIAL,
+		register: INITIAL
 	},
 	isCorrectRole: false,
 	info: null,

@@ -51,8 +51,8 @@ namespace Application.Services
                     var fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
                     foreach (var fish in fishes)
                     {
-                        //if(await CheckAndUpdateLifeParametersAsync(fish))
-                        //    await MakeAMoveAsync(fish);
+                        if (await CheckAndUpdateLifeParametersAsync(fish))
+                            await MakeAMoveAsync(fish);
                     }
 
                     //przesyłanie danych poprzez hub
