@@ -49,7 +49,7 @@ const UpdateAquariumForm: React.FC<UpdateAquariumFormProps> = ({ initialValues, 
 			</Form.Item>
 			<Form.Item {...tailLayout}>
 				<Button block loading={loading} type='primary' htmlType='submit'>
-					{t('common:Actions.Create')}
+					{'Edytuj'}
 				</Button>
 			</Form.Item>
 		</Form>

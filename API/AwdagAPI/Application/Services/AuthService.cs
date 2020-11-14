@@ -73,15 +73,15 @@ namespace Application.Services
                 throw new RestException(HttpStatusCode.Forbidden);
             await UserCreator.CreateUserAsync(UserManager, userToRegister, request.Password, request.Roles);
 
-            var generatedEmailConfirmationToken =
-                await UserManager.GenerateEmailConfirmationTokenAsync(userToRegister);
+            //var generatedEmailConfirmationToken =
+            //    await UserManager.GenerateEmailConfirmationTokenAsync(userToRegister);
 
-            var sendEmailResult = await _emailService.SendEmailAfterRegistrationAsync(userToRegister, generatedEmailConfirmationToken, request.UrlToIncludeInEmail, request.Language);
+            //var sendEmailResult = await _emailService.SendEmailAfterRegistrationAsync(userToRegister, generatedEmailConfirmationToken, request.UrlToIncludeInEmail, request.Language);
 
-            var emailErrors = new List<string>();
+            //var emailErrors = new List<string>();
 
-            if (sendEmailResult.ResponseType != HttpStatusCode.OK)
-                emailErrors = sendEmailResult.Errors.ToList();
+            //if (sendEmailResult.ResponseType != HttpStatusCode.OK)
+            //    emailErrors = sendEmailResult.Errors.ToList();
 
             var token = await _jwtGenerator.CreateTokenAsync(userToRegister);
             var response = new RegisterResponse
@@ -90,8 +90,8 @@ namespace Application.Services
                 RefreshToken = token.RefreshToken
             };
 
-            if (emailErrors.Any())
-                return new ServiceResponse<RegisterResponse>(HttpStatusCode.OK, emailErrors, response);
+            //if (emailErrors.Any())
+            //    return new ServiceResponse<RegisterResponse>(HttpStatusCode.OK, emailErrors, response);
 
             return new ServiceResponse<RegisterResponse>(HttpStatusCode.OK, response);
         }
