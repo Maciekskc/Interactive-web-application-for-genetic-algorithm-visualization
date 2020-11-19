@@ -228,9 +228,9 @@ namespace Persistence.Seeds
                             Y = random.Next(300, 700),
                             Vx = random.Next(-3, 3),
                             Vy = random.Next(-3, 3),
-                            V = random.Next(2, 4),
-                            VisionAngle = random.Next(15,30),
-                            VisionRange = random.Next(20,50),
+                            V = random.Next(2, 5),
+                            VisionAngle = random.Next(25,40),
+                            VisionRange = random.Next(30,90),
                             Color = String.Format("#{0:X6}", random.Next(0x1000000)),
                             FishId = ++seed.PhysicalStatisticId
                         }

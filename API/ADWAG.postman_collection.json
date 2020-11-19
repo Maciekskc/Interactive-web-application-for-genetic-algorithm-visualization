@@ -1,0 +1,679 @@
+{
+	"info": {
+		"_postman_id": "57e036d6-a6cc-4e96-8f79-246576198601",
+		"name": "ADWAG",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login as user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"kowalski@test.com\",\n\t\"password\": \"Password123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login as admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"email\": \"admin@test.com\",\n\t\"password\": \"Admin123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/auth/login",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"Maciej\",\r\n  \"lastName\": \"Bialkowsky\",\r\n  \"email\": \"pawelkob97@wp.pl\",\r\n  \"password\": \"Pass123!\",\r\n  \"confirmPassword\": \"Pass123!\",\r\n  \"roles\": [\"User\"],\r\n  \"urlToIncludeInEmail\": \"https://www.naszastrona.pl\",\r\n  \"language\": \"en\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh token",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/auth/refresh-token",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "65587881-f353-4592-aa35-c9d1b297376e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "da31196f-5d57-4051-9755-53e397e1470b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Fish",
+			"item": [
+				{
+					"name": "Get fishes from aquarium",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/Fish/aquarium/1?pageNumber=1&pageSize=20&query=&orderBy=NameAsc",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"Fish",
+								"aquarium",
+								"1"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "20"
+								},
+								{
+									"key": "query",
+									"value": ""
+								},
+								{
+									"key": "orderBy",
+									"value": "NameAsc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Fishes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/fish/get-user-fishes?pageNumber=1&pageSize=5&query=&orderBy=NameAsc",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"fish",
+								"get-user-fishes"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								},
+								{
+									"key": "query",
+									"value": ""
+								},
+								{
+									"key": "orderBy",
+									"value": "NameAsc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get fish",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/fish/27",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"fish",
+								"27"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Kill Fish",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/fish/kill/30",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"fish",
+								"kill",
+								"30"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Fish",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Edited\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/fish/30/edit",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"fish",
+								"30",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Fish",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Created\",\r\n    \"aquariumid\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/fish/create",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"fish",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Aquarium",
+			"item": [
+				{
+					"name": "GetAquarium",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/aquarium/5",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"aquarium",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Aquarium",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/aquarium/5/remove",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"aquarium",
+								"5",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Aquarium",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"width\":0,\r\n    \"height\":720,\r\n    \"capacity\":16\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/aquarium/4/edit",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"aquarium",
+								"4",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetAllAquariums",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/aquarium/get-all-aquariums?query=&orderBy=IdDesc",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"aquarium",
+								"get-all-aquariums"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": ""
+								},
+								{
+									"key": "orderBy",
+									"value": "IdDesc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Aquarium",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"width\":\"1080\",\r\n    \"height\":720,\r\n    \"capacity\":15,\r\n    \"foodmaximalamount\":7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/aquarium/create",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"aquarium",
+								"create"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Create ExtraOrdinaryFish",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"name\": \"Object#2\",\r\n        \"isAlive\": true,\r\n        \"aquariumId\": 2,\r\n        \"physicalStatistic\": {\r\n            \"x\": 677.39435,\r\n            \"y\": 503.7539,\r\n            \"v\": 50,\r\n            \"vx\": 20,\r\n            \"vy\": -20,\r\n            \"color\": \"#00ff0F\",\r\n            \"visionAngle\": 35,\r\n            \"visionRange\": 81\r\n        },\r\n        \"lifeParameters\": {\r\n            \"hunger\": 3.5,\r\n            \"vitality\": 5,\r\n            \"readytoprocreate\": true\r\n        },\r\n        \"setOfMutations\": {\r\n            \"predator\": false,\r\n            \"hungryCharge\": false\r\n        },\r\n        \"lifeTimeStatistic\": {\r\n            \"foodCollected\": 0,\r\n            \"distanceSwimmed\": 0\r\n        }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/admin/createFish",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"admin",
+								"createFish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users?pageNumber=2&pageSize=5&query=&orderBy=LastNameAsc",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "2"
+								},
+								{
+									"key": "pageSize",
+									"value": "5"
+								},
+								{
+									"key": "query",
+									"value": ""
+								},
+								{
+									"key": "orderBy",
+									"value": "LastNameAsc"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/534b660c-88ed-4595-b959-37225692c295",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"534b660c-88ed-4595-b959-37225692c295"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Andrzej\",\r\n    \"lastName\": \"Siemaszko\",\r\n    \"email\": \"pitula.szymon@gmail.com\",\r\n    \"password\": \"Password123!\",\r\n    \"roles\": [\r\n        \"Student\",\r\n        \"Administrator\"\r\n    ],\r\n    \"urlToIncludeInEmail\": \"https://www.naszastrona.pl\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Andrzejek\",\r\n    \"lastName\": \"PitulaEdit\",\r\n    \"emailConfirmed\": true,\r\n    \"phoneConfirmed\": true,\r\n    \"isDeleted\": false,\r\n    \"lockoutEnabled\": false,\r\n    \"lockoutEnd\": null,\r\n    \"roles\": [\r\n        \"Student\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/51ac9b0d-c7ee-4355-8726-319c93d64317",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"51ac9b0d-c7ee-4355-8726-319c93d64317"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set user password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"newPassword\": \"NewPassword123!\",\r\n    \"confirmNewPassword\": \"NewPassssword123!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/51ac9b0d-c7ee-4355-8726-319c93d64317",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"51ac9b0d-c7ee-4355-8726-319c93d64317"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/admin/users/b0683ef3-4fb4-4bb2-b478-52f804d6843a",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"admin",
+								"users",
+								"b0683ef3-4fb4-4bb2-b478-52f804d6843a"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsImp0aSI6IjQ0NzU5Yzc0LWM2MTktNDIxNi1iZjIyLTFiNmYyZjYwNjFkZCIsImVtYWlsIjoiYWRtaW5AdGVzdC5jb20iLCJ1c2VySWQiOiI3N2ZiZGEwMS04MjE3LTRiODctYWVmYS05YmQxZWY2ZTUxYWMiLCJyb2xlIjoiQWRtaW5pc3RyYXRvciIsIm5iZiI6MTYwNTgxOTU4MCwiZXhwIjoxNjA1ODIwNzgwLCJpYXQiOjE2MDU4MTk1ODAsImlzcyI6Imh0dHBzOi8vbG9jYWxob3N0OjQ0MzAzIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NDQzMDMifQ.fUxjmmStLK-keO9DY3g7MQ-yXZhbXfpyZtbhmMKG9Gj3mvDLOES8WF-aDY6oXoBbBstrU3zT-BFKZyDO3A2Phw",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "dd5573e2-4045-474c-a378-f45637609a4b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "66871d65-a317-4910-95c2-5006062bc5a0",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "b2897166-d449-4577-953f-3341c2072a39",
+			"key": "baseURL",
+			"value": "https://localhost:44303/api"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
