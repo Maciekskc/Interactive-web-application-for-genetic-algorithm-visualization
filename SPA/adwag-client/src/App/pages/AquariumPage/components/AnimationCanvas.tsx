@@ -15,7 +15,6 @@ export const AnimationCanvas: React.FC<PropsIterface> = (props: PropsIterface) =
 	};
 
 	const backGroundImageSetup = (p5: p5Types) => {
-		// Here, we use a callback to display the image after loading
 		p5.loadImage(
 			'C:/Users/macie/OneDrive/Pulpit/Uczelnia/Praca inżynierska/Praca/SPA/adwag-client/src/App/pages/AquariumPage/images/aquarium.jpg',
 			(img) => {

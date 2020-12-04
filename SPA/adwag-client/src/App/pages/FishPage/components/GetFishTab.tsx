@@ -28,8 +28,24 @@ export const GetFishTabs: React.FC<GetFishTabsProps> = ({ fish }) => {
 	const drawFish = (p5: p5Types) => {
 		try {
 			p5.push();
-			p5.fill(p5.color(fish.physicalStatistic.color));
 			p5.translate(250, 150);
+			p5.fill(p5.color(fish.physicalStatistic.color));
+			p5.noStroke();
+			p5.triangle(0, 0, -200, 70, -200, -70);
+
+			const mutationLinesColor = fish.setOfMutations.predator
+				? p5.stroke(255, 0, 0)
+				: fish.setOfMutations.hungryCharge
+				? p5.stroke(0, 0, 255)
+				: p5.noStroke();
+			const mutationLine1 =
+				fish.setOfMutations.predator || fish.setOfMutations.hungryCharge ? p5.line(0, 0, -200, 30) : null;
+			const mutationLine2 =
+				fish.setOfMutations.predator || fish.setOfMutations.hungryCharge ? p5.line(0, 0, -200, 0) : null;
+			const mutationLine3 =
+				fish.setOfMutations.predator || fish.setOfMutations.hungryCharge ? p5.line(0, 0, -200, -30) : null;
+
+			p5.noStroke();
 			p5.ellipse(0, 0, 300, 100);
 			p5.pop();
 		} catch (e) {}
@@ -41,8 +57,10 @@ export const GetFishTabs: React.FC<GetFishTabsProps> = ({ fish }) => {
 	const drawParent1 = (p5: p5Types) => {
 		try {
 			p5.push();
-			p5.fill(p5.color(fish.parent1.color));
 			p5.translate(55, 30);
+			p5.fill(p5.color(fish.parent1.color));
+			p5.noStroke();
+			p5.triangle(0, 0, -70, 21, -70, -21);
 			p5.ellipse(0, 0, 100, 33);
 			p5.pop();
 		} catch (e) {}
@@ -50,8 +68,10 @@ export const GetFishTabs: React.FC<GetFishTabsProps> = ({ fish }) => {
 	const drawParent2 = (p5: p5Types) => {
 		try {
 			p5.push();
-			p5.fill(p5.color(fish.parent2.color));
 			p5.translate(55, 30);
+			p5.fill(p5.color(fish.parent2.color));
+			p5.noStroke();
+			p5.triangle(0, 0, -70, 21, -70, -21);
 			p5.ellipse(0, 0, 100, 33);
 			p5.pop();
 		} catch (e) {}
