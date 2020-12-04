@@ -9,6 +9,8 @@ export interface Physical_statistic {
 export interface Fish {
 	name: string;
 	physicalStatistic: Physical_statistic;
+	hungryCharge: boolean;
+	predator: boolean;
 }
 
 export interface Food {

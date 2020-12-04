@@ -49,11 +49,11 @@ namespace Application.Services
                 {
                     //pętla organizująca algorytm
                     var fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
-                    foreach (var fish in fishes)
-                    {
-                        if (await CheckAndUpdateLifeParametersAsync(fish))
-                            await MakeAMoveAsync(fish);
-                    }
+                    //foreach (var fish in fishes)
+                    //{
+                    //    if (await CheckAndUpdateLifeParametersAsync(fish))
+                    //        await MakeAMoveAsync(fish);
+                    //}
 
                     //przesyłanie danych poprzez hub
                     foreach (var aquarium in _context.Aquariums.ToList())

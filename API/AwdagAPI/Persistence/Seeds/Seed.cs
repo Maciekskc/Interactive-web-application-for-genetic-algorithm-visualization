@@ -172,21 +172,21 @@ namespace Persistence.Seeds
                         Width = 1080,
                         Height = 720,
                         Capacity = 15,
-                        FoodMaximalAmount = 7
+                        FoodMaximalAmount = 10
                     },
                     new Aquarium()
                     {
                         Width = 1100,
                         Height = 720,
                         Capacity = 15,
-                        FoodMaximalAmount = 7
+                        FoodMaximalAmount = 10
                     },
                     new Aquarium()
                     {
                         Width = 1080,
                         Height = 720,
                         Capacity = 15,
-                        FoodMaximalAmount = 7
+                        FoodMaximalAmount = 10
                     },
                 };
                 seed.AquariumId = 3;

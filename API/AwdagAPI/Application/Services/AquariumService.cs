@@ -34,6 +34,16 @@ namespace Application.Services
         {
             var recordForResponse = await GetEntityByIdAsync<Aquarium>(aquariumId);
             var response = Mapper.Map<Aquarium, GetAquariumResponse>(recordForResponse);
+            response.HungaryHistogramData = new List<int>();
+            float hungerSummary = 0;
+            for (float hungaryLevel = 0.5F; hungaryLevel < 4.5; hungaryLevel += 0.5F)
+            {
+                int nextHungerLevelPopulatationCount = recordForResponse.Fishes.Where(f => f.LifeParameters.Hunger == hungaryLevel).Count();
+                response.HungaryHistogramData.Add(nextHungerLevelPopulatationCount);
+                hungerSummary += nextHungerLevelPopulatationCount * hungaryLevel;
+            }
+
+            response.HungaryAvarage = hungerSummary / response.CurrentPopulationCount;
             return new ServiceResponse<GetAquariumResponse>(HttpStatusCode.OK, response);
         }
 

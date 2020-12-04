@@ -7,4 +7,7 @@ export interface GetAquariumResponse {
 	foodMaximalAmount: number;
 	currentPopulationCount: number;
 	currentFoodsAmount: number;
+
+	hungaryHistogramData: number[];
+	hungaryAvarage: number;
 }
