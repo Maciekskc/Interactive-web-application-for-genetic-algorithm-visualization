@@ -25,7 +25,9 @@ namespace Application.Services
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private DataContext _context;
         private IMapper Mapper;
-
+        private DateTime _dataBaseUpdate = DateTime.UtcNow;
+        private TimeSpan _dataBaseUpdateInterval = new TimeSpan(0,0,0,5);
+        private List<Fish> fishes;
         public AlgorithmService(IConfiguration configuration, IHubContext<AquariumHub, IAquariumHubInterface> hub, IServiceScopeFactory serviceScopeFactory)
         {
             var options = new DbContextOptionsBuilder()
@@ -39,6 +41,7 @@ namespace Application.Services
             }
             _context = new DataContext(options);
             _hub = hub;
+            fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -48,12 +51,19 @@ namespace Application.Services
                 try
                 {
                     //pętla organizująca algorytm
-                    var fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
-                    //foreach (var fish in fishes)
-                    //{
-                    //    if (await CheckAndUpdateLifeParametersAsync(fish))
-                    //        await MakeAMoveAsync(fish);
-                    //}
+                    
+                    //aktualizowanie danych co pewien interwał czasu
+                    if (_dataBaseUpdate + _dataBaseUpdateInterval < DateTime.UtcNow)
+                    {
+                        await _context.SaveChangesAsync();
+                        fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
+                        _dataBaseUpdate = DateTime.UtcNow;
+                    }
+                    foreach (var fish in fishes)
+                    {
+                        if (await CheckAndUpdateLifeParametersAsync(fish))
+                            await MakeAMoveAsync(fish);
+                    }
 
                     //przesyłanie danych poprzez hub
                     foreach (var aquarium in _context.Aquariums.ToList())
@@ -105,7 +115,7 @@ namespace Application.Services
             await CheckIfHitBorderAndChangeDirectionIdNeed(fish, fishOldX, fishOldY);
             //aktualizujemy statystyki po ruchu
             UpdateLifeTimeStatisticOfFishAfterMove(fish);
-            var val = await _context.SaveChangesAsync();
+            //var val = await _context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -147,9 +157,9 @@ namespace Application.Services
 
                 if (length <= fish.PhysicalStatistic.V)
                 {
-                    _context.Foods.Remove(food);
+                    fish.Aquarium.Foods.Remove(food);
                     Random random = new Random();
-                    _context.Foods.Add(new Food()
+                    fish.Aquarium.Foods.Add(new Food()
                     {
                         X = (float) random.Next(0, fish.Aquarium.Width),
                         Y = (float) random.Next(0, fish.Aquarium.Height),
@@ -162,7 +172,7 @@ namespace Application.Services
                     {
                         MakeFishReadyToProcreate(fish);
                     }
-                    await _context.SaveChangesAsync();
+                    //await _context.SaveChangesAsync();
                 }
                 break;
             }
@@ -222,7 +232,7 @@ namespace Application.Services
                 if (length <= fish.PhysicalStatistic.V)
                 {
                     //atakowany cel ginie a rybka vitalność rybki zostaje zwiększona
-                    var attackedTarget = _context.Fishes.Single(t => t.Id == target.Id);
+                    var attackedTarget = fishes.Single(t => t.Id == target.Id);
                     attackedTarget.IsAlive = false;
                     attackedTarget.LifeTimeStatistic.DeathDate = DateTime.UtcNow;
                     //specjalna aktualizacja statystyk predatora
@@ -231,7 +241,7 @@ namespace Application.Services
                     //szarża zostaje wyłączona jednak prędkości zmienią się dopiero po uderzeniu w ścianę, przymyślic czy to zostawić
                     fish.PhysicalStatistic.V /= 2;
 
-                    await _context.SaveChangesAsync();
+                    //await _context.SaveChangesAsync();
                     UpdateLifeTimeStatisticOfFishAfterEat(fish);
                     //jeżeli to pożywienie sprawiło że rybka osiągnęła stan najedzenia to ustawiamy flagi zdolności do prokreacji
                     if (fish.LifeParameters.Hunger >= 4.0F)
@@ -357,7 +367,7 @@ namespace Application.Services
                 fish.IsAlive = false;
             }
 
-            await _context.SaveChangesAsync();
+           // await _context.SaveChangesAsync();
 
             if(fish.IsAlive)
                 return true;
@@ -593,7 +603,6 @@ namespace Application.Services
                     LastVitalityUpdate = DateTime.UtcNow
                 }
             };
-            _context.Fishes.Add(fish);
 
             var parentChilds = new List<ParentChild>()
             {
@@ -608,9 +617,11 @@ namespace Application.Services
                     Child = fish
                 }
             };
-            _context.ParentChild.AddRange(parentChilds);
+            fish.Parents = parentChilds;
+            fishes.Add(fish);
+            //_context.ParentChild.AddRange(parentChilds);
 
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
         }
 
         /// <summary>
