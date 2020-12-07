@@ -1,4 +1,6 @@
-﻿namespace Application.Dtos.Aquarium.Responses
+﻿using System.Collections.Generic;
+
+namespace Application.Dtos.Aquarium.Responses
 {
     public class GetAquariumResponse
     {
@@ -10,5 +12,8 @@
 
         public int CurrentPopulationCount { get; set; }
         public int CurrentFoodsAmount { get; set; }
+
+        public ICollection<int> HungaryHistogramData { get; set; }
+        public float HungaryAvarage { get; set; }
     }
 }

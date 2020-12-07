@@ -14,6 +14,8 @@ namespace Application.Dtos.Hub
     {
         public string Name { get; set; }
         public virtual PhysicalStatsForFishForHubTransferData PhysicalStatistic { get; set; }
+        public bool Predator { get; set; }
+        public bool HungryCharge { get; set; }
     }
 
     public class PhysicalStatsForFishForHubTransferData

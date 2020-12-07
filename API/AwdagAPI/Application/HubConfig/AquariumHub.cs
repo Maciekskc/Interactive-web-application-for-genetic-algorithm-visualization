@@ -16,7 +16,7 @@ namespace Application.HubConfig
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         }
 
-        public async Task ExitGroup(string groupName)
+        public async Task ExitGrouend (string groupName)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }

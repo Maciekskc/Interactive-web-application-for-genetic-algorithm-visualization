@@ -49,11 +49,11 @@ namespace Application.Services
                 {
                     //pętla organizująca algorytm
                     var fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
-                    foreach (var fish in fishes)
-                    {
-                        if (await CheckAndUpdateLifeParametersAsync(fish))
-                            await MakeAMoveAsync(fish);
-                    }
+                    //foreach (var fish in fishes)
+                    //{
+                    //    if (await CheckAndUpdateLifeParametersAsync(fish))
+                    //        await MakeAMoveAsync(fish);
+                    //}
 
                     //przesyłanie danych poprzez hub
                     foreach (var aquarium in _context.Aquariums.ToList())
@@ -508,7 +508,7 @@ namespace Application.Services
             var parent1Color = ColorTranslator.FromHtml(parent1.PhysicalStatistic.Color);
             var parent2Color = ColorTranslator.FromHtml(parent1.PhysicalStatistic.Color);
             var childColor = Color.FromArgb((byte) (parent1Color.R + parent2Color.R) / 2,
-                (byte) (parent1Color.G + parent2Color.G) / 2, (byte) (parent1Color.G + parent2Color.G) / 2);
+                (byte) (parent1Color.G + parent2Color.G) / 2, (byte) (parent1Color.B + parent2Color.B) / 2);
             #endregion
 
             //Mutacje

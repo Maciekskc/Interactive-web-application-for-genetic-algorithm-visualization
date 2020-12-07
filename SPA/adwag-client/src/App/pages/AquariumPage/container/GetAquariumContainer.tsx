@@ -2,17 +2,16 @@ import React, { useEffect } from 'react';
 import { RouteComponentProps, useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Avatar, Badge, Button, Card, Col, Result, Row, Typography } from 'antd';
+import Histogram from 'react-chart-histogram';
+import { Button, Card, Col, Result, Row } from 'antd';
 import LoadingScreen from 'App/common/components/LoadingScreen';
 import { RootState } from 'App/state/root.reducer';
 import { StatusType } from 'App/types/requestStatus';
 import { useTranslation } from 'react-i18next';
 import { getAquarium } from 'App/state/aquarium/aquarium.thunk';
-import { ArrowLeftOutlined, CreditCardFilled } from '@ant-design/icons';
-import GetAquariumAnimation from './GetAquariumAnimation';
-import { Link } from 'react-router-dom';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { cleanUpAquariumStatus, cleanUpSelectedAquarium } from 'App/state/aquarium/aquarium.slice';
-import { GetUserTabs } from 'App/pages/AdminPage/users/components/GetUserTabs';
+import { render } from 'react-dom';
 
 interface RouteParams {
 	aquariumId: string;
@@ -31,7 +30,6 @@ const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: Ge
 
 	const aquarium = useSelector((state: RootState) => state.aquarium.selectedAquarium);
 	const aquariumStatus = useSelector((state: RootState) => state.aquarium.status);
-
 	useEffect(() => {
 		if (!aquarium) {
 			dispatch(getAquarium(aquariumId));
@@ -44,6 +42,13 @@ const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: Ge
 			dispatch(cleanUpSelectedAquarium());
 		};
 	}, [dispatch]);
+
+	const histogramLabels = ['0.5', '1', '1.5', '2', '2.5', '3', '3.5', '4'];
+	const histogramOptions = {
+		fillColor: '#FFFFFF',
+		strokeColor: '#0000FF',
+		legend: 'Histogram poziomu najedzenia populacji'
+	};
 
 	return aquariumStatus.getAquarium === LOADING ? (
 		<LoadingScreen container='screen' />
@@ -82,6 +87,30 @@ const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: Ge
 						<p>Ilość osobników : {aquarium.currentPopulationCount}</p>
 					</Card>
 				</Col>
+			</Row>
+			<Row style={{ marginTop: 16 }} justify='space-around'>
+				<Card style={{ marginLeft: '15rem' }}>
+					<h1 style={{ textAlign: 'center' }}>Poziom najedzenia populacji</h1>
+					<Histogram
+						xLabels={histogramLabels}
+						yValues={aquarium.hungaryHistogramData}
+						width='800'
+						height='300'
+						options={histogramOptions}
+					/>
+				</Card>
+				<Card
+					style={{
+						textAlign: 'center',
+						marginTop: '6rem',
+						height: '9rem',
+						boxShadow: ' 3px black',
+						marginRight: '25rem'
+					}}
+				>
+					<h3>Średni poziom najedzenia</h3>
+					<h2>{aquarium.hungaryAvarage}</h2>
+				</Card>
 			</Row>
 		</>
 	) : (
