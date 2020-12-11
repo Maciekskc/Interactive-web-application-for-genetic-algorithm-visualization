@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { getFishesFromAquarium } from 'App/state/fish/fish.thunk';
 import { cleanUpFishStatus } from 'App/state/fish/fish.slice';
 import { renderFishesFromAquariumTableColumns } from '../utils/FishTable';
+import 'App/common/styles/table-style.less';
+
 const { Title } = Typography;
 
 interface RouteParams {
@@ -62,8 +64,10 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 		pageSize,
 		current: pageNumber,
 		total: totalNumberOfItems,
-		showSizeChanger: true
+		showSizeChanger: true,
+		margin: '16px 2rem'
 	};
+
 	return (
 		<>
 			<Row>
@@ -83,7 +87,9 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 			<Row>
 				<Col span={23}>
 					<Link to='/fishes/create'>
-						<Button icon={<PlusOutlined />}>Nowy Obiekt</Button>
+						<Button style={{ marginLeft: 16, marginBottom: 10 }} icon={<PlusOutlined />}>
+							Nowy Obiekt
+						</Button>
 					</Link>
 				</Col>
 			</Row>
@@ -104,6 +110,7 @@ const GetFishesFromAquariumContainer: React.FC<GetFishesFromAquariumContainerPro
 						}
 					/>
 					<Table
+						id='t'
 						pagination={paginationConfig}
 						onChange={handleTableChange}
 						loading={fishesStatus.getFishesFromAquarium === LOADING}

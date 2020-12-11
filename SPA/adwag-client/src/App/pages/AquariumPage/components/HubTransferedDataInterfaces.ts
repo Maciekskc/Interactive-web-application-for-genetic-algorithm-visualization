@@ -7,6 +7,7 @@ export interface Physical_statistic {
 }
 
 export interface Fish {
+	id: string;
 	name: string;
 	physicalStatistic: Physical_statistic;
 	hungryCharge: boolean;

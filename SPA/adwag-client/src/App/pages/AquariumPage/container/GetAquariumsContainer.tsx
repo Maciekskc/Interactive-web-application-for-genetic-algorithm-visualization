@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, RouteComponentProps } from 'react-router-dom';
 
 import { Row, Col, Button, Table, Input, notification, Typography } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
 
 import defaultPageQueryParams from 'App/common/utils/defaultPageQueryParams';
 import { RootState } from 'App/state/root.reducer';
@@ -12,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import { cleanUpFishStatus } from 'App/state/fish/fish.slice';
 import { getAquariums } from 'App/state/aquarium/aquarium.thunk';
 import { renderTableColumns } from '../utils/AquariumTable';
+import 'App/common/styles/table-style.less';
+
 const { Title } = Typography;
 
 interface RouteParams {
@@ -77,6 +78,7 @@ const GetAquariumsContainer = () => {
 						}
 					/>
 					<Table
+						id='t'
 						pagination={paginationConfig}
 						onChange={handleTableChange}
 						loading={aquariumsStatus.getAquariums === LOADING}

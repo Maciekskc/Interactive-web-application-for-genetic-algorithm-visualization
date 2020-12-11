@@ -83,7 +83,7 @@ const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: Ge
 					<Card>
 						<p>Szerokość : {aquarium.width}</p>
 						<p>Wysokość : {aquarium.height}</p>
-						<p>Liczność populacji : {aquarium.currentFoodsAmount}</p>
+						<p>Maksymalna liczność populacji : {aquarium.currentFoodsAmount}</p>
 						<p>Ilość osobników : {aquarium.currentPopulationCount}</p>
 					</Card>
 				</Col>
