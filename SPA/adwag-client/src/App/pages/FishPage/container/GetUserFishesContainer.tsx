@@ -81,7 +81,7 @@ const GetUserFishesContainer = () => {
 					</Link>
 				</Col>
 			</Row>
-			<Row className='overflow-hidden'>
+			<Row className='overflow-hidden t'>
 				<Col span={24}>
 					<Input
 						className='query-filter'
@@ -96,7 +96,6 @@ const GetUserFishesContainer = () => {
 						}
 					/>
 					<Table
-						id='t'
 						pagination={paginationConfig}
 						onChange={handleTableChange}
 						loading={fishesStatus.getFishesFromAquarium === LOADING}

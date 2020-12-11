@@ -65,7 +65,7 @@ const GetAquariumsContainer = () => {
 				<Title level={2}>Lista Akwarium</Title>
 			</Row>
 			<Row className='overflow-hidden'>
-				<Col span={24}>
+				<Col className='t' span={24}>
 					<Input
 						allowClear
 						onChange={(val) =>
@@ -78,7 +78,6 @@ const GetAquariumsContainer = () => {
 						}
 					/>
 					<Table
-						id='t'
 						pagination={paginationConfig}
 						onChange={handleTableChange}
 						loading={aquariumsStatus.getAquariums === LOADING}

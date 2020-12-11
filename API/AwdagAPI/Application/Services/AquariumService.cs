@@ -43,7 +43,7 @@ namespace Application.Services
                 hungerSummary += nextHungerLevelPopulatationCount * hungaryLevel;
             }
 
-            response.HungaryAvarage = hungerSummary / response.CurrentPopulationCount;
+            response.HungaryAvarage = response.CurrentPopulationCount !=0 ? hungerSummary / response.CurrentPopulationCount : 0;
             return new ServiceResponse<GetAquariumResponse>(HttpStatusCode.OK, response);
         }
 
