@@ -38,12 +38,12 @@ namespace Application.Services
             float hungerSummary = 0;
             for (float hungaryLevel = 0.5F; hungaryLevel < 4.5; hungaryLevel += 0.5F)
             {
-                int nextHungerLevelPopulatationCount = recordForResponse.Fishes.Where(f => f.LifeParameters.Hunger == hungaryLevel).Count();
+                int nextHungerLevelPopulatationCount = recordForResponse.Fishes.Where(f => f.LifeParameters.Hunger == hungaryLevel && f.IsAlive).Count();
                 response.HungaryHistogramData.Add(nextHungerLevelPopulatationCount);
                 hungerSummary += nextHungerLevelPopulatationCount * hungaryLevel;
             }
 
-            response.HungaryAvarage = hungerSummary / response.CurrentPopulationCount;
+            response.HungaryAvarage = response.CurrentPopulationCount !=0 ? hungerSummary / response.CurrentPopulationCount : 0;
             return new ServiceResponse<GetAquariumResponse>(HttpStatusCode.OK, response);
         }
 

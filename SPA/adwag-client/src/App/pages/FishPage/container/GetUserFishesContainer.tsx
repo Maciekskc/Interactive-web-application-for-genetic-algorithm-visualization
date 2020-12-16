@@ -12,6 +12,8 @@ import { useTranslation } from 'react-i18next';
 import { getUserFishes } from 'App/state/fish/fish.thunk';
 import { cleanUpFishStatus } from 'App/state/fish/fish.slice';
 import { renderUserFishesTableColumns } from '../utils/FishTable';
+import 'App/common/styles/table-style.less';
+
 const { Title } = Typography;
 const { LOADING, SUCCESS } = StatusType;
 
@@ -79,9 +81,10 @@ const GetUserFishesContainer = () => {
 					</Link>
 				</Col>
 			</Row>
-			<Row className='overflow-hidden'>
+			<Row className='overflow-hidden t'>
 				<Col span={24}>
 					<Input
+						className='query-filter'
 						allowClear
 						onChange={(val) =>
 							dispatch(

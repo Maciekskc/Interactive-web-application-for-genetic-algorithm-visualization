@@ -5,6 +5,7 @@ import { AnimationCanvas } from '../components/AnimationCanvas';
 import { RouteComponentProps, useHistory } from 'react-router';
 import { Button, Col, Row } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import { AnimationPopulationList } from '../components/AnimationPopulationList';
 
 let aquariumId: string = '1';
 
@@ -64,11 +65,13 @@ const GetAquariumAnimation: React.FC<GetAquariumAnimationProps> = ({ match }: Ge
 					Dodaj Obiekt
 				</Button>
 				<Button onClick={startConnectionAq}> Rozpocznij Animacje </Button>
-				<Button onClick={stopConnectionAq}> Przerwij Animacje </Button>
 			</Row>
-			<Row justify='center'>
-				<Col>
+			<Row justify='end' style={{ marginTop: 10 }}>
+				<Col span={16}>
 					<AnimationCanvas hubdata={hubdata} />
+				</Col>
+				<Col span={4}>
+					<AnimationPopulationList hubdata={hubdata} />
 				</Col>
 			</Row>
 		</>

@@ -24,12 +24,11 @@ const { LOADING } = StatusType;
 const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: GetAquariumContainerProps) => {
 	const aquariumId = match.params.aquariumId;
 	const { t } = useTranslation(['page', 'common']);
-
 	const history = useHistory();
 	const dispatch = useDispatch();
-
 	const aquarium = useSelector((state: RootState) => state.aquarium.selectedAquarium);
 	const aquariumStatus = useSelector((state: RootState) => state.aquarium.status);
+
 	useEffect(() => {
 		if (!aquarium) {
 			dispatch(getAquarium(aquariumId));
@@ -50,6 +49,8 @@ const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: Ge
 		legend: 'Histogram poziomu najedzenia populacji'
 	};
 
+	console.log(histogramLabels);
+	console.log(histogramOptions);
 	return aquariumStatus.getAquarium === LOADING ? (
 		<LoadingScreen container='screen' />
 	) : aquarium ? (
@@ -80,16 +81,16 @@ const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: Ge
 				justify='center'
 			>
 				<Col span={18}>
-					<Card>
+					<Card className='card-style'>
 						<p>Szerokość : {aquarium.width}</p>
 						<p>Wysokość : {aquarium.height}</p>
-						<p>Liczność populacji : {aquarium.currentFoodsAmount}</p>
+						<p>Maksymalna liczność populacji : {aquarium.capacity}</p>
 						<p>Ilość osobników : {aquarium.currentPopulationCount}</p>
 					</Card>
 				</Col>
 			</Row>
-			<Row style={{ marginTop: 16 }} justify='space-around'>
-				<Card style={{ marginLeft: '15rem' }}>
+			<Row style={{ marginTop: '4rem' }} justify='space-around'>
+				<Card className='card-style' style={{ marginLeft: '15rem' }}>
 					<h1 style={{ textAlign: 'center' }}>Poziom najedzenia populacji</h1>
 					<Histogram
 						xLabels={histogramLabels}
@@ -100,6 +101,7 @@ const GetAquariumContainer: React.FC<GetAquariumContainerProps> = ({ match }: Ge
 					/>
 				</Card>
 				<Card
+					className='card-style'
 					style={{
 						textAlign: 'center',
 						marginTop: '6rem',

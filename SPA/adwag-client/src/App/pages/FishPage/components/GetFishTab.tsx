@@ -1,4 +1,4 @@
-import { Row, Col, Card, Typography, Divider } from 'antd';
+import { Row, Col, Card, Typography, Divider, Tag } from 'antd';
 import { GetFishResponse } from 'App/api/endpoints/fish/responses/getFishResponse';
 import { cleanUpSelectedFish } from 'App/state/fish/fish.slice';
 import React from 'react';
@@ -16,14 +16,34 @@ interface GetFishTabsProps {
 export const GetFishTabs: React.FC<GetFishTabsProps> = ({ fish }) => {
 	const dispatch = useDispatch();
 	const timeAlive = new Date(
-		(fish.isAlive ? new Date(fish.lifeTimeStatistic.deathDate).valueOf() : new Date().valueOf()) -
-			new Date(fish.lifeTimeStatistic.birthDate).valueOf()
-	)
-		.toTimeString()
-		.substr(0, 8);
+		fish.isAlive
+			? new Date(fish.lifeTimeStatistic.deathDate).valueOf() -
+			  new Date(fish.lifeTimeStatistic.birthDate).valueOf()
+			: new Date().valueOf() - new Date(fish.lifeTimeStatistic.birthDate).valueOf()
+	).toLocaleTimeString();
+
+	const dateFormat = (date: Date) => {
+		return new Date(date).toLocaleDateString() + ', ' + new Date(date).toLocaleTimeString();
+	};
+
+	const hungaryTagColor = (hungaryLevel: number) => {
+		if (hungaryLevel === 4) {
+			return 'lime';
+		}
+		if (hungaryLevel > 3) {
+			return 'green';
+		}
+		if (hungaryLevel > 2) {
+			return 'yellow';
+		}
+		if (hungaryLevel > 1) {
+			return 'orange';
+		}
+		return 'red';
+	};
 
 	const setupFish = (p5: p5Types, canvasParentRef: Element) => {
-		p5.createCanvas(600, 300).parent(canvasParentRef);
+		p5.createCanvas(600, 230).parent(canvasParentRef);
 	};
 	const drawFish = (p5: p5Types) => {
 		try {
@@ -84,11 +104,14 @@ export const GetFishTabs: React.FC<GetFishTabsProps> = ({ fish }) => {
 			}}
 			justify='center'
 		>
-			<Card style={{ width: '70rem', height: '47rem', boxShadow: '1px 2px 2px #9E9E9E' }}>
+			<Card className='card-style' style={{ width: '70rem', height: '47rem', marginTop: '2rem' }}>
 				<Row>
 					<Col span={12} style={{ textAlign: 'center' }}>
 						<Title level={2}>ID: {fish.id}</Title>
-						<Sketch setup={setupFish} draw={drawFish} />;
+						<Sketch setup={setupFish} draw={drawFish} />
+						<Title level={2} style={{ color: fish.physicalStatistic.color }}>
+							Kolor: {fish.physicalStatistic.color}
+						</Title>
 					</Col>
 					<Col span={12}>
 						<Row style={{ justifyContent: 'center', margin: '16px' }}>
@@ -97,26 +120,73 @@ export const GetFishTabs: React.FC<GetFishTabsProps> = ({ fish }) => {
 						<Row justify='space-between'>
 							<Col span={10} style={{ width: '15rem', height: '20rem' }}>
 								<Card
+									className='card-style'
 									title='Statystyki'
 									style={{ width: '15rem', height: '15rem', boxShadow: '1px 2px 2px #9E9E9E' }}
 								>
-									<p>Kąt widzenia: {fish.physicalStatistic.visionAngle}°</p>
-									<p>Zasięg widzenia:{fish.physicalStatistic.visionRange}</p>
-									<p>Prędkość: {fish.physicalStatistic.v}</p>
+									<Row justify='space-between' style={{ marginBottom: '0.5rem' }}>
+										<Col span={12} style={{ textAlign: 'left' }}>
+											Kąt widzenia:
+										</Col>
+										<Col span={12} style={{ textAlign: 'right' }}>
+											{fish.physicalStatistic.visionAngle}°
+										</Col>
+									</Row>
+									<Row justify='space-between' style={{ marginBottom: '0.5rem' }}>
+										<Col span={20} style={{ textAlign: 'left' }}>
+											Zasięg widzenia:
+										</Col>
+										<Col span={4} style={{ textAlign: 'right' }}>
+											{fish.physicalStatistic.visionRange}
+										</Col>
+									</Row>
+									<Row justify='space-between' style={{ marginBottom: '0.5rem' }}>
+										<Col span={12} style={{ textAlign: 'left' }}>
+											Prędkość:
+										</Col>
+										<Col span={12} style={{ textAlign: 'right' }}>
+											{fish.physicalStatistic.v}
+										</Col>
+									</Row>
 								</Card>
 							</Col>
 							<Col span={10} style={{ width: '12rem', height: '20rem' }}>
 								<Card
+									className='card-style'
 									title='Pozycja'
 									style={{ width: '12rem', height: '15rem', boxShadow: '1px 2px 2px #9E9E9E' }}
 								>
-									<Row justify='space-between'>
-										<p>X: {fish.physicalStatistic.x}</p>
-										<p>Y:{fish.physicalStatistic.y}</p>
+									<Row justify='space-between' style={{ marginBottom: '0.5rem' }}>
+										<Col span={12} style={{ textAlign: 'left' }}>
+											X:
+										</Col>
+										<Col span={12} style={{ textAlign: 'right' }}>
+											{fish.physicalStatistic.x}
+										</Col>
 									</Row>
-									<Row justify='space-between'>
-										<p>vx: {fish.physicalStatistic.vx}</p>
-										<p>vy: {fish.physicalStatistic.y}</p>
+									<Row justify='space-between' style={{ marginBottom: '0.5rem' }}>
+										<Col span={12} style={{ textAlign: 'left' }}>
+											Y:
+										</Col>
+										<Col span={12} style={{ textAlign: 'right' }}>
+											{fish.physicalStatistic.y}
+										</Col>
+									</Row>
+									<Row justify='space-between' style={{ marginBottom: '0.5rem' }}>
+										<Col span={12} style={{ textAlign: 'left' }}>
+											Vx:
+										</Col>
+										<Col span={12} style={{ textAlign: 'right' }}>
+											{fish.physicalStatistic.vx}
+										</Col>
+									</Row>
+									<Row justify='space-between' style={{ marginBottom: '0.5rem' }}>
+										<Col span={12} style={{ textAlign: 'left' }}>
+											Vy:
+										</Col>
+										<Col span={12} style={{ textAlign: 'right' }}>
+											{fish.physicalStatistic.vy}
+										</Col>
 									</Row>
 								</Card>
 							</Col>
@@ -129,29 +199,88 @@ export const GetFishTabs: React.FC<GetFishTabsProps> = ({ fish }) => {
 						title='Pozycja'
 						style={{ width: '35rem', height: '20rem', justifyContent: 'center' }}
 					>
-						<Card
-							title='Parametry'
-							style={{ width: '30rem', height: '18rem', boxShadow: '1px 2px 2px #9E9E9E' }}
-						>
-							<p>NAJEDZENIE: {fish.lifeParameters.hunger}</p>
-							<p>CZAS ŻYCIA: {timeAlive}</p>
-							<p>ZEBRANE POŻYWIENIE: {fish.lifeTimeStatistic.foodCollected}</p>
-							<p>DRAPIEŻNIK: {fish.setOfMutations.predator === true ? 'TAK' : 'NIE'}</p>
-							<p>SZARŻA: {fish.setOfMutations.hungryCharge === true ? 'TAK' : 'NIE'}</p>
-							<p>ŻYJE: {fish.isAlive === true ? 'TAK' : 'NIE'}</p>
+						<Card className='card-style' title='Parametry' style={{ width: '30rem' }}>
+							<Row justify='space-between'>
+								<Col span={12} style={{ textAlign: 'left' }}>
+									NAJEDZENIE:
+								</Col>
+								<Col span={12} style={{ textAlign: 'right' }}>
+									<Tag
+										style={{ width: '4rem', textAlign: 'center' }}
+										color={hungaryTagColor(fish.lifeParameters.hunger)}
+									>
+										{fish.lifeParameters.hunger} / 5.0
+									</Tag>
+								</Col>
+							</Row>
+							<Row justify='space-between'>
+								<Col span={12} style={{ textAlign: 'left' }}>
+									CZAS ŻYCIA:
+								</Col>
+								<Col span={12} style={{ textAlign: 'right' }}>
+									{timeAlive}
+								</Col>
+							</Row>
+							<Row justify='space-between'>
+								<Col span={12} style={{ textAlign: 'left' }}>
+									ZEBRANE POŻYWIENIE:
+								</Col>
+								<Col span={12} style={{ textAlign: 'right' }}>
+									{fish.lifeTimeStatistic.foodCollected}
+								</Col>
+							</Row>
+							<Row justify='space-between'>
+								<Col span={12} style={{ textAlign: 'left' }}>
+									DRAPIEŻNIK:
+								</Col>
+								<Col span={12} style={{ textAlign: 'right' }}>
+									<Tag color={fish.setOfMutations.predator === true ? 'green' : 'red'}>
+										{fish.setOfMutations.predator === true ? 'TAK' : 'NIE'}
+									</Tag>
+								</Col>
+							</Row>
+							<Row justify='space-between'>
+								<Col span={12} style={{ textAlign: 'left' }}>
+									SZARŻA:
+								</Col>
+								<Col span={12} style={{ textAlign: 'right' }}>
+									<Tag color={fish.setOfMutations.hungryCharge === true ? 'green' : 'red'}>
+										{fish.setOfMutations.hungryCharge === true ? 'TAK' : 'NIE'}
+									</Tag>
+								</Col>
+							</Row>
+							<Row justify='space-between'>
+								<Col span={12} style={{ textAlign: 'left' }}>
+									ŻYJE:
+								</Col>
+								<Col span={12} style={{ textAlign: 'right' }}>
+									<Tag color={fish.isAlive === true ? 'green' : 'red'}>
+										{fish.isAlive === true ? 'TAK' : 'NIE'}
+									</Tag>
+								</Col>
+							</Row>
+							<Row justify='space-between'>
+								<Col span={16} style={{ textAlign: 'left' }}>
+									OSTATNIE ZJEDZONE POŻYWIENIE:
+								</Col>
+								<Col span={8} style={{ textAlign: 'right' }}>
+									{dateFormat(fish.lifeParameters.lastHungerUpdate)}
+								</Col>
+							</Row>
 						</Card>
 					</Col>
 					<Col span={12} style={{ width: '35rem', height: '20rem' }}>
 						<Card
+							className='card-style'
 							title='Rodzice'
-							style={{ width: '30rem', height: '18rem', boxShadow: '1px 2px 2px #9E9E9E' }}
+							style={{ width: '30rem', height: '16.25rem', boxShadow: '1px 2px 2px #9E9E9E' }}
 						>
 							<Row justify='space-around'>
 								<Col
 									span={10}
 									style={{
 										textAlign: 'center',
-										padding: '2.5rem'
+										padding: '1.5rem'
 									}}
 								>
 									{fish.parent1 ? (
@@ -173,7 +302,7 @@ export const GetFishTabs: React.FC<GetFishTabsProps> = ({ fish }) => {
 									span={10}
 									style={{
 										textAlign: 'center',
-										padding: '2.5rem'
+										padding: '1.5rem'
 									}}
 								>
 									{fish.parent2 ? (

@@ -7,8 +7,27 @@ import { FishForGetUserFishesResponse } from 'App/api/endpoints/fish/responses/g
 import { default as NumberFormat } from 'react-number-format';
 import { killFish } from 'App/state/fish/fish.thunk';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Button, Modal } from 'antd';
-import { UserForGetUsersResponse } from 'App/api/endpoints/admin/responses/getUsersResponse';
+import { Button, Modal, Tag } from 'antd';
+
+const hungaryTagColor = (hungaryLevel: number) => {
+	if (hungaryLevel === 4) {
+		return 'lime';
+	}
+	if (hungaryLevel > 3) {
+		return 'green';
+	}
+	if (hungaryLevel > 2) {
+		return 'yellow';
+	}
+	if (hungaryLevel > 1) {
+		return 'orange';
+	}
+	return 'red';
+};
+
+const formatBirthDate = (birthDate: Date) => {
+	return new Date(birthDate).toLocaleString();
+};
 
 export const renderFishesFromAquariumTableColumns = (
 	fishes: FishForGetFishesFromAquariumResponse[],
@@ -25,14 +44,19 @@ export const renderFishesFromAquariumTableColumns = (
 	{
 		title: 'Urodzony',
 		dataIndex: 'birthDate',
-		render: (record, object) => <>{object.lifeTimeStatistic.birthDate}</>
+		render: (record, object) => <>{formatBirthDate(object.lifeTimeStatistic.birthDate)}</>
 	},
 	{
 		title: 'Najedzenie',
 		dataIndex: 'hunger',
 		render: (record, object) => (
 			<>
-				<NumberFormat value={object.lifeParameters.hunger} displayType={'text'} format='####' /> / 5.0
+				<Tag
+					style={{ width: '4rem', textAlign: 'center' }}
+					color={hungaryTagColor(object.lifeParameters.hunger)}
+				>
+					{object.lifeParameters.hunger} / 5.0
+				</Tag>
 			</>
 		)
 	},
@@ -63,7 +87,11 @@ export const renderUserFishesTableColumns = (
 	{
 		title: 'Żyje',
 		dataIndex: 'isAlive',
-		render: (record, object) => <>{record === true ? 'TAK' : 'NIE'}</>
+		render: (record, object) => (
+			<Tag style={{ width: '4rem', textAlign: 'center' }} color={record === true ? 'green' : 'red'}>
+				{record === true ? 'TAK' : 'NIE'}
+			</Tag>
+		)
 	},
 	{
 		title: t('AdminPage.UsersTable.Actions'),

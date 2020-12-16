@@ -25,7 +25,10 @@ namespace Application.Services
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private DataContext _context;
         private IMapper Mapper;
-
+        private DateTime _dataBaseUpdate = DateTime.UtcNow;
+        private TimeSpan _dataBaseUpdateInterval = new TimeSpan(0,0,0,5);
+        private List<Fish> fishes;
+        private List<Fish> descendants=new List<Fish>();
         public AlgorithmService(IConfiguration configuration, IHubContext<AquariumHub, IAquariumHubInterface> hub, IServiceScopeFactory serviceScopeFactory)
         {
             var options = new DbContextOptionsBuilder()
@@ -39,6 +42,7 @@ namespace Application.Services
             }
             _context = new DataContext(options);
             _hub = hub;
+            fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -47,13 +51,27 @@ namespace Application.Services
             {
                 try
                 {
-                    //pętla organizująca algorytm
-                    var fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
-                    //foreach (var fish in fishes)
-                    //{
-                    //    if (await CheckAndUpdateLifeParametersAsync(fish))
-                    //        await MakeAMoveAsync(fish);
-                    //}
+                    //aktualizowanie danych w bazie co pewien interwał czasu
+                    if (_dataBaseUpdate + _dataBaseUpdateInterval < DateTime.UtcNow)
+                    {
+                        await _context.SaveChangesAsync();
+                        fishes = _context.Fishes.Where(f => f.IsAlive).ToList();
+                        _dataBaseUpdate = DateTime.UtcNow;
+                    }
+
+                    //dodanie potomka zmienia kolekcje i nie może być robione w czasie pętli bo kolekcja nie moze zostać zmieniona w trakcie przeglądania
+                    //dlatego potomkowie dodawani sa do kolejnej listy, jeśli coś znajduje się na tej liście nalezy to przekleić do listy docelowej
+                    if (descendants.Any())
+                    {
+                        fishes.AddRange(descendants);
+                        descendants = new List<Fish>();
+                    }
+
+                    foreach (var fish in fishes)
+                    {
+                        if (await CheckAndUpdateLifeParametersAsync(fish))
+                            await MakeAMoveAsync(fish);
+                    }
 
                     //przesyłanie danych poprzez hub
                     foreach (var aquarium in _context.Aquariums.ToList())
@@ -105,7 +123,7 @@ namespace Application.Services
             await CheckIfHitBorderAndChangeDirectionIdNeed(fish, fishOldX, fishOldY);
             //aktualizujemy statystyki po ruchu
             UpdateLifeTimeStatisticOfFishAfterMove(fish);
-            var val = await _context.SaveChangesAsync();
+            //var val = await _context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -147,9 +165,9 @@ namespace Application.Services
 
                 if (length <= fish.PhysicalStatistic.V)
                 {
-                    _context.Foods.Remove(food);
+                    fish.Aquarium.Foods.Remove(food);
                     Random random = new Random();
-                    _context.Foods.Add(new Food()
+                    fish.Aquarium.Foods.Add(new Food()
                     {
                         X = (float) random.Next(0, fish.Aquarium.Width),
                         Y = (float) random.Next(0, fish.Aquarium.Height),
@@ -157,12 +175,13 @@ namespace Application.Services
                     });
                     //zostawimy ten update pod zapisaem ponieważ po ruchu również odbywa się aktualizacja
                     UpdateLifeTimeStatisticOfFishAfterEat(fish);
+                    DisableHungryChargeMutationIfNeed(fish);
                     //jeżeli to pożywienie sprawiło że rybka osiągnęła stan najedzenia to ustawiamy flagi zdolności do prokreacji
                     if (fish.LifeParameters.Hunger >= 4.0F)
                     {
                         MakeFishReadyToProcreate(fish);
                     }
-                    await _context.SaveChangesAsync();
+                    //await _context.SaveChangesAsync();
                 }
                 break;
             }
@@ -206,7 +225,7 @@ namespace Application.Services
 
                 //w tym momencie już widzi jedzenie i następuje aktualizacja ruchu i ewentualnych mutacji
                 EnableHungryChargeMutationIfCould(fish);
-                
+                EnablePredatorAttackChargeIfCould(fish);
 
                 //wyznaczamy wektor kierunkowy do obiektu
                 var a = (double)(target.PhysicalStatistic.X - fish.PhysicalStatistic.X);
@@ -222,16 +241,16 @@ namespace Application.Services
                 if (length <= fish.PhysicalStatistic.V)
                 {
                     //atakowany cel ginie a rybka vitalność rybki zostaje zwiększona
-                    var attackedTarget = _context.Fishes.Single(t => t.Id == target.Id);
+                    var attackedTarget = fishes.Single(t => t.Id == target.Id);
                     attackedTarget.IsAlive = false;
                     attackedTarget.LifeTimeStatistic.DeathDate = DateTime.UtcNow;
                     //specjalna aktualizacja statystyk predatora
                     fish.LifeParameters.Vitality /= 2;
                     fish.SetOfMutations.HungryCharge = false;
                     //szarża zostaje wyłączona jednak prędkości zmienią się dopiero po uderzeniu w ścianę, przymyślic czy to zostawić
-                    fish.PhysicalStatistic.V /= 2;
+                    DisablePredatorAttackChargeIfCould(fish);
 
-                    await _context.SaveChangesAsync();
+                    //await _context.SaveChangesAsync();
                     UpdateLifeTimeStatisticOfFishAfterEat(fish);
                     //jeżeli to pożywienie sprawiło że rybka osiągnęła stan najedzenia to ustawiamy flagi zdolności do prokreacji
                     if (fish.LifeParameters.Hunger >= 4.0F)
@@ -357,7 +376,7 @@ namespace Application.Services
                 fish.IsAlive = false;
             }
 
-            await _context.SaveChangesAsync();
+           // await _context.SaveChangesAsync();
 
             if(fish.IsAlive)
                 return true;
@@ -518,10 +537,10 @@ namespace Application.Services
             switch (predatorParentsCount)
             {
                 case 1:
-                    percentageChanceForPredator += 30;
+                    percentageChanceForPredator += 20;
                     break;
                 case 2:
-                    percentageChanceForPredator += 65;
+                    percentageChanceForPredator += 40;
                     break;
                 default:
                     percentageChanceForPredator += 0;
@@ -563,7 +582,7 @@ namespace Application.Services
                     V = childSpeed,
                     //popłynie z przeskalowaną prędkością w kierunku preciwnym do parent 1
                     Vx = -parent1.PhysicalStatistic.Vx * childSpeed / parent1.PhysicalStatistic.V,
-                    Vy = -parent1.PhysicalStatistic.Vy * childSpeed / parent1.PhysicalStatistic.V,
+                    Vy = -parent2.PhysicalStatistic.Vy * childSpeed / parent2.PhysicalStatistic.V,
                     //kolor przekonwertowany na hex
                     Color = "#" + childColor.R.ToString("X2")+ childColor.G.ToString("X2")+ childColor.B.ToString("X2"),
                     VisionAngle = childVisionAngle,
@@ -593,7 +612,6 @@ namespace Application.Services
                     LastVitalityUpdate = DateTime.UtcNow
                 }
             };
-            _context.Fishes.Add(fish);
 
             var parentChilds = new List<ParentChild>()
             {
@@ -608,9 +626,12 @@ namespace Application.Services
                     Child = fish
                 }
             };
-            _context.ParentChild.AddRange(parentChilds);
+            fish.Parents = parentChilds;
+            descendants.Add(fish);
+            _context.Add(fish);
+            //_context.ParentChild.AddRange(parentChilds);
 
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -628,7 +649,7 @@ namespace Application.Services
         /// </summary>
         /// <param name="fish"></param>
         /// <returns></returns>
-        private async Task EnableHungryChargeMutationIfCould(Fish fish)
+        private void EnableHungryChargeMutationIfCould(Fish fish)
         {
             if (fish.SetOfMutations.HungryCharge && !fish.SetOfMutations.HungryChargeEnabled)
             {
@@ -646,7 +667,7 @@ namespace Application.Services
         /// </summary>
         /// <param name="fish"></param>
         /// <returns></returns>
-        private async Task DisableHungryChargeMutationIfNeed(Fish fish)
+        private void DisableHungryChargeMutationIfNeed(Fish fish)
         {
             if (fish.SetOfMutations.HungryCharge && fish.SetOfMutations.HungryChargeEnabled)
             {
@@ -655,6 +676,40 @@ namespace Application.Services
                 fish.PhysicalStatistic.Vy = fish.PhysicalStatistic.Vy * (3.0F / 4.0F);
                 fish.LifeParameters.HungerInterval = new TimeSpan((long) (fish.LifeParameters.HungerInterval.Ticks * (4.0F / 3.0F)));
                 fish.SetOfMutations.HungryChargeEnabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Aktywuje przyspieszenie drapieżnika aby szybiej do gonić cel
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
+        private void EnablePredatorAttackChargeIfCould(Fish fish)
+        {
+            if (fish.SetOfMutations.Predator && !fish.SetOfMutations.PredatorAttackCharge)
+            {
+
+                fish.PhysicalStatistic.V = fish.PhysicalStatistic.V * 1.5F;
+                fish.PhysicalStatistic.Vx = fish.PhysicalStatistic.Vx * 1.5F;
+                fish.PhysicalStatistic.Vy = fish.PhysicalStatistic.Vy * 1.5F;
+                fish.SetOfMutations.PredatorAttackCharge = true;
+            }
+        }
+
+        /// <summary>
+        /// Dezaktywuje przyspieszenie drapieżnika aby szybiej do gonić cel
+        /// </summary>
+        /// <param name="fish"></param>
+        /// <returns></returns>
+        private void DisablePredatorAttackChargeIfCould(Fish fish)
+        {
+            if (fish.SetOfMutations.Predator && fish.SetOfMutations.PredatorAttackCharge)
+            {
+
+                fish.PhysicalStatistic.V = fish.PhysicalStatistic.V / 1.5F;
+                fish.PhysicalStatistic.Vx = fish.PhysicalStatistic.Vx / 1.5F;
+                fish.PhysicalStatistic.Vy = fish.PhysicalStatistic.Vy / 1.5F;
+                fish.SetOfMutations.PredatorAttackCharge = false;
             }
         }
     }
