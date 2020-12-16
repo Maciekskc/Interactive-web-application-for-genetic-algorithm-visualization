@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 
 import { Button } from 'antd';
 import { RootState } from 'App/state/root.reducer';
+import Title from 'antd/lib/typography/Title';
+import './HomePageContainer.less';
 
 const HomePageContainer: React.FC<{}> = () => {
 	type MouseClickEvent = (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
@@ -18,15 +20,13 @@ const HomePageContainer: React.FC<{}> = () => {
 	};
 
 	return (
-		<div>
-			<h1>Witamy w ADWAG</h1>
-			<h2>Adwag, to interaktywna aplikacja webowa do wizualizacji algorytmu genetycznego</h2>
-			<h2>
+		<div className='landing-page-style'>
+			<Title level={1}>Witamy w ADWAG!</Title>
+			<h2>Adwag, to interaktywna aplikacja webowa do wizualizacji algorytmu genetycznego,</h2>
+			<Title level={4} style={{ paddingBottom: '3rem' }}>
 				Aby przyjrzeć się bliżej jak działa algorytm populacyjny, przejdź do zakładki akwarium i wybierz
-				populacje którą chciałbyś obserwować
-			</h2>
-			{/* <Button onClick={logState}>Log Redux State</Button>
-			<Button onClick={getAllCokies}>Log Document Cookies</Button> */}
+				populacje, którą chciałbyś obserwować.
+			</Title>
 		</div>
 	);
 };

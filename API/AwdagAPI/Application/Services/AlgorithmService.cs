@@ -51,9 +51,7 @@ namespace Application.Services
             {
                 try
                 {
-                    //pętla organizująca algorytm
-                    
-                    //aktualizowanie danych co pewien interwał czasu
+                    //aktualizowanie danych w bazie co pewien interwał czasu
                     if (_dataBaseUpdate + _dataBaseUpdateInterval < DateTime.UtcNow)
                     {
                         await _context.SaveChangesAsync();
@@ -61,7 +59,7 @@ namespace Application.Services
                         _dataBaseUpdate = DateTime.UtcNow;
                     }
 
-                    //dodanie potoka zmienia kolekcje i nie może być robione w czasie pętli bo kolekcja nie moze zostać zmieniona w trakcie przeglądania
+                    //dodanie potomka zmienia kolekcje i nie może być robione w czasie pętli bo kolekcja nie moze zostać zmieniona w trakcie przeglądania
                     //dlatego potomkowie dodawani sa do kolejnej listy, jeśli coś znajduje się na tej liście nalezy to przekleić do listy docelowej
                     if (descendants.Any())
                     {
